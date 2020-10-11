@@ -9,8 +9,14 @@ endif
 
 #objects := $(wildcard *.go)
 objects := $(patsubst %.go,%.o,$(wildcard *.go))
-    $(warning ***** starting Makefile for goal(s) "$(objects)")
+   #$(warning ***** starting Makefile for goal(s) "$(objects)")
 
 .PHONY: all
 all:
-	go build cmd/sea
+	@echo "building all"
+	bash script/build.sh
+
+.PHONY: clean
+clean:
+	@echo "clean"
+	bash script/clean.sh
