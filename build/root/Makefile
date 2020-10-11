@@ -7,6 +7,10 @@ else
     MAKEFLAGS += -s
 endif
 
+#objects := $(wildcard *.go)
+objects := $(patsubst %.go,%.o,$(wildcard *.go))
+    $(warning ***** starting Makefile for goal(s) "$(objects)")
+
 .PHONY: all
 ifeq ($(PRINT_HELP),y)
 all:

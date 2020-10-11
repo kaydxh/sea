@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sea.api.openapi-spec.v1.date;
+package sea.api.v1.date;
 import "google/protobuf/descriptor.proto";
 import "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/options/annotations.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
