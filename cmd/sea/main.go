@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	command := sea.NewProxyCommand()
+	command := sea.NewCommand()
 
 	//	pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
 	//	pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
