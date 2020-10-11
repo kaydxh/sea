@@ -12,7 +12,5 @@ objects := $(patsubst %.go,%.o,$(wildcard *.go))
     $(warning ***** starting Makefile for goal(s) "$(objects)")
 
 .PHONY: all
-ifeq ($(PRINT_HELP),y)
 all:
-	@echo "$$ALL_HELP_INFO"
-endif
+	go build cmd/sea
