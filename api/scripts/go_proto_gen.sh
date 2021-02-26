@@ -3,6 +3,7 @@
 
 # Fail on any error.
 set -euo pipefail
+# set -o xtrace
 
 SCRIPTPATH=$(cd `dirname $0`;pwd)
 
