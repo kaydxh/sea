@@ -16,6 +16,11 @@ all:
 	@echo "building all"
 	bash script/build.sh
 
+.PHONY: generate
+generate:
+	@echo "make generate"
+	bash api/scripts/go_proto_gen.sh api/openapi-spec/v1.0/date
+
 .PHONY: clean
 clean:
 	@echo "clean"
