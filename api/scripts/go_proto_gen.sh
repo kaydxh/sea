@@ -44,6 +44,8 @@ grpc_option="--grpc-gateway_out=logtostderr=true"
 grpc_option="${grpc_option},paths=source_relative:."
 
 for f in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -0); do
-  protoc -I . ${proto_headers} --govalidators_out=paths=source_relative:. --go_out=plugins=grpc,paths=source_relative:. ${grpc_option} ${f}
+  #protoc -I . ${proto_headers} --govalidators_out=paths=source_relative:. --go-grpc_out=plugins=grpc,paths=source_relative:. ${grpc_option} ${f}
+  #protoc -I . ${proto_headers} --govalidators_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=./api/openapi-spec/v1.0/date/date.yaml,paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
+  protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=./api/openapi-spec/v1.0/date/date.yaml,paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
   echo $f
 done
