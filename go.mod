@@ -9,7 +9,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.9.5
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.1.0
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/kaydxh/golang v0.0.19
+	github.com/kaydxh/golang v0.0.20
 	github.com/mwitkow/go-proto-validators v0.3.2
 	github.com/ory/x v0.0.264
 	github.com/prometheus/client_golang v1.9.0
