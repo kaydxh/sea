@@ -15,6 +15,7 @@ export GOFLAGS="-mod=readonly"
 
 OUT_PUT_PATH=output/bin
 echo "==> Building..."
+#go build -mod=vendor -o ${OUT_PUT_PATH}/sea ./cmd/sea
 go build -o ${OUT_PUT_PATH}/sea ./cmd/sea
 
 # Done!

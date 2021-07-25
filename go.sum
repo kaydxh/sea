@@ -883,8 +883,8 @@ github.com/karrick/godirwalk v1.10.12/go.mod h1:RoGL9dQei4vP9ilrpETWE8CLOZ1kiN0L
 github.com/karrick/godirwalk v1.15.3/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/karrick/godirwalk v1.15.5/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
 github.com/karrick/godirwalk v1.16.1/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
-github.com/kaydxh/golang v0.0.20 h1:To9pN9EjX8TfI+hpOcQD12C3jhVZ/HF3sXoHBhWqPQ0=
-github.com/kaydxh/golang v0.0.20/go.mod h1:7vAGjjyfXOJmIPjYIcX9Co32JTe+mtsTFhy3sKnlLOA=
+github.com/kaydxh/golang v0.0.23 h1:gAqJBNEssMe2/8CG0NuGSgISNK+mwlxFa7nh1qmcvkc=
+github.com/kaydxh/golang v0.0.23/go.mod h1:PgarIrJ1NX7mGtSVU/HXY8u7WEC+p7C8N3K4A6FU6CQ=
 github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51/go.mod h1:CzGEWj7cYgsdH8dAjBGEr58BoE7ScuLd+fwFZ44+/x8=
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/errcheck v1.2.0/go.mod h1:/BMXB+zMLi60iA8Vv6Ksmxu/1UDYcXs4uQLJ+jE2L00=

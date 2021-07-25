@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	errors_ "github.com/kaydxh/golang/go/errors"
+	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 )
 
@@ -23,9 +24,9 @@ type CompletedServerRunOptions struct {
 	*completedServerRunOptions
 }
 
-func NewServerRunOptions() *ServerRunOptions {
+func NewServerRunOptions(configFile string) *ServerRunOptions {
 	return &ServerRunOptions{
-		webServerConfig: webserver_.NewConfig(),
+		webServerConfig: webserver_.NewConfig(webserver_.WithViper(viper_.GetViper(configFile, "web"))),
 	}
 }
 
@@ -47,6 +48,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+
 	s.installWebHandler(ws)
 
 	prepared, err := ws.PrepareRun()
