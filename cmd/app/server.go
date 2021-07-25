@@ -7,6 +7,7 @@ import (
 
 	"github.com/kaydxh/sea/cmd/app/options"
 	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 )
 
 const (
@@ -15,13 +16,17 @@ const (
 
 // NewSealetCommand creates a *cobra.Command object with default parameters
 func NewSealetCommand(ctx context.Context) *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "sealet",
 		Short: "sealet Public HTTP/2 and GRPC APIs",
 		// stop printing usage when the command errors
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			s := options.NewServerRunOptions()
+			cfgFile, err := cmd.Flags().GetString("config")
+			if err != nil {
+				return err
+			}
+			s := options.NewServerRunOptions(cfgFile)
 
 			// set default options
 			completedOptions, err := s.Complete()
@@ -38,45 +43,36 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 				os.Exit(1)
 			}
 
+			fmt.Printf("command exit")
+			return nil
+		},
+		Args: func(cmd *cobra.Command, args []string) error {
+			for _, arg := range args {
+				if len(arg) > 0 {
+					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
+				}
+			}
 			return nil
 		},
 	}
-}
 
-/*
-// completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
-type completedServerRunOptions struct {
-	*options.ServerRunOptions
-}
+	cobra.OnInitialize(func() {})
 
-// Complete set default ServerRunOptions.
-func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
-	var options completedServerRunOptions
-	if err := completeServer(s); err != nil {
-		return options, err
+	var cfgFile string
+	cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", defaultConfigPath(),
+		fmt.Sprintf("Config file (default is %q)", defaultConfigPath()))
+
+	cmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
+		cmd.Flags().VisitAll(func(flag *pflag.Flag) {
+			fmt.Printf("FLAG: --%s=%q\n", flag.Name, flag.Value)
+		})
+		return nil
 	}
 
-	options.ServerRunOptions = s
-	return options, nil
+	return cmd
 }
 
-func completeServer(s *options.ServerRunOptions) error {
-	return nil
+// defaultConfigPath returns config file's default path
+func defaultConfigPath() string {
+	return fmt.Sprintf("./conf/%s.yaml", componentSealet)
 }
-
-// Run runs the specified APIServer.  This should never exit.
-func Run(ctx context.Context, completeOptions completedServerRunOptions) error {
-	// To help debugging, immediately log version
-	server, err := CreateServerChain(completeOptions, stopCh)
-	if err != nil {
-		return err
-	}
-
-	prepared, err := server.PrepareRun()
-	if err != nil {
-		return err
-	}
-
-	return prepared.Run(ctx)
-}
-*/
