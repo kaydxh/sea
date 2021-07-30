@@ -6,8 +6,8 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	"github.com/kaydxh/sea/web/app/modules/date"
-	"github.com/searKing/golang/third_party/github.com/grpc-ecosystem/grpc-gateway/v2/grpc"
 )
 
 type Handler struct{}
@@ -17,7 +17,7 @@ func NewHandler() *Handler {
 }
 
 // SetRoutes registers this handler's routes.
-func (h *Handler) SetRoutes(ginRouter gin.IRouter, grpcRouter *grpc.Gateway) {
+func (h *Handler) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) {
 	// bind grpcGateway as default
 
 	//	middlewares.MiddlewaresRouter(ginRouter)

@@ -19,7 +19,7 @@ all:
 .PHONY: generate 
 generate:
 	@echo "make generate"
-	bash api/scripts/go_proto_gen.sh api/openapi-spec/v1.0
+	bash  api/scripts/go_proto_gen.sh api/openapi-spec/v1
 
 .PHONY: clean
 clean:

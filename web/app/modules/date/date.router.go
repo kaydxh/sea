@@ -7,23 +7,27 @@ package date
 import (
 	"context"
 
-	"github.com/kaydxh/sea/api/openapi-spec/v1.0/date"
+	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
+	"github.com/kaydxh/sea/api/openapi-spec/v1/date"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/searKing/golang/third_party/github.com/grpc-ecosystem/grpc-gateway/v2/grpc"
-	grpc_ "google.golang.org/grpc"
+	"google.golang.org/grpc"
 )
 
-func Router(router *grpc.Gateway) *grpc.Gateway {
+func Router(router *gw_.GRPCGateway) *gw_.GRPCGateway {
 	s := Controller{}
-	router.RegisterGRPCFunc(func(srv *grpc_.Server) {
+	router.RegisterGRPCHandler(func(srv *grpc.Server) {
 		date.RegisterDateServiceServer(srv, &s)
 	})
-	_ = router.RegisterHTTPFunc(
+	err := router.RegisterHTTPHandler(
 		context.Background(),
-		func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc_.DialOption) error {
+		func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
 			return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 		},
 	)
+	if err != nil {
+		return nil
+	}
+
 	return router
 }

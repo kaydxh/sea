@@ -6,12 +6,12 @@ config_version: 3
 #
 # Name of the service configuration.
 #
-name: date.sea.com
+name: sea.date.com
 
 #
 # API title to appear in the user interface (Swagger).
 #
-title: File Storage Service Date API
+title: Sea Service Date API
 
 #
 # API usage restrictions.
@@ -38,5 +38,6 @@ http:
     #
     - selector: sea.api.v1.date.DateService.Now
       # just for gin, ignore this path for grpc_gateway
-      post: '/Now'
-      body: "*"
+      additional_bindings:
+        - post: '/Now'
+          body: "*"
