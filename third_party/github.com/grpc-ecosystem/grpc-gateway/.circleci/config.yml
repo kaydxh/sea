@@ -16,9 +16,9 @@ commands:
           EOF
   generate:
     steps:
-      - run: make realclean
-      - run: make examples
-      - run: make testproto
+      - run: make install
+      - run: make clean
+      - run: make generate
       - run: go mod tidy
   renovate_git_amend_push:
     description: Git amend and push changes
@@ -36,12 +36,12 @@ commands:
 executors:
   build-env:
     environment:
-    ## Split key to avoid github from revoking it
-      password0: '99544cdcb19ad4e3fd64'
-      password1: '3ec86b2e5a431be2d72c'
-      GLOG_logtostderr: '1'
+      ## Split key to avoid github revoking it
+      password0: "99544cdcb19ad4e3fd64"
+      password1: "3ec86b2e5a431be2d72c"
+      GLOG_logtostderr: "1"
     docker:
-      - image: docker.pkg.github.com/grpc-ecosystem/grpc-gateway/build-env:1.15
+      - image: docker.pkg.github.com/grpc-ecosystem/grpc-gateway/build-env:1.16
         auth:
           username: gateway-ci-user
           password: ${password0}${password1}
@@ -79,24 +79,8 @@ jobs:
       - checkout
       - generate
       - run: git diff --exit-code
-  lint:
-    executor: build-env
-    working_directory: /src/grpc-gateway
-    steps:
-      - checkout
-      - run: go get golang.org/x/lint/golint
-      - run: make lint
-  fuzzit:
-    docker:
-      - image: fuzzitdev/fuzzit:golang1.12-stretch-llvm9
-    working_directory: /src/grpc-gateway
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run: ./fuzzit.sh
   bazel:
-    docker:
-      - image: l.gcr.io/google/bazel:latest
+    executor: build-env
     working_directory: /src/grpc-gateway
     steps:
       - checkout
@@ -107,16 +91,22 @@ jobs:
       - configure_bazel
       - run:
           name: Check that Bazel BUILD files are up-to-date
-          command: 'bazel run //:gazelle -- --mode=diff ||
-            (echo "ERROR: Bazel files out-of-date, please run \`bazel run :gazelle\`" >&2; exit 1)'
+          command: |
+            bazel run //:gazelle &&
+            git diff --exit-code
+      - run:
+          name: Check that repositories.bzl is up-to-date
+          command: |
+            bazel run //:gazelle -- update-repos -from_file=go.mod -to_macro=repositories.bzl%go_repositories &&
+            git diff --exit-code
+      - run:
+          name: Check formatting of Bazel BUILD files
+          command: |
+            bazel run //:buildifier &&
+            git diff --exit-code
       - run:
           name: Run tests with Bazel
           command: bazel test //...
-      - run:
-          name: Check formatting of Bazel BUILD files
-          command: 'bazel run //:buildifier_check ||
-            (echo "ERROR: Bazel files not formatted, please run \`bazel run :buildifier\`" >&2; exit 1)'
-          when: always
       - save_cache:
           key: v2-bazel-cache-{{ checksum "repositories.bzl" }}
           paths:
@@ -132,7 +122,22 @@ jobs:
             cd $(mktemp -d) &&
             go mod init tmp &&
             go get golang.org/x/exp/cmd/gorelease@latest
-      - run: gorelease
+      - run: gorelease -base=v2.5.0
+  proto_lint:
+    docker:
+      - image: bufbuild/buf:0.44.0
+    steps:
+      - checkout
+      - run: buf build
+      - run: buf lint
+      - run: buf breaking --path protoc-gen-openapiv2/options/annotations.proto --path protoc-gen-openapiv2/options/openapiv2.proto --against 'https://github.com/grpc-ecosystem/grpc-gateway.git#branch=master'
+  proto_push:
+    docker:
+      - image: bufbuild/buf:0.44.0
+    steps:
+      - checkout
+      - run: echo -e "machine buf.build\npassword ${BUF_API_TOKEN}" >> ~/.netrc
+      - run: buf beta push
   release:
     executor: build-env
     working_directory: /src/grpc-gateway
@@ -141,8 +146,7 @@ jobs:
       - run: go mod vendor
       - run: curl -sL https://git.io/goreleaser | bash
   update-repositoriesbzl:
-    docker:
-      - image: l.gcr.io/google/bazel:latest
+    executor: build-env
     working_directory: /src/grpc-gateway
     steps:
       - checkout
@@ -169,12 +173,15 @@ workflows:
     jobs:
       - build
       - test
-      - fuzzit
       - node_test
       - generate
-      - lint
       - bazel
       - gorelease
+      - proto_lint
+      - proto_push:
+          filters:
+            branches:
+              only: /^master$/
       - release:
           filters:
             branches:
@@ -184,7 +191,7 @@ workflows:
       - update-repositoriesbzl:
           filters:
             branches:
-              only: /renovate\/.+/
+              only: /renovate\/master-.+/
             tags:
               ignore: /.*/
       - regenerate:
@@ -197,4 +204,3 @@ workflows:
               only: /renovate\/master-.+/
             tags:
               ignore: /.*/
-
