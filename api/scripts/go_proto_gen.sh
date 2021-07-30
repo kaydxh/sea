@@ -24,15 +24,18 @@ function die() {
 # This will place three binaries in your $GOBIN
 # Make sure that your $GOBIN is in your $PATH
  go install \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
-    github.com/golang/protobuf/protoc-gen-go
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
+    google.golang.org/protobuf/cmd/protoc-gen-go \
+    google.golang.org/grpc/cmd/protoc-gen-go-grpc \
+    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger 
 COMMENT
 
 echo `pwd`
 
 echo "==> Checking tools..."
-GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway protoc-gen-govalidators)
+#GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway protoc-gen-govalidators)
+GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway)
 for tool in ${GEN_PROTO_TOOLS[@]}; do
    q=$(command -v ${tool}) || die "didn't find ${tool}"
    echo 1>&2 "${tool}: ${q}"
@@ -49,7 +52,6 @@ grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
 
 for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -0); do
-  #protoc -I . ${proto_headers} --govalidators_out=paths=source_relative:. --go-grpc_out=plugins=grpc,paths=source_relative:. ${grpc_option} ${f}
   echo "Generating ${proto}"
   api_conf_yaml_base_name="$(basename ${proto} .proto).yaml"
   api_conf_yaml_dir="$(dirname ${proto})"

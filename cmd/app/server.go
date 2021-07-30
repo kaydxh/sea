@@ -38,6 +38,7 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 			if err := completedOptions.Validate(nil); err != nil {
 				return err
 			}
+
 			if err := completedOptions.Run(ctx); err != nil {
 				fmt.Printf("failed to run")
 				os.Exit(1)

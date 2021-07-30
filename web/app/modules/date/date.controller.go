@@ -6,9 +6,10 @@ package date
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/kaydxh/sea/api/openapi-spec/v1.0/date"
+	"github.com/kaydxh/sea/api/openapi-spec/v1/date"
 )
 
 type Controller struct {
@@ -22,6 +23,7 @@ func (c *Controller) Now(
 	_ context.Context,
 	req *date.DateRequest,
 ) (resp *date.DateResponse, err error) {
+	fmt.Println(">>>>>NOW")
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
