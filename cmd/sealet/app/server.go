@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kaydxh/sea/cmd/app/options"
+	"github.com/kaydxh/sea/cmd/sealet/app/options"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
@@ -20,6 +20,9 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 		Use:   "sealet",
 		Short: "sealet Public HTTP/2 and GRPC APIs",
 		// stop printing usage when the command errors
+		Long: `To get started run the serve subcommand which will start a gateway server
+			   You can use curl over HTTP 1.1, 
+			   eg: curl -X POST -k https://localhost:10000/Now `,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfgFile, err := cmd.Flags().GetString("config")
