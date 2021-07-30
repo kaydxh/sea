@@ -14,6 +14,22 @@
     },
     "x-something-something": "yadda"
   },
+  "tags": [
+    {
+      "name": "ABitOfEverythingService",
+      "description": "ABitOfEverythingService description -- which should not be used in place of the documentation comment!",
+      "externalDocs": {
+        "description": "Find out more about EchoService",
+        "url": "https://github.com/grpc-ecosystem/grpc-gateway"
+      }
+    },
+    {
+      "name": "camelCaseServiceName"
+    },
+    {
+      "name": "AnotherServiceWithNoBindings"
+    }
+  ],
   "schemes": [
     "http",
     "https",
@@ -55,10 +71,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -111,15 +133,21 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
           "503": {
             "description": "Returned when the resource is temporarily unavailable.",
             "schema": {},
             "x-number": 100
           },
           "default": {
-            "description": "An unexpected error response",
+            "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -140,7 +168,7 @@
         }
       }
     },
-    "/v1/example/a_bit_of_everything/params/get/nested_enum/{single_nested.ok}": {
+    "/v1/example/a_bit_of_everything/params/get/nested_enum/{singleNested.ok}": {
       "get": {
         "operationId": "ABitOfEverythingService_CheckNestedEnumGetQueryParams",
         "responses": {
@@ -167,16 +195,22 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "single_nested.ok",
+            "name": "singleNested.ok",
             "description": "DeepEnum description.",
             "in": "path",
             "required": true,
@@ -187,14 +221,14 @@
             ]
           },
           {
-            "name": "single_nested.name",
+            "name": "singleNested.name",
             "description": "name is nested field.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "single_nested.amount",
+            "name": "singleNested.amount",
             "in": "query",
             "required": false,
             "type": "integer",
@@ -207,7 +241,7 @@
             "type": "string"
           },
           {
-            "name": "float_value",
+            "name": "floatValue",
             "description": "Float value field",
             "in": "query",
             "required": true,
@@ -216,75 +250,75 @@
             "default": "0.2"
           },
           {
-            "name": "double_value",
+            "name": "doubleValue",
             "in": "query",
             "required": false,
             "type": "number",
             "format": "double"
           },
           {
-            "name": "int64_value",
+            "name": "int64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "uint64_value",
+            "name": "uint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "int32_value",
+            "name": "int32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "fixed64_value",
+            "name": "fixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "fixed32_value",
+            "name": "fixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "bool_value",
+            "name": "boolValue",
             "in": "query",
             "required": false,
             "type": "boolean"
           },
           {
-            "name": "string_value",
+            "name": "stringValue",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "bytes_value",
+            "name": "bytesValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "byte"
           },
           {
-            "name": "uint32_value",
+            "name": "uint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "enum_value",
+            "name": "enumValue",
             "description": " - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -296,7 +330,7 @@
             "default": "ZERO"
           },
           {
-            "name": "path_enum_value",
+            "name": "pathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -307,7 +341,7 @@
             "default": "ABC"
           },
           {
-            "name": "nested_path_enum_value",
+            "name": "nestedPathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -318,35 +352,35 @@
             "default": "GHI"
           },
           {
-            "name": "sfixed32_value",
+            "name": "sfixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sfixed64_value",
+            "name": "sfixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "sint32_value",
+            "name": "sint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sint64_value",
+            "name": "sint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "repeated_string_value",
+            "name": "repeatedStringValue",
             "in": "query",
             "required": false,
             "type": "array",
@@ -356,7 +390,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "oneof_string",
+            "name": "oneofString",
             "in": "query",
             "required": false,
             "type": "string"
@@ -368,14 +402,14 @@
             "type": "string"
           },
           {
-            "name": "timestamp_value",
+            "name": "timestampValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "repeated_enum_value",
+            "name": "repeatedEnumValue",
             "description": "repeated enum value. it is comma-separated in query.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -390,7 +424,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "repeated_enum_annotation",
+            "name": "repeatedEnumAnnotation",
             "description": "Repeated numeric enum title. Repeated numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -405,7 +439,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "enum_value_annotation",
+            "name": "enumValueAnnotation",
             "description": "Numeric enum title. Numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -417,7 +451,7 @@
             "default": "ZERO"
           },
           {
-            "name": "repeated_string_annotation",
+            "name": "repeatedStringAnnotation",
             "description": "Repeated string title. Repeated string description.",
             "in": "query",
             "required": false,
@@ -428,25 +462,45 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "nested_annotation.name",
+            "name": "nestedAnnotation.name",
             "description": "name is nested field.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "nested_annotation.amount",
+            "name": "nestedAnnotation.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "int64_override_type",
+            "name": "int64OverrideType",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "requiredStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as required in Open API definition.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "outputOnlyStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as readonly in Open API definition.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "optionalStringValue",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -454,7 +508,7 @@
         ]
       }
     },
-    "/v1/example/a_bit_of_everything/params/get/{single_nested.name}": {
+    "/v1/example/a_bit_of_everything/params/get/{singleNested.name}": {
       "get": {
         "operationId": "ABitOfEverythingService_CheckGetQueryParams",
         "responses": {
@@ -481,30 +535,36 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "single_nested.name",
+            "name": "singleNested.name",
             "description": "name is nested field.",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "single_nested.amount",
+            "name": "singleNested.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "single_nested.ok",
+            "name": "singleNested.ok",
             "description": "DeepEnum description.\n\n - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
             "in": "query",
             "required": false,
@@ -522,7 +582,7 @@
             "type": "string"
           },
           {
-            "name": "float_value",
+            "name": "floatValue",
             "description": "Float value field",
             "in": "query",
             "required": true,
@@ -531,75 +591,75 @@
             "default": "0.2"
           },
           {
-            "name": "double_value",
+            "name": "doubleValue",
             "in": "query",
             "required": false,
             "type": "number",
             "format": "double"
           },
           {
-            "name": "int64_value",
+            "name": "int64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "uint64_value",
+            "name": "uint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "int32_value",
+            "name": "int32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "fixed64_value",
+            "name": "fixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "fixed32_value",
+            "name": "fixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "bool_value",
+            "name": "boolValue",
             "in": "query",
             "required": false,
             "type": "boolean"
           },
           {
-            "name": "string_value",
+            "name": "stringValue",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "bytes_value",
+            "name": "bytesValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "byte"
           },
           {
-            "name": "uint32_value",
+            "name": "uint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "enum_value",
+            "name": "enumValue",
             "description": " - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -611,7 +671,7 @@
             "default": "ZERO"
           },
           {
-            "name": "path_enum_value",
+            "name": "pathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -622,7 +682,7 @@
             "default": "ABC"
           },
           {
-            "name": "nested_path_enum_value",
+            "name": "nestedPathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -633,35 +693,35 @@
             "default": "GHI"
           },
           {
-            "name": "sfixed32_value",
+            "name": "sfixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sfixed64_value",
+            "name": "sfixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "sint32_value",
+            "name": "sint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sint64_value",
+            "name": "sint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "repeated_string_value",
+            "name": "repeatedStringValue",
             "in": "query",
             "required": false,
             "type": "array",
@@ -671,7 +731,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "oneof_string",
+            "name": "oneofString",
             "in": "query",
             "required": false,
             "type": "string"
@@ -683,14 +743,14 @@
             "type": "string"
           },
           {
-            "name": "timestamp_value",
+            "name": "timestampValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "repeated_enum_value",
+            "name": "repeatedEnumValue",
             "description": "repeated enum value. it is comma-separated in query.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -705,7 +765,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "repeated_enum_annotation",
+            "name": "repeatedEnumAnnotation",
             "description": "Repeated numeric enum title. Repeated numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -720,7 +780,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "enum_value_annotation",
+            "name": "enumValueAnnotation",
             "description": "Numeric enum title. Numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -732,7 +792,7 @@
             "default": "ZERO"
           },
           {
-            "name": "repeated_string_annotation",
+            "name": "repeatedStringAnnotation",
             "description": "Repeated string title. Repeated string description.",
             "in": "query",
             "required": false,
@@ -743,14 +803,14 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "nested_annotation.amount",
+            "name": "nestedAnnotation.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "nested_annotation.ok",
+            "name": "nestedAnnotation.ok",
             "description": "DeepEnum description.\n\n - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
             "in": "query",
             "required": false,
@@ -762,11 +822,31 @@
             "default": "FALSE"
           },
           {
-            "name": "int64_override_type",
+            "name": "int64OverrideType",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "requiredStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as required in Open API definition.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "outputOnlyStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as readonly in Open API definition.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "optionalStringValue",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -774,7 +854,7 @@
         ]
       }
     },
-    "/v1/example/a_bit_of_everything/params/post/{string_value}": {
+    "/v1/example/a_bit_of_everything/params/post/{stringValue}": {
       "post": {
         "operationId": "ABitOfEverythingService_CheckPostQueryParams",
         "responses": {
@@ -801,16 +881,22 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "string_value",
+            "name": "stringValue",
             "in": "path",
             "required": true,
             "type": "string"
@@ -830,7 +916,7 @@
             "type": "string"
           },
           {
-            "name": "float_value",
+            "name": "floatValue",
             "description": "Float value field",
             "in": "query",
             "required": true,
@@ -839,69 +925,69 @@
             "default": "0.2"
           },
           {
-            "name": "double_value",
+            "name": "doubleValue",
             "in": "query",
             "required": false,
             "type": "number",
             "format": "double"
           },
           {
-            "name": "int64_value",
+            "name": "int64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "uint64_value",
+            "name": "uint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "int32_value",
+            "name": "int32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "fixed64_value",
+            "name": "fixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "fixed32_value",
+            "name": "fixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "bool_value",
+            "name": "boolValue",
             "in": "query",
             "required": false,
             "type": "boolean"
           },
           {
-            "name": "bytes_value",
+            "name": "bytesValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "byte"
           },
           {
-            "name": "uint32_value",
+            "name": "uint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "enum_value",
+            "name": "enumValue",
             "description": " - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -913,7 +999,7 @@
             "default": "ZERO"
           },
           {
-            "name": "path_enum_value",
+            "name": "pathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -924,7 +1010,7 @@
             "default": "ABC"
           },
           {
-            "name": "nested_path_enum_value",
+            "name": "nestedPathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -935,35 +1021,35 @@
             "default": "GHI"
           },
           {
-            "name": "sfixed32_value",
+            "name": "sfixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sfixed64_value",
+            "name": "sfixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "sint32_value",
+            "name": "sint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sint64_value",
+            "name": "sint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "repeated_string_value",
+            "name": "repeatedStringValue",
             "in": "query",
             "required": false,
             "type": "array",
@@ -973,7 +1059,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "oneof_string",
+            "name": "oneofString",
             "in": "query",
             "required": false,
             "type": "string"
@@ -985,14 +1071,14 @@
             "type": "string"
           },
           {
-            "name": "timestamp_value",
+            "name": "timestampValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "repeated_enum_value",
+            "name": "repeatedEnumValue",
             "description": "repeated enum value. it is comma-separated in query.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1007,7 +1093,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "repeated_enum_annotation",
+            "name": "repeatedEnumAnnotation",
             "description": "Repeated numeric enum title. Repeated numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1022,7 +1108,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "enum_value_annotation",
+            "name": "enumValueAnnotation",
             "description": "Numeric enum title. Numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1034,7 +1120,7 @@
             "default": "ZERO"
           },
           {
-            "name": "repeated_string_annotation",
+            "name": "repeatedStringAnnotation",
             "description": "Repeated string title. Repeated string description.",
             "in": "query",
             "required": false,
@@ -1045,21 +1131,21 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "nested_annotation.name",
+            "name": "nestedAnnotation.name",
             "description": "name is nested field.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "nested_annotation.amount",
+            "name": "nestedAnnotation.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "nested_annotation.ok",
+            "name": "nestedAnnotation.ok",
             "description": "DeepEnum description.\n\n - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
             "in": "query",
             "required": false,
@@ -1071,11 +1157,31 @@
             "default": "FALSE"
           },
           {
-            "name": "int64_override_type",
+            "name": "int64OverrideType",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "requiredStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as required in Open API definition.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "outputOnlyStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as readonly in Open API definition.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "optionalStringValue",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -1110,10 +1216,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -1125,21 +1237,21 @@
             "type": "string"
           },
           {
-            "name": "single_nested.name",
+            "name": "singleNested.name",
             "description": "name is nested field.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "single_nested.amount",
+            "name": "singleNested.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "single_nested.ok",
+            "name": "singleNested.ok",
             "description": "DeepEnum description.\n\n - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
             "in": "query",
             "required": false,
@@ -1151,7 +1263,7 @@
             "default": "FALSE"
           },
           {
-            "name": "float_value",
+            "name": "floatValue",
             "description": "Float value field",
             "in": "query",
             "required": true,
@@ -1160,75 +1272,75 @@
             "default": "0.2"
           },
           {
-            "name": "double_value",
+            "name": "doubleValue",
             "in": "query",
             "required": false,
             "type": "number",
             "format": "double"
           },
           {
-            "name": "int64_value",
+            "name": "int64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "uint64_value",
+            "name": "uint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "int32_value",
+            "name": "int32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "fixed64_value",
+            "name": "fixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "fixed32_value",
+            "name": "fixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "bool_value",
+            "name": "boolValue",
             "in": "query",
             "required": false,
             "type": "boolean"
           },
           {
-            "name": "string_value",
+            "name": "stringValue",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "bytes_value",
+            "name": "bytesValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "byte"
           },
           {
-            "name": "uint32_value",
+            "name": "uint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "enum_value",
+            "name": "enumValue",
             "description": " - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1240,7 +1352,7 @@
             "default": "ZERO"
           },
           {
-            "name": "path_enum_value",
+            "name": "pathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -1251,7 +1363,7 @@
             "default": "ABC"
           },
           {
-            "name": "nested_path_enum_value",
+            "name": "nestedPathEnumValue",
             "in": "query",
             "required": false,
             "type": "string",
@@ -1262,35 +1374,35 @@
             "default": "GHI"
           },
           {
-            "name": "sfixed32_value",
+            "name": "sfixed32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sfixed64_value",
+            "name": "sfixed64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "sint32_value",
+            "name": "sint32Value",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sint64_value",
+            "name": "sint64Value",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "repeated_string_value",
+            "name": "repeatedStringValue",
             "in": "query",
             "required": false,
             "type": "array",
@@ -1300,7 +1412,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "oneof_string",
+            "name": "oneofString",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1312,14 +1424,14 @@
             "type": "string"
           },
           {
-            "name": "timestamp_value",
+            "name": "timestampValue",
             "in": "query",
             "required": false,
             "type": "string",
             "format": "date-time"
           },
           {
-            "name": "repeated_enum_value",
+            "name": "repeatedEnumValue",
             "description": "repeated enum value. it is comma-separated in query.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1334,7 +1446,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "repeated_enum_annotation",
+            "name": "repeatedEnumAnnotation",
             "description": "Repeated numeric enum title. Repeated numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1349,7 +1461,7 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "enum_value_annotation",
+            "name": "enumValueAnnotation",
             "description": "Numeric enum title. Numeric enum description.\n\n - ZERO: ZERO means 0\n - ONE: ONE means 1",
             "in": "query",
             "required": false,
@@ -1361,7 +1473,7 @@
             "default": "ZERO"
           },
           {
-            "name": "repeated_string_annotation",
+            "name": "repeatedStringAnnotation",
             "description": "Repeated string title. Repeated string description.",
             "in": "query",
             "required": false,
@@ -1372,21 +1484,21 @@
             "collectionFormat": "multi"
           },
           {
-            "name": "nested_annotation.name",
+            "name": "nestedAnnotation.name",
             "description": "name is nested field.",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "nested_annotation.amount",
+            "name": "nestedAnnotation.amount",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "nested_annotation.ok",
+            "name": "nestedAnnotation.ok",
             "description": "DeepEnum description.\n\n - FALSE: FALSE is false.\n - TRUE: TRUE is true.",
             "in": "query",
             "required": false,
@@ -1398,11 +1510,31 @@
             "default": "FALSE"
           },
           {
-            "name": "int64_override_type",
+            "name": "int64OverrideType",
             "in": "query",
             "required": false,
             "type": "integer",
             "format": "int64"
+          },
+          {
+            "name": "requiredStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as required in Open API definition.",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "outputOnlyStringViaFieldBehaviorAnnotation",
+            "description": "mark a field as readonly in Open API definition.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "optionalStringValue",
+            "in": "query",
+            "required": false,
+            "type": "string"
           }
         ],
         "tags": [
@@ -1416,7 +1548,7 @@
         }
       }
     },
-    "/v1/example/a_bit_of_everything/{float_value}/{double_value}/{int64_value}/separator/{uint64_value}/{int32_value}/{fixed64_value}/{fixed32_value}/{bool_value}/{string_value}/{uint32_value}/{sfixed32_value}/{sfixed64_value}/{sint32_value}/{sint64_value}/{nonConventionalNameValue}/{enum_value}/{path_enum_value}/{nested_path_enum_value}/{enum_value_annotation}": {
+    "/v1/example/a_bit_of_everything/{floatValue}/{doubleValue}/{int64Value}/separator/{uint64Value}/{int32Value}/{fixed64Value}/{fixed32Value}/{boolValue}/{stringValue}/{uint32Value}/{sfixed32Value}/{sfixed64Value}/{sint32Value}/{sint64Value}/{nonConventionalNameValue}/{enumValue}/{pathEnumValue}/{nestedPathEnumValue}/{enumValueAnnotation}": {
       "post": {
         "summary": "Create a new ABitOfEverything",
         "description": "This API creates a new ABitOfEverything",
@@ -1445,16 +1577,22 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "float_value",
+            "name": "floatValue",
             "description": "Float value field",
             "in": "path",
             "required": true,
@@ -1463,89 +1601,89 @@
             "default": "0.2"
           },
           {
-            "name": "double_value",
+            "name": "doubleValue",
             "in": "path",
             "required": true,
             "type": "number",
             "format": "double"
           },
           {
-            "name": "int64_value",
+            "name": "int64Value",
             "in": "path",
             "required": true,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "uint64_value",
+            "name": "uint64Value",
             "in": "path",
             "required": true,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "int32_value",
+            "name": "int32Value",
             "in": "path",
             "required": true,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "fixed64_value",
+            "name": "fixed64Value",
             "in": "path",
             "required": true,
             "type": "string",
             "format": "uint64"
           },
           {
-            "name": "fixed32_value",
+            "name": "fixed32Value",
             "in": "path",
             "required": true,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "bool_value",
+            "name": "boolValue",
             "in": "path",
             "required": true,
             "type": "boolean"
           },
           {
-            "name": "string_value",
+            "name": "stringValue",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "uint32_value",
+            "name": "uint32Value",
             "in": "path",
             "required": true,
             "type": "integer",
             "format": "int64"
           },
           {
-            "name": "sfixed32_value",
+            "name": "sfixed32Value",
             "in": "path",
             "required": true,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sfixed64_value",
+            "name": "sfixed64Value",
             "in": "path",
             "required": true,
             "type": "string",
             "format": "int64"
           },
           {
-            "name": "sint32_value",
+            "name": "sint32Value",
             "in": "path",
             "required": true,
             "type": "integer",
             "format": "int32"
           },
           {
-            "name": "sint64_value",
+            "name": "sint64Value",
             "in": "path",
             "required": true,
             "type": "string",
@@ -1558,7 +1696,7 @@
             "type": "string"
           },
           {
-            "name": "enum_value",
+            "name": "enumValue",
             "in": "path",
             "required": true,
             "type": "string",
@@ -1568,7 +1706,7 @@
             ]
           },
           {
-            "name": "path_enum_value",
+            "name": "pathEnumValue",
             "in": "path",
             "required": true,
             "type": "string",
@@ -1578,7 +1716,7 @@
             ]
           },
           {
-            "name": "nested_path_enum_value",
+            "name": "nestedPathEnumValue",
             "in": "path",
             "required": true,
             "type": "string",
@@ -1588,7 +1726,7 @@
             ]
           },
           {
-            "name": "enum_value_annotation",
+            "name": "enumValueAnnotation",
             "description": "Numeric enum description.",
             "in": "path",
             "required": true,
@@ -1597,62 +1735,6 @@
               "ZERO",
               "ONE"
             ]
-          }
-        ],
-        "tags": [
-          "ABitOfEverythingService"
-        ]
-      }
-    },
-    "/v1/example/a_bit_of_everything/{single_nested.name}": {
-      "post": {
-        "operationId": "ABitOfEverythingService_DeepPathEcho",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/examplepbABitOfEverything"
-            }
-          },
-          "403": {
-            "description": "Returned when the user does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "418": {
-            "description": "I'm a teapot.",
-            "schema": {
-              "$ref": "#/definitions/examplepbNumericEnum"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "single_nested.name",
-            "description": "name is nested field.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/examplepbABitOfEverything"
-            }
           }
         ],
         "tags": [
@@ -1687,10 +1769,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -1732,10 +1820,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -1787,10 +1881,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -1806,7 +1906,203 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/examplepbABitOfEverything"
+              "type": "object",
+              "example": {
+                "int64_value": 12,
+                "double_value": 12.3
+              },
+              "properties": {
+                "singleNested": {
+                  "$ref": "#/definitions/ABitOfEverythingNested"
+                },
+                "nested": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ABitOfEverythingNested"
+                  }
+                },
+                "floatValue": {
+                  "type": "number",
+                  "format": "float",
+                  "default": "0.2",
+                  "description": "Float value field",
+                  "required": [
+                    "float_value"
+                  ]
+                },
+                "doubleValue": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "int64Value": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "uint64Value": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "int32Value": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "fixed64Value": {
+                  "type": "string",
+                  "format": "uint64"
+                },
+                "fixed32Value": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "boolValue": {
+                  "type": "boolean"
+                },
+                "stringValue": {
+                  "type": "string"
+                },
+                "bytesValue": {
+                  "type": "string",
+                  "format": "byte"
+                },
+                "uint32Value": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "enumValue": {
+                  "$ref": "#/definitions/examplepbNumericEnum"
+                },
+                "pathEnumValue": {
+                  "$ref": "#/definitions/pathenumPathEnum"
+                },
+                "nestedPathEnumValue": {
+                  "$ref": "#/definitions/MessagePathEnumNestedPathEnum"
+                },
+                "sfixed32Value": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sfixed64Value": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "sint32Value": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "sint64Value": {
+                  "type": "string",
+                  "format": "int64"
+                },
+                "repeatedStringValue": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "oneofEmpty": {
+                  "properties": {}
+                },
+                "oneofString": {
+                  "type": "string"
+                },
+                "mapValue": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/examplepbNumericEnum"
+                  }
+                },
+                "mappedStringValue": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "mappedNestedValue": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/definitions/ABitOfEverythingNested"
+                  }
+                },
+                "nonConventionalNameValue": {
+                  "type": "string"
+                },
+                "timestampValue": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "repeatedEnumValue": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/examplepbNumericEnum"
+                  },
+                  "title": "repeated enum value. it is comma-separated in query"
+                },
+                "repeatedEnumAnnotation": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/examplepbNumericEnum"
+                  },
+                  "description": "Repeated numeric enum description.",
+                  "title": "Repeated numeric enum title"
+                },
+                "enumValueAnnotation": {
+                  "$ref": "#/definitions/examplepbNumericEnum",
+                  "description": "Numeric enum description.",
+                  "title": "Numeric enum title"
+                },
+                "repeatedStringAnnotation": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Repeated string description.",
+                  "title": "Repeated string title"
+                },
+                "repeatedNestedAnnotation": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ABitOfEverythingNested"
+                  },
+                  "description": "Repeated nested object description.",
+                  "title": "Repeated nested object title"
+                },
+                "nestedAnnotation": {
+                  "$ref": "#/definitions/ABitOfEverythingNested",
+                  "description": "Nested object description.",
+                  "title": "Nested object title"
+                },
+                "int64OverrideType": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "requiredStringViaFieldBehaviorAnnotation": {
+                  "type": "string",
+                  "title": "mark a field as required in Open API definition",
+                  "required": [
+                    "required_string_via_field_behavior_annotation"
+                  ]
+                },
+                "outputOnlyStringViaFieldBehaviorAnnotation": {
+                  "type": "string",
+                  "title": "mark a field as readonly in Open API definition",
+                  "readOnly": true
+                },
+                "optionalStringValue": {
+                  "type": "string"
+                }
+              },
+              "description": "Intentionaly complicated message type to cover many features of Protobuf.",
+              "title": "A bit of everything",
+              "externalDocs": {
+                "description": "Find out more about ABitOfEverything",
+                "url": "https://github.com/grpc-ecosystem/grpc-gateway"
+              },
+              "required": [
+                "int64Value",
+                "doubleValue",
+                "floatValue",
+                "requiredStringViaFieldBehaviorAnnotation"
+              ]
             }
           }
         ],
@@ -1815,7 +2111,7 @@
         ]
       }
     },
-    "/v1/example/a_bit_of_everything_repeated/{path_repeated_float_value}/{path_repeated_double_value}/{path_repeated_int64_value}/{path_repeated_uint64_value}/{path_repeated_int32_value}/{path_repeated_fixed64_value}/{path_repeated_fixed32_value}/{path_repeated_bool_value}/{path_repeated_string_value}/{path_repeated_bytes_value}/{path_repeated_uint32_value}/{path_repeated_enum_value}/{path_repeated_sfixed32_value}/{path_repeated_sfixed64_value}/{path_repeated_sint32_value}/{path_repeated_sint64_value}": {
+    "/v1/example/a_bit_of_everything_repeated/{pathRepeatedFloatValue}/{pathRepeatedDoubleValue}/{pathRepeatedInt64Value}/{pathRepeatedUint64Value}/{pathRepeatedInt32Value}/{pathRepeatedFixed64Value}/{pathRepeatedFixed32Value}/{pathRepeatedBoolValue}/{pathRepeatedStringValue}/{pathRepeatedBytesValue}/{pathRepeatedUint32Value}/{pathRepeatedEnumValue}/{pathRepeatedSfixed32Value}/{pathRepeatedSfixed64Value}/{pathRepeatedSint32Value}/{pathRepeatedSint64Value}": {
       "get": {
         "operationId": "ABitOfEverythingService_GetRepeatedQuery",
         "responses": {
@@ -1842,16 +2138,22 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
         "parameters": [
           {
-            "name": "path_repeated_float_value",
+            "name": "pathRepeatedFloatValue",
             "description": "repeated values. they are comma-separated in path",
             "in": "path",
             "required": true,
@@ -1864,7 +2166,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_double_value",
+            "name": "pathRepeatedDoubleValue",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1876,7 +2178,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_int64_value",
+            "name": "pathRepeatedInt64Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1888,7 +2190,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_uint64_value",
+            "name": "pathRepeatedUint64Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1900,7 +2202,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_int32_value",
+            "name": "pathRepeatedInt32Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1912,7 +2214,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_fixed64_value",
+            "name": "pathRepeatedFixed64Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1924,7 +2226,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_fixed32_value",
+            "name": "pathRepeatedFixed32Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1936,7 +2238,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_bool_value",
+            "name": "pathRepeatedBoolValue",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1947,7 +2249,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_string_value",
+            "name": "pathRepeatedStringValue",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1958,7 +2260,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_bytes_value",
+            "name": "pathRepeatedBytesValue",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1970,7 +2272,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_uint32_value",
+            "name": "pathRepeatedUint32Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1982,7 +2284,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_enum_value",
+            "name": "pathRepeatedEnumValue",
             "in": "path",
             "required": true,
             "type": "array",
@@ -1997,7 +2299,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_sfixed32_value",
+            "name": "pathRepeatedSfixed32Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -2009,7 +2311,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_sfixed64_value",
+            "name": "pathRepeatedSfixed64Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -2021,7 +2323,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_sint32_value",
+            "name": "pathRepeatedSint32Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -2033,7 +2335,7 @@
             "minItems": 1
           },
           {
-            "name": "path_repeated_sint64_value",
+            "name": "pathRepeatedSint64Value",
             "in": "path",
             "required": true,
             "type": "array",
@@ -2043,6 +2345,190 @@
             },
             "collectionFormat": "csv",
             "minItems": 1
+          }
+        ],
+        "tags": [
+          "ABitOfEverythingService"
+        ]
+      }
+    },
+    "/v1/example/checkStatus": {
+      "get": {
+        "operationId": "ABitOfEverythingService_CheckStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/examplepbCheckStatusResponse"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "418": {
+            "description": "I'm a teapot.",
+            "schema": {
+              "$ref": "#/definitions/examplepbNumericEnum"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ABitOfEverythingService"
+        ]
+      }
+    },
+    "/v1/example/deep_path/{singleNested.name}": {
+      "post": {
+        "operationId": "ABitOfEverythingService_DeepPathEcho",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/examplepbABitOfEverything"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "418": {
+            "description": "I'm a teapot.",
+            "schema": {
+              "$ref": "#/definitions/examplepbNumericEnum"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "singleNested.name",
+            "description": "name is nested field.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/examplepbABitOfEverything"
+            }
+          }
+        ],
+        "tags": [
+          "ABitOfEverythingService"
+        ]
+      }
+    },
+    "/v1/{book.name=publishers/*/books/*}": {
+      "patch": {
+        "operationId": "ABitOfEverythingService_UpdateBook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/examplepbBook"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "418": {
+            "description": "I'm a teapot.",
+            "schema": {
+              "$ref": "#/definitions/examplepbNumericEnum"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "book.name",
+            "description": "The resource name of the book.\n\nFormat: `publishers/{publisher}/books/{book}`\n\nExample: `publishers/1257894000000000000/books/my-book`",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": "The book to update.\n\nThe book's `name` field is used to identify the book to be updated.\nFormat: publishers/{publisher}/books/{book}",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/examplepbBook"
+            }
+          },
+          {
+            "name": "updateMask",
+            "description": "The list of fields to be updated.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "allowMissing",
+            "description": "If set to true, and the book is not found, a new book will be created.\nIn this situation, `update_mask` is ignored.",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "tags": [
@@ -2078,10 +2564,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2103,7 +2595,7 @@
             }
           },
           {
-            "name": "book_id",
+            "name": "bookId",
             "description": "The ID to use for the book.\n\nThis must start with an alphanumeric character.",
             "in": "query",
             "required": false,
@@ -2142,10 +2634,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2165,15 +2663,11 @@
             }
           },
           {
-            "name": "update_mask.paths",
-            "description": "The set of field mask paths.",
+            "name": "updateMask",
+            "description": "The paths to update.",
             "in": "query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
+            "type": "string"
           }
         ],
         "tags": [
@@ -2206,10 +2700,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2229,15 +2729,11 @@
             }
           },
           {
-            "name": "update_mask.paths",
-            "description": "The set of field mask paths.",
+            "name": "updateMask",
+            "description": "The paths to update.",
             "in": "query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "collectionFormat": "multi"
+            "type": "string"
           }
         ],
         "tags": [
@@ -2279,15 +2775,21 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
           "503": {
             "description": "Returned when the resource is temporarily unavailable.",
             "schema": {},
             "x-number": 100
           },
           "default": {
-            "description": "An unexpected error response",
+            "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2340,15 +2842,21 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
           "503": {
             "description": "Returned when the resource is temporarily unavailable.",
             "schema": {},
             "x-number": 100
           },
           "default": {
-            "description": "An unexpected error response",
+            "description": "An unexpected error response.",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2398,10 +2906,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2437,10 +2951,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2476,10 +2996,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2518,10 +3044,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2537,7 +3069,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/examplepbBody"
+              "type": "object"
             }
           }
         ],
@@ -2573,10 +3105,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2612,10 +3150,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2667,10 +3211,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2718,10 +3268,16 @@
               "$ref": "#/definitions/examplepbNumericEnum"
             }
           },
-          "default": {
-            "description": "An unexpected error response",
+          "500": {
+            "description": "Server error",
             "schema": {
-              "$ref": "#/definitions/runtimeError"
+              "$ref": "#/definitions/examplepbErrorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
             }
           }
         },
@@ -2789,10 +3345,11 @@
     "examplepbABitOfEverything": {
       "type": "object",
       "example": {
-        "uuid": "0cf361e1-4b44-483d-a159-54dabdf7e814"
+        "int64_value": 12,
+        "double_value": 12.3
       },
       "properties": {
-        "single_nested": {
+        "singleNested": {
           "$ref": "#/definitions/ABitOfEverythingNested"
         },
         "uuid": {
@@ -2806,7 +3363,7 @@
             "$ref": "#/definitions/ABitOfEverythingNested"
           }
         },
-        "float_value": {
+        "floatValue": {
           "type": "number",
           "format": "float",
           "default": "0.2",
@@ -2815,94 +3372,94 @@
             "float_value"
           ]
         },
-        "double_value": {
+        "doubleValue": {
           "type": "number",
           "format": "double"
         },
-        "int64_value": {
+        "int64Value": {
           "type": "string",
           "format": "int64"
         },
-        "uint64_value": {
+        "uint64Value": {
           "type": "string",
           "format": "uint64"
         },
-        "int32_value": {
+        "int32Value": {
           "type": "integer",
           "format": "int32"
         },
-        "fixed64_value": {
+        "fixed64Value": {
           "type": "string",
           "format": "uint64"
         },
-        "fixed32_value": {
+        "fixed32Value": {
           "type": "integer",
           "format": "int64"
         },
-        "bool_value": {
+        "boolValue": {
           "type": "boolean"
         },
-        "string_value": {
+        "stringValue": {
           "type": "string"
         },
-        "bytes_value": {
+        "bytesValue": {
           "type": "string",
           "format": "byte"
         },
-        "uint32_value": {
+        "uint32Value": {
           "type": "integer",
           "format": "int64"
         },
-        "enum_value": {
+        "enumValue": {
           "$ref": "#/definitions/examplepbNumericEnum"
         },
-        "path_enum_value": {
+        "pathEnumValue": {
           "$ref": "#/definitions/pathenumPathEnum"
         },
-        "nested_path_enum_value": {
+        "nestedPathEnumValue": {
           "$ref": "#/definitions/MessagePathEnumNestedPathEnum"
         },
-        "sfixed32_value": {
+        "sfixed32Value": {
           "type": "integer",
           "format": "int32"
         },
-        "sfixed64_value": {
+        "sfixed64Value": {
           "type": "string",
           "format": "int64"
         },
-        "sint32_value": {
+        "sint32Value": {
           "type": "integer",
           "format": "int32"
         },
-        "sint64_value": {
+        "sint64Value": {
           "type": "string",
           "format": "int64"
         },
-        "repeated_string_value": {
+        "repeatedStringValue": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "oneof_empty": {
+        "oneofEmpty": {
           "properties": {}
         },
-        "oneof_string": {
+        "oneofString": {
           "type": "string"
         },
-        "map_value": {
+        "mapValue": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/examplepbNumericEnum"
           }
         },
-        "mapped_string_value": {
+        "mappedStringValue": {
           "type": "object",
           "additionalProperties": {
             "type": "string"
           }
         },
-        "mapped_nested_value": {
+        "mappedNestedValue": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/ABitOfEverythingNested"
@@ -2911,18 +3468,18 @@
         "nonConventionalNameValue": {
           "type": "string"
         },
-        "timestamp_value": {
+        "timestampValue": {
           "type": "string",
           "format": "date-time"
         },
-        "repeated_enum_value": {
+        "repeatedEnumValue": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/examplepbNumericEnum"
           },
           "title": "repeated enum value. it is comma-separated in query"
         },
-        "repeated_enum_annotation": {
+        "repeatedEnumAnnotation": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/examplepbNumericEnum"
@@ -2930,12 +3487,12 @@
           "description": "Repeated numeric enum description.",
           "title": "Repeated numeric enum title"
         },
-        "enum_value_annotation": {
+        "enumValueAnnotation": {
           "$ref": "#/definitions/examplepbNumericEnum",
           "description": "Numeric enum description.",
           "title": "Numeric enum title"
         },
-        "repeated_string_annotation": {
+        "repeatedStringAnnotation": {
           "type": "array",
           "items": {
             "type": "string"
@@ -2943,7 +3500,7 @@
           "description": "Repeated string description.",
           "title": "Repeated string title"
         },
-        "repeated_nested_annotation": {
+        "repeatedNestedAnnotation": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/ABitOfEverythingNested"
@@ -2951,14 +3508,29 @@
           "description": "Repeated nested object description.",
           "title": "Repeated nested object title"
         },
-        "nested_annotation": {
+        "nestedAnnotation": {
           "$ref": "#/definitions/ABitOfEverythingNested",
           "description": "Nested object description.",
           "title": "Nested object title"
         },
-        "int64_override_type": {
+        "int64OverrideType": {
           "type": "integer",
           "format": "int64"
+        },
+        "requiredStringViaFieldBehaviorAnnotation": {
+          "type": "string",
+          "title": "mark a field as required in Open API definition",
+          "required": [
+            "required_string_via_field_behavior_annotation"
+          ]
+        },
+        "outputOnlyStringViaFieldBehaviorAnnotation": {
+          "type": "string",
+          "title": "mark a field as readonly in Open API definition",
+          "readOnly": true
+        },
+        "optionalStringValue": {
+          "type": "string"
         }
       },
       "description": "Intentionaly complicated message type to cover many features of Protobuf.",
@@ -2969,8 +3541,10 @@
       },
       "required": [
         "uuid",
-        "int64_value",
-        "double_value"
+        "int64Value",
+        "doubleValue",
+        "floatValue",
+        "requiredStringViaFieldBehaviorAnnotation"
       ]
     },
     "examplepbABitOfEverythingRepeated": {
@@ -2989,7 +3563,7 @@
         ]
       },
       "properties": {
-        "path_repeated_float_value": {
+        "pathRepeatedFloatValue": {
           "type": "array",
           "items": {
             "type": "number",
@@ -2997,102 +3571,102 @@
           },
           "title": "repeated values. they are comma-separated in path"
         },
-        "path_repeated_double_value": {
+        "pathRepeatedDoubleValue": {
           "type": "array",
           "items": {
             "type": "number",
             "format": "double"
           }
         },
-        "path_repeated_int64_value": {
+        "pathRepeatedInt64Value": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "int64"
           }
         },
-        "path_repeated_uint64_value": {
+        "pathRepeatedUint64Value": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "uint64"
           }
         },
-        "path_repeated_int32_value": {
+        "pathRepeatedInt32Value": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int32"
           }
         },
-        "path_repeated_fixed64_value": {
+        "pathRepeatedFixed64Value": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "uint64"
           }
         },
-        "path_repeated_fixed32_value": {
+        "pathRepeatedFixed32Value": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int64"
           }
         },
-        "path_repeated_bool_value": {
+        "pathRepeatedBoolValue": {
           "type": "array",
           "items": {
             "type": "boolean"
           }
         },
-        "path_repeated_string_value": {
+        "pathRepeatedStringValue": {
           "type": "array",
           "items": {
             "type": "string"
           }
         },
-        "path_repeated_bytes_value": {
+        "pathRepeatedBytesValue": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "byte"
           }
         },
-        "path_repeated_uint32_value": {
+        "pathRepeatedUint32Value": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int64"
           }
         },
-        "path_repeated_enum_value": {
+        "pathRepeatedEnumValue": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/examplepbNumericEnum"
           }
         },
-        "path_repeated_sfixed32_value": {
+        "pathRepeatedSfixed32Value": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int32"
           }
         },
-        "path_repeated_sfixed64_value": {
+        "pathRepeatedSfixed64Value": {
           "type": "array",
           "items": {
             "type": "string",
             "format": "int64"
           }
         },
-        "path_repeated_sint32_value": {
+        "pathRepeatedSint32Value": {
           "type": "array",
           "items": {
             "type": "integer",
             "format": "int32"
           }
         },
-        "path_repeated_sint64_value": {
+        "pathRepeatedSint64Value": {
           "type": "array",
           "items": {
             "type": "string",
@@ -3122,7 +3696,7 @@
           "description": "Output only. The book's ID.",
           "readOnly": true
         },
-        "create_time": {
+        "createTime": {
           "type": "string",
           "format": "date-time",
           "description": "Output only. Creation time of the book.",
@@ -3130,6 +3704,48 @@
         }
       },
       "description": "An example resource type from AIP-123 used to test the behavior described in\nthe CreateBookRequest message.\n\nSee: https://google.aip.dev/123"
+    },
+    "examplepbCheckStatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/rpcStatus"
+        }
+      }
+    },
+    "examplepbErrorObject": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Response code",
+          "title": "code",
+          "pattern": "^[0-9]$"
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "title": "message",
+          "pattern": "^[a-zA-Z0-9]{1, 32}$"
+        }
+      }
+    },
+    "examplepbErrorResponse": {
+      "type": "object",
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "format": "uuid",
+          "example": "2438ac3c-37eb-4902-adef-ed16b4431030",
+          "description": "Unique event identifier for server requests",
+          "title": "x-correlation-id",
+          "pattern": "^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$"
+        },
+        "error": {
+          "$ref": "#/definitions/examplepbErrorObject"
+        }
+      }
     },
     "examplepbNumericEnum": {
       "type": "string",
@@ -3146,8 +3762,9 @@
         "abe": {
           "$ref": "#/definitions/examplepbABitOfEverything"
         },
-        "update_mask": {
-          "$ref": "#/definitions/protobufFieldMask"
+        "updateMask": {
+          "type": "string",
+          "description": "The paths to update."
         }
       },
       "title": "UpdateV2Request request for update includes the message and the update mask"
@@ -3163,7 +3780,7 @@
     "protobufAny": {
       "type": "object",
       "properties": {
-        "type_url": {
+        "typeUrl": {
           "type": "string",
           "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
         },
@@ -3173,42 +3790,29 @@
           "description": "Must be a valid serialized protocol buffer of the above specified type."
         }
       },
-      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := \u0026pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
     },
-    "protobufFieldMask": {
+    "rpcStatus": {
       "type": "object",
       "properties": {
-        "paths": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The set of field mask paths."
-        }
-      },
-      "description": "paths: \"f.a\"\n    paths: \"f.b.d\"\n\nHere `f` represents a field in some root message, `a` and `b`\nfields in the message found in `f`, and `d` a field found in the\nmessage in `f.b`.\n\nField masks are used to specify a subset of fields that should be\nreturned by a get operation or modified by an update operation.\nField masks also have a custom JSON encoding (see below).\n\n# Field Masks in Projections\n\nWhen used in the context of a projection, a response message or\nsub-message is filtered by the API to only contain those fields as\nspecified in the mask. For example, if the mask in the previous\nexample is applied to a response message as follows:\n\n    f {\n      a : 22\n      b {\n        d : 1\n        x : 2\n      }\n      y : 13\n    }\n    z: 8\n\nThe result will not contain specific values for fields x,y and z\n(their value will be set to the default, and omitted in proto text\noutput):\n\n\n    f {\n      a : 22\n      b {\n        d : 1\n      }\n    }\n\nA repeated field is not allowed except at the last position of a\npaths string.\n\nIf a FieldMask object is not present in a get operation, the\noperation applies to all fields (as if a FieldMask of all fields\nhad been specified).\n\nNote that a field mask does not necessarily apply to the\ntop-level response message. In case of a REST get operation, the\nfield mask applies directly to the response, but in case of a REST\nlist operation, the mask instead applies to each individual message\nin the returned resource list. In case of a REST custom method,\nother definitions may be used. Where the mask applies will be\nclearly documented together with its declaration in the API.  In\nany case, the effect on the returned resource/resources is required\nbehavior for APIs.\n\n# Field Masks in Update Operations\n\nA field mask in update operations specifies which fields of the\ntargeted resource are going to be updated. The API is required\nto only change the values of the fields as specified in the mask\nand leave the others untouched. If a resource is passed in to\ndescribe the updated values, the API ignores the values of all\nfields not covered by the mask.\n\nIf a repeated field is specified for an update operation, new values will\nbe appended to the existing repeated field in the target resource. Note that\na repeated field is only allowed in the last position of a `paths` string.\n\nIf a sub-message is specified in the last position of the field mask for an\nupdate operation, then new value will be merged into the existing sub-message\nin the target resource.\n\nFor example, given the target message:\n\n    f {\n      b {\n        d: 1\n        x: 2\n      }\n      c: [1]\n    }\n\nAnd an update message:\n\n    f {\n      b {\n        d: 10\n      }\n      c: [2]\n    }\n\nthen if the field mask is:\n\n paths: [\"f.b\", \"f.c\"]\n\nthen the result will be:\n\n    f {\n      b {\n        d: 10\n        x: 2\n      }\n      c: [1, 2]\n    }\n\nAn implementation may provide options to override this default behavior for\nrepeated and message fields.\n\nIn order to reset a field's value to the default, the field must\nbe in the mask and set to the default value in the provided resource.\nHence, in order to reset all fields of a resource, provide a default\ninstance of the resource and set all fields in the mask, or do\nnot provide a mask as described below.\n\nIf a field mask is not present on update, the operation applies to\nall fields (as if a field mask of all fields has been specified).\nNote that in the presence of schema evolution, this may mean that\nfields the client does not know and has therefore not filled into\nthe request will be reset to their default. If this is unwanted\nbehavior, a specific service may require a client to always specify\na field mask, producing an error if not.\n\nAs with get operations, the location of the resource which\ndescribes the updated values in the request message depends on the\noperation kind. In any case, the effect of the field mask is\nrequired to be honored by the API.\n\n## Considerations for HTTP REST\n\nThe HTTP kind of an update operation which uses a field mask must\nbe set to PATCH instead of PUT in order to satisfy HTTP semantics\n(PUT must only be used for full updates).\n\n# JSON Encoding of Field Masks\n\nIn JSON, a field mask is encoded as a single string where paths are\nseparated by a comma. Fields name in each path are converted\nto/from lower-camel naming conventions.\n\nAs an example, consider the following message declarations:\n\n    message Profile {\n      User user = 1;\n      Photo photo = 2;\n    }\n    message User {\n      string display_name = 1;\n      string address = 2;\n    }\n\nIn proto a field mask for `Profile` may look as such:\n\n    mask {\n      paths: \"user.display_name\"\n      paths: \"photo\"\n    }\n\nIn JSON, the same mask is represented as below:\n\n    {\n      mask: \"user.displayName,photo\"\n    }\n\n# Field Masks and Oneof Fields\n\nField masks treat fields in oneofs just as regular fields. Consider the\nfollowing message:\n\n    message SampleMessage {\n      oneof test_oneof {\n        string name = 4;\n        SubMessage sub_message = 9;\n      }\n    }\n\nThe field mask can be:\n\n    mask {\n      paths: \"name\"\n    }\n\nOr:\n\n    mask {\n      paths: \"sub_message\"\n    }\n\nNote that oneof type names (\"test_oneof\" in this case) cannot be used in\npaths.\n\n## Field Mask Verification\n\nThe implementation of any API method which has a FieldMask type field in the\nrequest should verify the included field paths, and return an\n`INVALID_ARGUMENT` error if any path is unmappable.",
-      "title": "`FieldMask` represents a set of symbolic field paths, for example:"
-    },
-    "runtimeError": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        },
         "code": {
           "type": "integer",
-          "format": "int32"
+          "format": "int32",
+          "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code]."
         },
         "message": {
-          "type": "string"
+          "type": "string",
+          "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client."
         },
         "details": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/protobufAny"
-          }
+          },
+          "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use."
         }
-      }
+      },
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors)."
     },
     "subStringMessage": {
       "type": "object",
