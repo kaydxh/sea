@@ -22,7 +22,7 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 		// stop printing usage when the command errors
 		Long: `To get started run the serve subcommand which will start a gateway server
 			   You can use curl over HTTP 1.1, 
-			   eg: curl -X POST -k https://localhost:10000/Now `,
+			   eg: curl -X POST -k https://localhost:port/Now `,
 		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfgFile, err := cmd.Flags().GetString("config")
