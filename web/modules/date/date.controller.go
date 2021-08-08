@@ -6,10 +6,10 @@ package date
 
 import (
 	"context"
-	"fmt"
 	"time"
 
-	"github.com/kaydxh/sea/api/openapi-spec/v1/date"
+	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
+	"github.com/sirupsen/logrus"
 )
 
 type Controller struct {
@@ -23,7 +23,7 @@ func (c *Controller) Now(
 	_ context.Context,
 	req *date.DateRequest,
 ) (resp *date.DateResponse, err error) {
-	fmt.Println(">>>>>NOW")
+	logrus.WithField("func", "Now").Infof(">>>>Now")
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
