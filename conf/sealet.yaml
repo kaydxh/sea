@@ -1,3 +1,13 @@
+log:
+  formatter: text
+  level: info
+  filepath: ./log
+  max_age: 10h
+  max_count: 0
+  rotate_interval: 1h
+  rotate_size: 104857600
+  report_caller: true
 web:
   bind_address:
     port: 10001
+    timeout: 10s
