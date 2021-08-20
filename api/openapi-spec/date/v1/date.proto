@@ -25,5 +25,5 @@ message DateRequest {
 
 message DateResponse {
   string request_id = 1 [json_name = "RequestId"];
-  string date = 2;
+  string date = 2 [json_name = "Date"];
 }
