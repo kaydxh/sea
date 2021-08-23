@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	errors_ "github.com/kaydxh/golang/go/errors"
+	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
@@ -28,8 +29,29 @@ type CompletedServerRunOptions struct {
 }
 
 func NewServerRunOptions(configFile string) *ServerRunOptions {
+	gatewayOpts := []webserver_.ConfigOption{}
+	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
+
+	//api response formatter
+	gatewayOpts = append(
+		gatewayOpts,
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloudHTTPResponseOptions()),
+	)
+
+	//format error response
+	gatewayOpts = append(
+		gatewayOpts,
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+	)
+
+	//auto generate requestId
+	gatewayOpts = append(
+		gatewayOpts,
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerUnaryInterceptorsRequestIdOptions()),
+	)
+
 	return &ServerRunOptions{
-		webServerConfig: webserver_.NewConfig(webserver_.WithViper(viper_.GetViper(configFile, "web"))),
+		webServerConfig: webserver_.NewConfig(gatewayOpts...),
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
 	}
 }
