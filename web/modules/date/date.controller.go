@@ -24,8 +24,13 @@ func (c *Controller) Now(
 	req *date.DateRequest,
 ) (resp *date.DateResponse, err error) {
 	logrus.WithField("func", "Now").Infof(">>>>Now")
+
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
 	}, nil
+
+	// return error response
+	//		err = fmt.Errorf("InvalidArgument")
+	//		return nil, status.Error(codes.InvalidArgument, err.Error())
 }
