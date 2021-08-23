@@ -8,7 +8,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/kaydxh/golang v0.0.27
+	github.com/kaydxh/golang v0.0.28
 	github.com/ory/x v0.0.264
 	github.com/prometheus/client_golang v1.11.0
 	github.com/searKing/golang/pkg v0.0.0-20200701165901-f5465359f9b0
@@ -20,4 +20,4 @@ require (
 	google.golang.org/protobuf v1.27.1
 )
 
-//replace github.com/kaydxh/golang v0.0.26 => /Users/kayxhding/workspace/studyspace/git-kayxhding/github.com/kaydxh/golang
+//replace github.com/kaydxh/golang => ../../../github.com/kaydxh/golang
