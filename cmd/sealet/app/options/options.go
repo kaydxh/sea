@@ -35,7 +35,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	//api response formatter
 	gatewayOpts = append(
 		gatewayOpts,
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloudHTTPResponseOptions()),
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
 	)
 
 	//format error response
