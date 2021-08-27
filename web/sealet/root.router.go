@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	"github.com/kaydxh/sea/web/modules/date"
+	//proxy_ "github.com/kaydxh/golang/pkg/proxy"
 )
 
 type Handler struct{}
@@ -31,6 +32,15 @@ func (h *Handler) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) 
 	// API
 	//	apiRouter := ginRouter.Group(values.APIPathPrefix)
 	//	health.Router(apiRouter)
+
+	//reverse proxy for  path "/proxy",
+	/*
+		addr := "http://127.0.0.1:1080"
+		rp, err := proxy_.NewReverseProxy(ginRouter, proxy_.WithTargetUrl(addr), proxy_.WithRouterPatterns("/Now"))
+		if err == nil {
+			rp.SetProxy()
+		}
+	*/
 
 	date.Router(grpcRouter)
 
