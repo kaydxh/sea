@@ -29,7 +29,7 @@ WORKDIR /app
 
 # [suggest] declare exposed port
 EXPOSE 10001
-ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
+#ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
 
 # [suggest] use command array
 ENTRYPOINT ENTRYPOINT ["sh", "start.sh"]
