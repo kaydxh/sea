@@ -77,7 +77,7 @@ func RegisterDateServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/sea.api.v1.date.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/sea.api.sealet.date.v1.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -139,7 +139,7 @@ func RegisterDateServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/sea.api.v1.date.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/sea.api.sealet.date.v1.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
