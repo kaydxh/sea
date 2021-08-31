@@ -97,5 +97,5 @@ var DateService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/openapi-spec/date/v1/date.proto",
+	Metadata: "api/openapi-spec/sealet/date/v1/date.proto",
 }
