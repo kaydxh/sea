@@ -8,7 +8,7 @@ import (
 	"context"
 
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
-	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"

@@ -8,7 +8,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
 	"github.com/sirupsen/logrus"
 )
 

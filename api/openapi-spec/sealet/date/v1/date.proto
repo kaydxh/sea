@@ -9,14 +9,7 @@ import "google/protobuf/descriptor.proto";
 option go_package = "github.com/kaydxh/sea/openapi-spec/v1/date;date";
 
 service DateService {
-  rpc Now(DateRequest) returns (DateResponse) {
-    // option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
-    // tags: "query date"
-    // consumes: ""
-    // produces: "application/json"
-    // description: "return date of the node\n"
-    //  };
-  };
+  rpc Now(DateRequest) returns (DateResponse) {};
 }
 
 message DateRequest {
