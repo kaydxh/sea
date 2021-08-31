@@ -31,7 +31,7 @@ func NewDateServiceClient(cc grpc.ClientConnInterface) DateServiceClient {
 
 func (c *dateServiceClient) Now(ctx context.Context, in *DateRequest, opts ...grpc.CallOption) (*DateResponse, error) {
 	out := new(DateResponse)
-	err := c.cc.Invoke(ctx, "/sea.api.v1.date.DateService/Now", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/sea.api.sealet.date.v1.DateService/Now", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func _DateService_Now_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sea.api.v1.date.DateService/Now",
+		FullMethod: "/sea.api.sealet.date.v1.DateService/Now",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(DateServiceServer).Now(ctx, req.(*DateRequest))
@@ -88,7 +88,7 @@ func _DateService_Now_Handler(srv interface{}, ctx context.Context, dec func(int
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DateService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "sea.api.v1.date.DateService",
+	ServiceName: "sea.api.sealet.date.v1.DateService",
 	HandlerType: (*DateServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

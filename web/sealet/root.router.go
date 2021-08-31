@@ -9,7 +9,7 @@ import (
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 
 	//proxy_ "github.com/kaydxh/golang/pkg/proxy"
-	"github.com/kaydxh/sea/web/modules/date"
+	"github.com/kaydxh/sea/web/modules/sealet/date"
 )
 
 type Handler struct{}
