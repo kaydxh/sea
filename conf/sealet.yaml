@@ -11,3 +11,5 @@ web:
   bind_address:
     port: 10001
     timeout: 10s
+  max_concurrency_unary: 10 # max concurrency for grpc unary api
+  max_concurrency_stream: 10 # max concurrency for grpc stream api
