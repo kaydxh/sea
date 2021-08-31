@@ -38,6 +38,8 @@ http:
     #
     - selector: sea.api.sealet.date.v1.DateService.Now
       # just for gin, ignore this path for grpc_gateway
+      get: '/Now'
       additional_bindings:
+        - get: '/Now'
         - post: '/Now'
           body: "*"
