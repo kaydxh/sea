@@ -4,7 +4,7 @@
 set -euo pipefail
 # set -o xtrace
 
-function signal_handle()
+function signal_handler()
 {
     # get task process id
     local pids=`jobs -p`
@@ -16,7 +16,7 @@ function signal_handle()
     fi
 }
 
-# signal handle
-trap signal_handle SIGINT SIGQUIT SIGKILL SIGTERM SIGABRT SIGSEGV
+# reset signal handle to signal_handle
+trap signal_handler SIGINT SIGQUIT SIGKILL SIGTERM SIGABRT SIGSEGV
 
 ./bin/sealet --config ./conf/sealet.yaml
