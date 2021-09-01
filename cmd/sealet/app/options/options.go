@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	errors_ "github.com/kaydxh/golang/go/errors"
+	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
@@ -15,6 +16,7 @@ import (
 type ServerRunOptions struct {
 	webServerConfig *webserver_.Config
 	logConfig       *logs_.Config
+	mysqlConfig     *mysql_.Config
 }
 
 // completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
@@ -53,6 +55,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	return &ServerRunOptions{
 		webServerConfig: webserver_.NewConfig(gatewayOpts...),
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
+		mysqlConfig:     mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
 	}
 }
 
@@ -78,8 +81,12 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	logrus.Infof("Installing Logs")
 	s.installLogsOrDie()
 
+	//install web handler
 	logrus.Infof("Installing WebHandler")
 	s.installWebHandler(ws)
+
+	//below, auto installed depend on yaml configure with enabled field
+	s.installMysqlOrDie()
 
 	prepared, err := ws.PrepareRun()
 	if err != nil {
