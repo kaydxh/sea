@@ -7,9 +7,10 @@ require (
 	github.com/gin-gonic/gin v1.7.2
 	github.com/go-playground/validator/v10 v10.7.0
 	github.com/golang/protobuf v1.5.2
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/kaydxh/golang v0.0.32
+	github.com/kaydxh/golang v0.0.33
 	github.com/kr/text v0.2.0 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
@@ -27,4 +28,4 @@ require (
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )
 
-//replace github.com/kaydxh/golang v0.0.32  => ../../../github.com/kaydxh/golang
+//replace github.com/kaydxh/golang v0.0.33 => ../../../github.com/kaydxh/golang

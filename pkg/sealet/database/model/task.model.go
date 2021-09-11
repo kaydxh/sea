@@ -5,6 +5,9 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
+	runtime_ "github.com/kaydxh/golang/go/runtime"
+	time_ "github.com/kaydxh/golang/go/time"
+	"github.com/sirupsen/logrus"
 )
 
 type Task struct {
@@ -27,6 +30,15 @@ type Task struct {
 }
 
 func (arg Task) GetTasksByQuery(ctx context.Context, db *sqlx.DB, query string) ([]Task, error) {
+	tc := time_.New(true)
+	caller := runtime_.GetShortCaller()
+	logger := logrus.WithField("caller", caller)
+	clean := func() {
+		tc.Tick(caller)
+		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
+	}
+	defer clean()
+
 	// Check that invalid preparations fail
 	ns, err := db.PrepareNamedContext(ctx, query)
 	if err != nil {
@@ -44,6 +56,15 @@ func (arg Task) GetTasksByQuery(ctx context.Context, db *sqlx.DB, query string) 
 
 // exec sql for insert/update/delete
 func (arg Task) ExecTaskByQuery(ctx context.Context, db *sqlx.DB, query string) error {
+	tc := time_.New(true)
+	caller := runtime_.GetShortCaller()
+	logger := logrus.WithField("caller", caller)
+	clean := func() {
+		tc.Tick(caller)
+		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
+	}
+	defer clean()
+
 	_, err := db.NamedExecContext(ctx, query, arg)
 	if err != nil {
 		return err

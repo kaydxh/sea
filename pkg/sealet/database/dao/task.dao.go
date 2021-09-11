@@ -44,6 +44,7 @@ func (dao TaskDao) DeleteTask(ctx context.Context, db *sqlx.DB, arg model.Task) 
 // UpdateTask
 // UPDATE task SET foo=:foo, bar=:bar WHERE thud=:thud AND grunt=:grunt
 func (dao TaskDao) UpdateTask(ctx context.Context, db *sqlx.DB, cols, conds []string, arg model.Task) error {
+
 	query := fmt.Sprintf(
 		`UPDATE task SET %s %s`,
 		mysql_.JoinNamedColumnsValues(cols...),
@@ -55,6 +56,7 @@ func (dao TaskDao) UpdateTask(ctx context.Context, db *sqlx.DB, cols, conds []st
 
 // GetTasks
 func (dao TaskDao) GetTasks(ctx context.Context, db *sqlx.DB, arg model.Task) ([]model.Task, error) {
+
 	query := `SELECT * FROM task`
 	return arg.GetTasksByQuery(
 		ctx,
