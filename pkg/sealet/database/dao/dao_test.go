@@ -14,7 +14,7 @@ import (
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 )
 
-func GetDB(t *testing.T) *sqlx.DB {
+func GetDBOrDie() *sqlx.DB {
 
 	var (
 		once sync.Once
@@ -27,11 +27,11 @@ func GetDB(t *testing.T) *sqlx.DB {
 
 		db, err = config.Complete().New()
 		if err != nil {
-			t.Fatalf("failed to new config err: %v", err)
+			panic(err)
 		}
 
 		if db == nil {
-			t.Fatalf("db is not enable")
+			panic("db is not enable")
 		}
 	})
 
@@ -40,7 +40,7 @@ func GetDB(t *testing.T) *sqlx.DB {
 
 func TestGetTasks(t *testing.T) {
 
-	result, err := dao.TaskDao{}.GetTasks(context.Background(), GetDB(t),
+	result, err := dao.TaskDao{}.GetTasks(context.Background(), GetDBOrDie(),
 		model.Task{})
 	if err != nil {
 		t.Fatalf("failed to get tasks, err: %v", err)
@@ -51,7 +51,7 @@ func TestGetTasks(t *testing.T) {
 
 func TestGetTasksWithCondtion(t *testing.T) {
 
-	result, err := dao.TaskDao{}.GetTasks(context.Background(), GetDB(t),
+	result, err := dao.TaskDao{}.GetTasks(context.Background(), GetDBOrDie(),
 		model.Task{
 			TaskType: 1,
 			TaskName: "task1",
@@ -65,7 +65,7 @@ func TestGetTasksWithCondtion(t *testing.T) {
 
 func TestAddTask(t *testing.T) {
 
-	err := dao.TaskDao{}.AddTask(context.Background(), GetDB(t), model.Task{
+	err := dao.TaskDao{}.AddTask(context.Background(), GetDBOrDie(), model.Task{
 		TaskName: "task3",
 		TaskId:   uuid.New().String(),
 		TaskType: 3,
@@ -77,7 +77,7 @@ func TestAddTask(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 
-	err := dao.TaskDao{}.DeleteTask(context.Background(), GetDB(t), model.Task{
+	err := dao.TaskDao{}.DeleteTask(context.Background(), GetDBOrDie(), model.Task{
 		TaskName: "task3",
 		TaskType: 3,
 	})
@@ -90,7 +90,7 @@ func TestUpdateTask(t *testing.T) {
 
 	err := dao.TaskDao{}.UpdateTask(
 		context.Background(),
-		GetDB(t),
+		GetDBOrDie(),
 		[]string{"task_name"},
 		[]string{"task_type"},
 		model.Task{
