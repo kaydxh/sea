@@ -14,6 +14,9 @@ type TaskDao struct{}
 // AddTask
 func (dao TaskDao) AddTask(ctx context.Context, db *sqlx.DB, arg model.Task) error {
 
+	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, DatabaseExecuteTimeout)
+	defer cancel()
+
 	query := `INSERT INTO task 
 			 (is_deleted, task_name, task_id, task_type, task_status)
 			 VALUES (:is_deleted,
@@ -28,11 +31,17 @@ func (dao TaskDao) AddTask(ctx context.Context, db *sqlx.DB, arg model.Task) err
                      task_type    = :task_type,
                      task_status  = :task_status
 					 `
+	defer cancel()
+
 	return arg.ExecTaskByQuery(ctx, db, query)
 }
 
 // DeleteTask
 func (dao TaskDao) DeleteTask(ctx context.Context, db *sqlx.DB, arg model.Task) error {
+
+	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, DatabaseExecuteTimeout)
+	defer cancel()
+
 	query := `DELETE FROM task`
 	return arg.ExecTaskByQuery(
 		ctx,
@@ -45,17 +54,22 @@ func (dao TaskDao) DeleteTask(ctx context.Context, db *sqlx.DB, arg model.Task) 
 // UPDATE task SET foo=:foo, bar=:bar WHERE thud=:thud AND grunt=:grunt
 func (dao TaskDao) UpdateTask(ctx context.Context, db *sqlx.DB, cols, conds []string, arg model.Task) error {
 
+	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, DatabaseExecuteTimeout)
+	defer cancel()
+
 	query := fmt.Sprintf(
 		`UPDATE task SET %s %s`,
 		mysql_.JoinNamedColumnsValues(cols...),
 		mysql_.GenerateNameColumsCondition(mysql_.SqlCompareEqual, mysql_.SqlOperatorAnd, conds...),
 	)
-
 	return arg.ExecTaskByQuery(ctx, db, query)
 }
 
 // GetTasks
 func (dao TaskDao) GetTasks(ctx context.Context, db *sqlx.DB, arg model.Task) ([]model.Task, error) {
+
+	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, DatabaseExecuteTimeout)
+	defer cancel()
 
 	query := `SELECT * FROM task`
 	return arg.GetTasksByQuery(
