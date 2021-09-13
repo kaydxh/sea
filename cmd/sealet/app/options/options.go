@@ -6,6 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	errors_ "github.com/kaydxh/golang/go/errors"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
+	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
@@ -17,6 +18,7 @@ type ServerRunOptions struct {
 	webServerConfig *webserver_.Config
 	logConfig       *logs_.Config
 	mysqlConfig     *mysql_.Config
+	redisConfig     *redis_.Config
 }
 
 // completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
@@ -87,6 +89,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 
 	//below, auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie()
+	s.installRedisOrDie()
 
 	prepared, err := ws.PrepareRun()
 	if err != nil {
