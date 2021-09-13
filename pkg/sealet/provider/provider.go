@@ -1,10 +1,14 @@
 package provider
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/go-redis/redis"
+	"github.com/jmoiron/sqlx"
+)
 
 // Provider for global instance
 type Provider struct {
-	SqlDB *sqlx.DB
+	SqlDB   *sqlx.DB
+	RedisDB *redis.Client
 }
 
 var provider = &Provider{}
@@ -15,4 +19,8 @@ func GlobalProvider() *Provider {
 
 func GetSqlDB() *sqlx.DB {
 	return provider.SqlDB
+}
+
+func GetRedisDB() *redis.Client {
+	return provider.RedisDB
 }
