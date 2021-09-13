@@ -58,7 +58,9 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 		webServerConfig: webserver_.NewConfig(gatewayOpts...),
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
 		mysqlConfig:     mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
+		redisConfig:     redis_.NewConfig(redis_.WithViper(viper_.GetViper(configFile, "database.redis"))),
 	}
+
 }
 
 // Validate checks ServerRunOptions and return a slice of found errs.
