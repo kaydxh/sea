@@ -24,6 +24,7 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 			   You can use curl over HTTP 1.1, 
 			   eg: curl -X POST -k https://localhost:port/Now `,
 		SilenceUsage: true,
+
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfgFile, err := cmd.Flags().GetString("config")
 			if err != nil {
@@ -43,16 +44,22 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 			}
 
 			if err := completedOptions.Run(ctx); err != nil {
-				fmt.Printf("failed to run")
+				fmt.Printf("failed to run server")
 				os.Exit(1)
 			}
 
-			fmt.Printf("command exit")
 			return nil
 		},
+
+		PostRunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Printf("server exit")
+			return nil
+		},
+
 		Args: func(cmd *cobra.Command, args []string) error {
 			for _, arg := range args {
 				if len(arg) > 0 {
+					//%q a single-quoted character literal safely escaped with Go syntax
 					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
 				}
 			}
