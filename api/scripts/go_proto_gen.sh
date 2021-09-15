@@ -48,6 +48,7 @@ proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/g
 source_relative_option="paths=source_relative:."
 go_tag_option="--go-tag_out=${source_relative_option}"
 go_grpc_option="--go-grpc_out=${source_relative_option}"
+grpc_gateway_option=""
 grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
 
@@ -56,9 +57,13 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   api_conf_yaml_base_name="$(basename ${proto} .proto).yaml"
   api_conf_yaml_dir="$(dirname ${proto})"
   api_conf_yaml="${api_conf_yaml_dir}/$api_conf_yaml_base_name"
-  grpc_api_yaml_option="grpc_api_configuration=${api_conf_yaml},${source_relative_option}"
+  grpc_api_yaml_option=""
 
-  grpc_option="${grpc_gateway_out_option},${grpc_api_yaml_option} ${grpc_gateway_delete_option}"
-  protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_option} "${proto}"
+  if [[ -f "${api_conf_yaml}" ]];then
+    grpc_api_yaml_option="grpc_api_configuration=${api_conf_yaml},${source_relative_option}"
+    grpc_gateway_option="${grpc_gateway_out_option},${grpc_api_yaml_option} ${grpc_gateway_delete_option}"
+  fi
+
+  protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} "${proto}"
   #protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=${api_conf_yaml},paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
 done
