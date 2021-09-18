@@ -18,19 +18,26 @@ func (dao TaskDao) AddTask(ctx context.Context, db *sqlx.DB, arg model.Task) err
 	defer cancel()
 
 	query := `INSERT INTO task 
-			 (is_deleted, task_name, task_id, task_type, task_status)
-			 VALUES (:is_deleted,
+			   (
+			   is_deleted,
+			   task_name,
+			   task_id,
+			   task_type,
+			   task_status
+			   )
+			   VALUES (
+			         :is_deleted,
 			         :task_name,
 					 :task_id,
 					 :task_type,
-					 :task_status)
+					 :task_status
+					 )
 					 ON DUPLICATE KEY UPDATE
 					 is_deleted   = :is_deleted,
                      task_name    = :task_name,
                      task_id      = :task_id,
                      task_type    = :task_type,
-                     task_status  = :task_status
-					 `
+                     task_status  = :task_status`
 	defer cancel()
 
 	return arg.ExecTaskByQuery(ctx, db, query)
