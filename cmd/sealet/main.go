@@ -36,6 +36,8 @@ func main() {
 	command := app.NewSealetCommand(ctx)
 	// profile
 	{
+
+		//env variable PROFILING=cpu[mem,mutex,block,trace,thread_create,goroutine]
 		defer profile_.StartWithEnv().Stop()
 		//	rootCmd.SetHelpTemplate(fmt.Sprintf("%s\n%s", rootCmd.HelpTemplate(), profile.HelpMessage()))
 	}
