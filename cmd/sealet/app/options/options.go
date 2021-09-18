@@ -11,7 +11,6 @@ import (
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
-	"github.com/sirupsen/logrus"
 )
 
 type ServerRunOptions struct {
@@ -82,16 +81,14 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 		return err
 	}
 
-	logrus.Infof("Installing Logs")
 	s.installLogsOrDie()
 
-	//install web handler
-	logrus.Infof("Installing WebHandler")
-	s.installWebHandler(ws)
-
-	//below, auto installed depend on yaml configure with enabled field
+	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie()
 	s.installRedisOrDie()
+
+	//install web handler
+	s.installWebHandler(ws)
 
 	prepared, err := ws.PrepareRun()
 	if err != nil {

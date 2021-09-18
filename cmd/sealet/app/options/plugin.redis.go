@@ -7,8 +7,8 @@ import (
 
 func (s *CompletedServerRunOptions) installRedisOrDie() {
 	c := s.redisConfig.Complete()
-	if c.Proto.GetEnabled() {
-		logrus.Infof("Installing Redis")
+	if !c.Proto.GetEnabled() {
+		return
 	}
 
 	db, err := c.New()
@@ -18,4 +18,5 @@ func (s *CompletedServerRunOptions) installRedisOrDie() {
 	}
 
 	provider.GlobalProvider().RedisDB = db
+
 }

@@ -7,8 +7,8 @@ import (
 
 func (s *CompletedServerRunOptions) installMysqlOrDie() {
 	c := s.mysqlConfig.Complete()
-	if c.Proto.GetEnabled() {
-		logrus.Infof("Installing Mysql")
+	if !c.Proto.GetEnabled() {
+		return
 	}
 
 	db, err := c.New()
@@ -18,4 +18,5 @@ func (s *CompletedServerRunOptions) installMysqlOrDie() {
 	}
 
 	provider.GlobalProvider().SqlDB = db
+
 }
