@@ -1,4 +1,4 @@
-package dao_test
+package mysqldao_test
 
 import (
 	"context"
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/kaydxh/sea/pkg/sealet/database/dao"
 	"github.com/kaydxh/sea/pkg/sealet/database/model"
 )
 
@@ -16,7 +15,7 @@ import (
 func BenchmarkAddTask(t *testing.B) {
 	for n := 0; n < t.N; n++ {
 		fmt.Println("n: ", n)
-		err := dao.TaskDao{}.AddTask(context.Background(), GetDBOrDie(), model.Task{
+		err := GetTaskDao().AddTask(context.Background(), model.Task{
 			TaskName: "task3",
 			TaskId:   uuid.New().String(),
 			TaskType: 3,
@@ -29,13 +28,15 @@ func BenchmarkAddTask(t *testing.B) {
 
 func BenchmarkParallelAddTask(t *testing.B) {
 	t.RunParallel(func(pb *testing.PB) {
-		err := dao.TaskDao{}.AddTask(context.Background(), GetDBOrDie(), model.Task{
-			TaskName: "task3",
-			TaskId:   uuid.New().String(),
-			TaskType: 3,
-		})
-		if err != nil {
-			t.Fatalf("failed to add tasks, err: %v", err)
+		for pb.Next() {
+			err := GetTaskDao().AddTask(context.Background(), model.Task{
+				TaskName: "task3",
+				TaskId:   uuid.New().String(),
+				TaskType: 3,
+			})
+			if err != nil {
+				t.Fatalf("failed to add tasks, err: %v", err)
+			}
 		}
 	})
 }
