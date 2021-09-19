@@ -1,13 +1,7 @@
 package model
 
 import (
-	"context"
 	"database/sql"
-
-	"github.com/jmoiron/sqlx"
-	runtime_ "github.com/kaydxh/golang/go/runtime"
-	time_ "github.com/kaydxh/golang/go/time"
-	"github.com/sirupsen/logrus"
 )
 
 type Task struct {
@@ -29,6 +23,7 @@ type Task struct {
 	TaskStatus int    `db:"task_status"`
 }
 
+/*
 func (arg Task) GetTasksByQuery(ctx context.Context, db *sqlx.DB, query string) ([]Task, error) {
 	tc := time_.New(true)
 	caller := runtime_.GetShortCaller()
@@ -71,3 +66,4 @@ func (arg Task) ExecTaskByQuery(ctx context.Context, db *sqlx.DB, query string) 
 	}
 	return nil
 }
+*/
