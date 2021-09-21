@@ -6,6 +6,7 @@ require (
 	github.com/dgraph-io/ristretto v0.0.3 // indirect
 	github.com/gin-gonic/gin v1.7.2
 	github.com/go-playground/validator/v10 v10.7.0
+	github.com/go-redis/redis/v8 v8.11.3
 	github.com/golang/protobuf v1.5.2
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
@@ -28,4 +29,4 @@ require (
 	gopkg.in/ini.v1 v1.62.0 // indirect
 )
 
-//replace github.com/kaydxh/golang v0.0.33 => ../../../github.com/kaydxh/golang
+replace github.com/kaydxh/golang v0.0.33 => ../../../github.com/kaydxh/golang
