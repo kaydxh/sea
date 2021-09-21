@@ -2,7 +2,6 @@ package mysqldao_test
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"testing"
 
@@ -25,8 +24,6 @@ func GetDBOrDie() *sqlx.DB {
 	onceDB.Do(func() {
 		cfgFile := "../../../../../conf/sealet.yaml"
 		config := mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(cfgFile, "database.mysql")))
-
-		fmt.Println("===========>GETDB")
 
 		db, err = config.Complete().New(context.Background())
 		if err != nil {
