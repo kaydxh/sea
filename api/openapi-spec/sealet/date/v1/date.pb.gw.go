@@ -67,43 +67,7 @@ func local_request_DateService_Now_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-var (
-	filter_DateService_Now_1 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
-)
-
 func request_DateService_Now_1(ctx context.Context, marshaler runtime.Marshaler, client DateServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DateRequest
-	var metadata runtime.ServerMetadata
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DateService_Now_1); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := client.Now(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_DateService_Now_1(ctx context.Context, marshaler runtime.Marshaler, server DateServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DateRequest
-	var metadata runtime.ServerMetadata
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DateService_Now_1); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-
-	msg, err := server.Now(ctx, &protoReq)
-	return msg, metadata, err
-
-}
-
-func request_DateService_Now_2(ctx context.Context, marshaler runtime.Marshaler, client DateServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DateRequest
 	var metadata runtime.ServerMetadata
 
@@ -120,7 +84,7 @@ func request_DateService_Now_2(ctx context.Context, marshaler runtime.Marshaler,
 
 }
 
-func local_request_DateService_Now_2(ctx context.Context, marshaler runtime.Marshaler, server DateServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DateService_Now_1(ctx context.Context, marshaler runtime.Marshaler, server DateServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq DateRequest
 	var metadata runtime.ServerMetadata
 
@@ -166,7 +130,7 @@ func RegisterDateServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_DateService_Now_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_DateService_Now_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -186,29 +150,6 @@ func RegisterDateServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		}
 
 		forward_DateService_Now_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
-	mux.Handle("POST", pattern_DateService_Now_2, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		var stream runtime.ServerTransportStream
-		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/sea.api.sealet.date.v1.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := local_request_DateService_Now_2(rctx, inboundMarshaler, server, req, pathParams)
-		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_DateService_Now_2(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -273,7 +214,7 @@ func RegisterDateServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_DateService_Now_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_DateService_Now_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -293,26 +234,6 @@ func RegisterDateServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("POST", pattern_DateService_Now_2, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		ctx, cancel := context.WithCancel(req.Context())
-		defer cancel()
-		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/sea.api.sealet.date.v1.DateService/Now", runtime.WithHTTPPathPattern("/Now"))
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-		resp, md, err := request_DateService_Now_2(rctx, inboundMarshaler, client, req, pathParams)
-		ctx = runtime.NewServerMetadataContext(ctx, md)
-		if err != nil {
-			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
-			return
-		}
-
-		forward_DateService_Now_2(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
-
-	})
-
 	return nil
 }
 
@@ -320,14 +241,10 @@ var (
 	pattern_DateService_Now_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"Now"}, ""))
 
 	pattern_DateService_Now_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"Now"}, ""))
-
-	pattern_DateService_Now_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"Now"}, ""))
 )
 
 var (
 	forward_DateService_Now_0 = runtime.ForwardResponseMessage
 
 	forward_DateService_Now_1 = runtime.ForwardResponseMessage
-
-	forward_DateService_Now_2 = runtime.ForwardResponseMessage
 )

@@ -40,6 +40,6 @@ http:
       # just for gin, ignore this path for grpc_gateway
       get: '/Now'
       additional_bindings:
-        - get: '/Now'
+        #- get: '/Now'
         - post: '/Now'
           body: "*"
