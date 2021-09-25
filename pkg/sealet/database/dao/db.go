@@ -6,4 +6,5 @@ import (
 
 var (
 	DatabaseExecuteTimeout = time.Minute
+	//DatabaseExecuteTimeout = time.Millisecond
 )
