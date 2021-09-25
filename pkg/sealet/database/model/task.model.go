@@ -13,14 +13,14 @@ type Task struct {
 	CreatedAt sql.NullTime `db:"created_at"`
 	UpdatedAt sql.NullTime `db:"updated_at"`
 
-	IsDeleted bool         `db:"is_deleted"` // soft delete, 0 for not deleted, 1 for deleted
+	IsDeleted bool         `db:"is_deleted" redis:"is_deleted"` // soft delete, 0 for not deleted, 1 for deleted
 	DeletedAt sql.NullTime `db:"deleted_at"`
-	Version   int          `db:"version"`
+	Version   int          `db:"version"    redis:"version"`
 
-	TaskName   string `db:"task_name"`
-	TaskId     string `db:"task_id"`
-	TaskType   int    `db:"task_type"`
-	TaskStatus int    `db:"task_status"`
+	TaskName   string `db:"task_name"   redis:"task_name"`
+	TaskId     string `db:"task_id"     redis:"task_id"`
+	TaskType   int    `db:"task_type"   redis:"task_type"`
+	TaskStatus int    `db:"task_status" redis:"task_status"`
 }
 
 /*
