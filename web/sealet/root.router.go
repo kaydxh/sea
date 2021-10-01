@@ -10,6 +10,7 @@ import (
 
 	//proxy_ "github.com/kaydxh/golang/pkg/proxy"
 	"github.com/kaydxh/sea/web/modules/sealet/date"
+	"github.com/kaydxh/sea/web/modules/sealet/monitor"
 )
 
 type Handler struct{}
@@ -44,6 +45,7 @@ func (h *Handler) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) 
 	*/
 
 	date.Router(grpcRouter)
+	monitor.Router(ginRouter)
 
 	//// NOTE: It might be required to set Router.HandleMethodNotAllowed to false to avoid problems.
 	//r.HandleMethodNotAllowed = false
