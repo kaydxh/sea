@@ -86,6 +86,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie(ctx)
 	s.installRedisOrDie(ctx)
+	//	s.installPrometheusOrDie(ctx)
 
 	//install web handler
 	s.installWebHandler(ws)
