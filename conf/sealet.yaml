@@ -13,12 +13,17 @@ web:
     timeout: 10s
   max_concurrency_unary: 10 # max concurrency for grpc unary api
   max_concurrency_stream: 10 # max concurrency for grpc stream api
+  monitor:
+    prometheus:
+      enabled_prometheus_timer_cost: true
+      enabled_prometheus_method_called: true
+  
 database:
   mysql:
-    enabled: false
+    enabled: true 
     address: "localhost:3306"
     username: "root"
-    password: ""
+    password: "password"
     db_name: "sealet"
     max_connections: 100
     max_idle_connections: 10
@@ -26,10 +31,10 @@ database:
     max_wait_duration: 20s
     fail_after_duration: 1m
   redis:
-    enabled: false
+    enabled: true 
     addresses: 
       - "localhost:6380"
-    password: ""
+    password: "password"
     db: 0 
     max_connections: 100
     max_idle_connections: 10
