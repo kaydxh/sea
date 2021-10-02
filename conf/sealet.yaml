@@ -11,16 +11,16 @@ web:
   bind_address:
     port: 10001
     timeout: 10s
-  max_concurrency_unary: 10 # max concurrency for grpc unary api
-  max_concurrency_stream: 10 # max concurrency for grpc stream api
+  max_concurrency_unary: 0 # max concurrency for grpc unary api
+  max_concurrency_stream: 0 # max concurrency for grpc stream api
   monitor:
     prometheus:
-      enabled_prometheus_timer_cost: true
-      enabled_prometheus_method_called: true
+      enabled_metric_timer_cost: true
+      enabled_metric_code_message: true
   
 database:
   mysql:
-    enabled: true 
+    enabled: false
     address: "localhost:3306"
     username: "root"
     password: "password"
@@ -31,7 +31,7 @@ database:
     max_wait_duration: 20s
     fail_after_duration: 1m
   redis:
-    enabled: true 
+    enabled:  false 
     addresses: 
       - "localhost:6380"
     password: "password"
