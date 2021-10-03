@@ -28,7 +28,6 @@ import (
 func main() {
 
 	rand.Seed(time.Now().UnixNano())
-	//logs.InitLog()
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os_.ShutdownSignals...)
 	defer cancel()
@@ -38,6 +37,7 @@ func main() {
 	{
 
 		//env variable PROFILING=cpu[mem,mutex,block,trace,thread_create,goroutine]
+		//PROFILING="cpu" PROFILEPATH="./profile" ./bin/sealet --config ./config/sealet.config
 		defer profile_.StartWithEnv().Stop()
 		//	rootCmd.SetHelpTemplate(fmt.Sprintf("%s\n%s", rootCmd.HelpTemplate(), profile.HelpMessage()))
 	}
