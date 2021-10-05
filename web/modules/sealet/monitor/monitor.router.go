@@ -8,7 +8,7 @@ import "github.com/gin-gonic/gin"
 
 func Router(router gin.IRouter) gin.IRouter {
 	s := Controller{}
-	router.Any("/metrics/prometheus/*path", s.MetricsPrometheus())
+	router.Any("/metrics", s.MetricsPrometheus())
 
 	return router
 }
