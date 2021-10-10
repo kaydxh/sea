@@ -16,6 +16,7 @@ export GOFLAGS="-mod=readonly"
 OUT_PUT_PATH=output/bin
 echo "==> Building..."
 #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
+go mod tidy
 go build -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
 
 # Done!
