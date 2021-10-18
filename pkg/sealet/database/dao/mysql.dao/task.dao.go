@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
+	context_ "github.com/kaydxh/golang/go/context"
 	runtime_ "github.com/kaydxh/golang/go/runtime"
 	time_ "github.com/kaydxh/golang/go/time"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
@@ -24,7 +25,7 @@ func NewTaskDao(db *sqlx.DB) *TaskDao {
 // AddTask
 func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
 
-	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
+	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
 
 	query := `INSERT INTO task 
@@ -55,7 +56,7 @@ func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
 // DeleteTask
 func (d *TaskDao) DeleteTask(ctx context.Context, arg model.Task) error {
 
-	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
+	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
 
 	query := `DELETE FROM task`
@@ -70,7 +71,7 @@ func (d *TaskDao) DeleteTask(ctx context.Context, arg model.Task) error {
 // UPDATE task SET foo=:foo, bar=:bar WHERE thud=:thud AND grunt=:grunt
 func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg model.Task) error {
 
-	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
+	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
 
 	query := fmt.Sprintf(
@@ -84,7 +85,7 @@ func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg mode
 // GetTasks
 func (d *TaskDao) GetTasks(ctx context.Context, arg model.Task) ([]model.Task, error) {
 
-	ctx, cancel := mysql_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
+	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
 
 	query := `SELECT * FROM task`
