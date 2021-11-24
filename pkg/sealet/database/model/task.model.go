@@ -2,6 +2,8 @@ package model
 
 import (
 	"database/sql"
+	"fmt"
+	"strings"
 )
 
 type Task struct {
@@ -21,6 +23,20 @@ type Task struct {
 	TaskId     string `db:"task_id"     redis:"task_id"`
 	TaskType   int    `db:"task_type"   redis:"task_type"`
 	TaskStatus int    `db:"task_status" redis:"task_status"`
+}
+
+type Tasks []*Task
+
+func (t Tasks) String() string {
+	s := "["
+	for _, task := range t {
+		s += fmt.Sprintf("%v,", task)
+	}
+	if len(t) > 0 {
+		s = strings.TrimRight(s, ",")
+	}
+
+	return s + "]"
 }
 
 /*
