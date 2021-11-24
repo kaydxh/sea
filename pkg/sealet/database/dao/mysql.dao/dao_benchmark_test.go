@@ -15,7 +15,7 @@ import (
 func BenchmarkAddTask(t *testing.B) {
 	for n := 0; n < t.N; n++ {
 		fmt.Println("n: ", n)
-		err := GetTaskDao().AddTask(context.Background(), model.Task{
+		err := GetTaskDao().AddTask(context.Background(), &model.Task{
 			TaskName: "task3",
 			TaskId:   uuid.New().String(),
 			TaskType: 3,
@@ -29,7 +29,7 @@ func BenchmarkAddTask(t *testing.B) {
 func BenchmarkParallelAddTask(t *testing.B) {
 	t.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			err := GetTaskDao().AddTask(context.Background(), model.Task{
+			err := GetTaskDao().AddTask(context.Background(), &model.Task{
 				TaskName: "task3",
 				TaskId:   uuid.New().String(),
 				TaskType: 3,

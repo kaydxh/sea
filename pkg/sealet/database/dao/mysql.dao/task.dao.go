@@ -23,7 +23,7 @@ func NewTaskDao(db *sqlx.DB) *TaskDao {
 }
 
 // AddTask
-func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
+func (d *TaskDao) AddTask(ctx context.Context, arg *model.Task) error {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -54,7 +54,7 @@ func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
 }
 
 // DeleteTask
-func (d *TaskDao) DeleteTask(ctx context.Context, arg model.Task) error {
+func (d *TaskDao) DeleteTask(ctx context.Context, arg *model.Task) error {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -69,7 +69,7 @@ func (d *TaskDao) DeleteTask(ctx context.Context, arg model.Task) error {
 
 // UpdateTask
 // UPDATE task SET foo=:foo, bar=:bar WHERE thud=:thud AND grunt=:grunt
-func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg model.Task) error {
+func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg *model.Task) error {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -83,7 +83,7 @@ func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg mode
 }
 
 // GetTasks
-func (d *TaskDao) GetTasks(ctx context.Context, arg model.Task) ([]model.Task, error) {
+func (d *TaskDao) GetTasks(ctx context.Context, arg *model.Task) ([]*model.Task, error) {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -97,8 +97,23 @@ func (d *TaskDao) GetTasks(ctx context.Context, arg model.Task) ([]model.Task, e
 
 }
 
+// GetTasks
+func (d *TaskDao) GetTasksLike(ctx context.Context, arg *model.Task) ([]*model.Task, error) {
+
+	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
+	defer cancel()
+
+	query := `SELECT * FROM task`
+	return d.getTasksByQuery(
+		ctx,
+		mysql_.GenerateCondition(mysql_.SqlCompareLike, mysql_.SqlOperatorAnd, query, arg),
+		arg,
+	)
+
+}
+
 // GetTaskCount
-func (d *TaskDao) GetTaskCount(ctx context.Context, conds []string, arg model.Task) (uint64, error) {
+func (d *TaskDao) GetTaskCount(ctx context.Context, conds []string, arg *model.Task) (uint64, error) {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -111,13 +126,16 @@ func (d *TaskDao) GetTaskCount(ctx context.Context, conds []string, arg model.Ta
 	return d.getCountByQuery(ctx, query, arg)
 }
 
-func (d *TaskDao) getTasksByQuery(ctx context.Context, query string, arg model.Task) ([]model.Task, error) {
+func (d *TaskDao) getTasksByQuery(ctx context.Context, query string, arg *model.Task) (dest []*model.Task, err error) {
 	tc := time_.New(true)
 	caller := runtime_.GetShortCaller()
 	logger := logrus.WithField("caller", caller)
 	clean := func() {
 		tc.Tick(caller)
 		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
+		if err != nil {
+			logger.WithError(err).Errorf("sql: %s", query)
+		}
 	}
 	defer clean()
 
@@ -128,7 +146,6 @@ func (d *TaskDao) getTasksByQuery(ctx context.Context, query string, arg model.T
 	}
 	defer ns.Close()
 
-	var dest []model.Task
 	err = ns.SelectContext(ctx, &dest, arg)
 	if err != nil {
 		return nil, err
@@ -136,13 +153,16 @@ func (d *TaskDao) getTasksByQuery(ctx context.Context, query string, arg model.T
 	return dest, nil
 }
 
-func (d *TaskDao) getCountByQuery(ctx context.Context, query string, arg model.Task) (uint64, error) {
+func (d *TaskDao) getCountByQuery(ctx context.Context, query string, arg *model.Task) (count uint64, err error) {
 	tc := time_.New(true)
 	caller := runtime_.GetShortCaller()
 	logger := logrus.WithField("caller", caller)
 	clean := func() {
 		tc.Tick(caller)
 		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
+		if err != nil {
+			logger.WithError(err).Errorf("sql: %s", query)
+		}
 	}
 	defer clean()
 
@@ -151,7 +171,6 @@ func (d *TaskDao) getCountByQuery(ctx context.Context, query string, arg model.T
 		return 0, err
 	}
 
-	var count uint64
 	err = ns.QueryRowContext(ctx, arg).Scan(&count)
 	if err != nil {
 		return 0, err
@@ -161,19 +180,24 @@ func (d *TaskDao) getCountByQuery(ctx context.Context, query string, arg model.T
 }
 
 // exec sql for insert/update/delete
-func (d *TaskDao) execTaskByQuery(ctx context.Context, query string, arg model.Task) error {
+func (d *TaskDao) execTaskByQuery(ctx context.Context, query string, arg *model.Task) (err error) {
 	tc := time_.New(true)
 	caller := runtime_.GetShortCaller()
 	logger := logrus.WithField("caller", caller)
 	clean := func() {
 		tc.Tick(caller)
 		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
+		if err != nil {
+			logger.WithError(err).Errorf("sql: %s", query)
+		}
 	}
 	defer clean()
 
-	_, err := d.db.NamedExecContext(ctx, query, arg)
+	rows, err := d.db.NamedExecContext(ctx, query, arg)
 	if err != nil {
 		return err
 	}
+	logger.Infof("affected rows: %v by sql", rows)
+
 	return nil
 }
