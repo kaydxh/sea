@@ -53,20 +53,33 @@ func GetTaskDao() *mysqldao.TaskDao {
 
 func TestGetTasks(t *testing.T) {
 
-	result, err := GetTaskDao().GetTasks(context.Background(), model.Task{})
+	results, err := GetTaskDao().GetTasks(context.Background(), &model.Task{})
 	if err != nil {
 		t.Fatalf("failed to get tasks, err: %v", err)
 	}
 
-	t.Logf("result of get tasks: %#v", result)
+	t.Logf("result of get tasks: %v", model.Tasks(results))
+}
+
+func TestGetTasksLike(t *testing.T) {
+
+	results, err := GetTaskDao().GetTasksLike(context.Background(), &model.Task{
+		//		TaskName: "task4",
+		TaskId: "9",
+	})
+	if err != nil {
+		t.Fatalf("failed to get tasks, err: %v", err)
+	}
+
+	t.Logf("result of get tasks: %v", model.Tasks(results))
 }
 
 func TestGetTasksWithCondtion(t *testing.T) {
 
 	result, err := GetTaskDao().GetTasks(context.Background(),
-		model.Task{
+		&model.Task{
 			TaskType: 1,
-			TaskName: "task1",
+			TaskName: "task",
 		})
 	if err != nil {
 		t.Fatalf("failed to get tasks, err: %v", err)
@@ -77,7 +90,7 @@ func TestGetTasksWithCondtion(t *testing.T) {
 
 func TestAddTask(t *testing.T) {
 
-	err := GetTaskDao().AddTask(context.Background(), model.Task{
+	err := GetTaskDao().AddTask(context.Background(), &model.Task{
 		TaskName: "task3",
 		TaskId:   uuid.New().String(),
 		TaskType: 3,
@@ -89,7 +102,7 @@ func TestAddTask(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 
-	err := GetTaskDao().DeleteTask(context.Background(), model.Task{
+	err := GetTaskDao().DeleteTask(context.Background(), &model.Task{
 		TaskName: "task3",
 		TaskType: 3,
 	})
@@ -104,7 +117,7 @@ func TestUpdateTask(t *testing.T) {
 		context.Background(),
 		[]string{"task_name"},
 		[]string{"task_type"},
-		model.Task{
+		&model.Task{
 			TaskName: "task20",
 			TaskType: 2,
 		},
