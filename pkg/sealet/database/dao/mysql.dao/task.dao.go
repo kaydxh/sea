@@ -114,16 +114,18 @@ func (d *TaskDao) GetTasksByPage(
 
 	query := fmt.Sprintf(
 		`SELECT * FROM  %s
-		     WHERE %s
-			   ORDER BY create_time DESC, id DESC limit %d, %d`,
+		          WHERE %s
+			      ORDER BY create_time DESC, id DESC limit %d, %d`,
 		taskTableName,
 		mysql_.ConditionWithEqualAnd(conds...),
+		offset,
+		limit,
 	)
-	return m.getTasks(ctx, query, arg)
+	return d.getTasks(ctx, query, arg)
 }
 
 // GetTasksCount
-func (d *TaskDao) GetTasksCount(ctx context.Context, conds []string, arg *model.Task) (uint64, error) {
+func (d *TaskDao) GetTasksCount(ctx context.Context, conds []string, arg *model.Task) (uint32, error) {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
