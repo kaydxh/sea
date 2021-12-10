@@ -162,25 +162,6 @@ func (d *TaskDao) getTasks(ctx context.Context, query string, arg interface{}) (
 	if err != nil {
 		return nil, err
 	}
-	/*
-		rows, err := d.db.NamedQueryContext(ctx, query, arg)
-		if err != nil {
-			fmt.Printf("===err: %v\n", err)
-			return nil, err
-		}
-		defer rows.Close()
-
-		for rows.Next() {
-			var task model.Task
-			err = rows.StructScan(&task)
-			if err != nil {
-				fmt.Printf("StructScan===err: %v\n", err)
-				return nil, err
-			}
-
-			dest = append(dest, &task)
-		}
-	*/
 
 	return dest, nil
 }
