@@ -32,7 +32,7 @@ type CompletedServerRunOptions struct {
 }
 
 func NewServerRunOptions(configFile string) *ServerRunOptions {
-	gatewayOpts := []webserver_.ConfigOption{}
+	var gatewayOpts []webserver_.ConfigOption
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
 	//api response formatter
