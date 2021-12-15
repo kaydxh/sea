@@ -68,7 +68,7 @@ func TestGetTasksByPage(t *testing.T) {
 	)
 
 	filters := map[string]interface{}{
-		model.ColTaskTaskId: "task1",
+		model.ColTaskTaskId: "9d00b6c6-b41c-4c1d-8999-6e85f6f089a6",
 	}
 
 	conds := []string{model.ColTaskTaskId}
