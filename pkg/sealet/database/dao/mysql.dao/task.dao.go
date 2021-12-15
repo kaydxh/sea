@@ -6,12 +6,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	context_ "github.com/kaydxh/golang/go/context"
-	runtime_ "github.com/kaydxh/golang/go/runtime"
-	time_ "github.com/kaydxh/golang/go/time"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	"github.com/kaydxh/sea/pkg/sealet/database/dao"
 	"github.com/kaydxh/sea/pkg/sealet/database/model"
-	"github.com/sirupsen/logrus"
 )
 
 const taskTableName = "task"
@@ -89,7 +86,7 @@ func (d *TaskDao) UpdateTask(ctx context.Context, cols, conds []string, arg *mod
 }
 
 // GetTasks
-func (d *TaskDao) GetTasks(ctx context.Context, conds []string, arg *model.Task) ([]*model.Task, error) {
+func (d *TaskDao) GetTasks(ctx context.Context, conds []string, arg *model.Task) (tasks []*model.Task, err error) {
 
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
@@ -100,7 +97,13 @@ func (d *TaskDao) GetTasks(ctx context.Context, conds []string, arg *model.Task)
 		taskTableName,
 		mysql_.ConditionWithEqualAnd(conds...),
 	)
-	return d.getTasks(ctx, query, arg)
+
+	err = mysql_.SelectNamedContext(ctx, query, arg, &tasks, d.db)
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 func (d *TaskDao) GetTasksByPage(
@@ -108,7 +111,7 @@ func (d *TaskDao) GetTasksByPage(
 	offset, limit int32,
 	conds []string,
 	arg map[string]interface{},
-) ([]*model.Task, error) {
+) (tasks []*model.Task, err error) {
 	ctx, cancel := context_.WithTimeout(ctx, dao.DatabaseExecuteTimeout)
 	defer cancel()
 
@@ -121,7 +124,13 @@ func (d *TaskDao) GetTasksByPage(
 		offset,
 		limit,
 	)
-	return d.getTasks(ctx, query, arg)
+
+	err = mysql_.SelectNamedContext(ctx, query, arg, &tasks, d.db)
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 // GetTasksCount
@@ -138,32 +147,4 @@ func (d *TaskDao) GetTasksCount(ctx context.Context, conds []string, arg *model.
 	)
 
 	return mysql_.GetCountContext(ctx, query, arg, d.db)
-}
-
-func (d *TaskDao) getTasks(ctx context.Context, query string, arg interface{}) (dest []*model.Task, err error) {
-	tc := time_.New(true)
-	caller := runtime_.GetShortCaller()
-	logger := logrus.WithField("caller", caller)
-	clean := func() {
-		tc.Tick(caller)
-		logger.WithField("cost", tc.String()).Infof("SQL EXECL")
-		if err != nil {
-			logger.WithError(err).Errorf("sql: %s", query)
-		}
-	}
-	defer clean()
-
-	// Check that invalid preparations fail
-	ns, err := d.db.PrepareNamedContext(ctx, query)
-	if err != nil {
-		return nil, err
-	}
-	defer ns.Close()
-
-	err = ns.SelectContext(ctx, &dest, arg)
-	if err != nil {
-		return nil, err
-	}
-
-	return dest, nil
 }
