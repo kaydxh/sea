@@ -8,6 +8,7 @@ import (
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
+	interceptormonitor_ "github.com/kaydxh/golang/pkg/grpc-middleware/monitor"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
@@ -70,7 +71,9 @@ func (s *ServerRunOptions) Validate(validate *validator.Validate) error {
 
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
-	_ = s
+
+	// grpc middleware for log in-out packet
+	s.webServerConfig.WithGRPCGatewayOptions(interceptormonitor_.UnaryServerInterceptorOfInOutPacket())
 	return CompletedServerRunOptions{&completedServerRunOptions{s}}, nil
 }
 
