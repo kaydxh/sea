@@ -5,6 +5,8 @@ set -euo pipefail
 
 OLD_PROJECT_NAME=$1
 NEW_PROJECT_NAME=$2
+OLD_GIT_REPOSITORY_NAME=$3 #github.com/kaydxh
+NEW_GIT_REPOSITORY_NAME=$4 #git.code.oa.com/kaydxh
 
 function usage() {
     echo >&2 "Usage: $0 OLD_PROJECT_NAME NEW_PROJECT_NAME"
@@ -61,6 +63,30 @@ function replaceContentOfFiles {
    UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
    sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME}/g" "${it}"
 
+   # replace git name
+   sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME}/g" "${it}"
+
+   # support by base 4.0
+   # sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
+  done
+}
+
+function replaceGitRespositoryNameOfFiles {
+  for it in $(grep -RIl --exclude-dir={*third_party*,*node_modules*,*output*} --exclude=*rename-project.sh "${OLD_GIT_REPOSITORY_NAME}" .)
+  do
+    echo "${it}"
+    # skip soft link file
+    if [[ -h ${it} ]];then
+      continue
+    fi
+
+    OLD_GIT_NAME=${OLD_GIT_REPOSITORY_NAME}/${OLD_PROJECT_NAME}
+    ESCAPED_OLD_GIT_NAME=$(printf '%s\n' "$OLD_GIT_NAME" | sed -e 's/[]\/$*.^[]/\\&/g')
+    NEW_GIT_NAME=${NEW_GIT_REPOSITORY_NAME}/${NEW_PROJECT_NAME}
+    ESCAPED_NEW_GIT_NAME=$(printf '%s\n' "$NEW_GIT_NAME" | sed -e 's/[]\/$*.^[]/\\&/g')
+
+   sed -i "" "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
+
    # support by base 4.0
    # sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
   done
@@ -72,8 +98,9 @@ function replaceProjectRootName {
   fi
 }
 
-checkParams 
-renameFilesAndDirectories 
-replaceContentOfFiles 
-replaceProjectRootName 
+#checkParams 
+#renameFilesAndDirectories 
+#replaceContentOfFiles 
+#replaceProjectRootName 
+replaceGitRespositoryNameOfFiles 
 
