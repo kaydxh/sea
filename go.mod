@@ -20,7 +20,7 @@ require (
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/kaydxh/golang v0.0.71
+	github.com/kaydxh/golang v0.0.72
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
@@ -46,4 +46,4 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 )
 
-//replace github.com/kaydxh/golang v0.0.62 => ../../../github.com/kaydxh/golang
+//replace github.com/kaydxh/golang v0.0.71 => ../../../github.com/kaydxh/golang
