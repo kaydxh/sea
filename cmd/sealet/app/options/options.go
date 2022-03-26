@@ -8,7 +8,6 @@ import (
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
-	interceptormonitor_ "github.com/kaydxh/golang/pkg/grpc-middleware/monitor"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	reslover_ "github.com/kaydxh/golang/pkg/reslover"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
@@ -38,24 +37,6 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	var gatewayOpts []webserver_.ConfigOption
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
-	//api response formatter
-	gatewayOpts = append(
-		gatewayOpts,
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
-	)
-
-	//format error response
-	gatewayOpts = append(
-		gatewayOpts,
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
-	)
-
-	//auto generate requestId
-	gatewayOpts = append(
-		gatewayOpts,
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerUnaryInterceptorsRequestIdOptions()),
-	)
-
 	return &ServerRunOptions{
 		webServerConfig: webserver_.NewConfig(gatewayOpts...),
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
@@ -75,8 +56,16 @@ func (s *ServerRunOptions) Validate(validate *validator.Validate) error {
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
-	// grpc middleware for log in-out packet
-	s.webServerConfig.WithGRPCGatewayOptions(interceptormonitor_.UnaryServerInterceptorOfInOutPacket())
+	//api30 response formatter
+	s.webServerConfig.WithWebConfigOptions(
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
+	)
+
+	//format error response
+	s.webServerConfig.WithWebConfigOptions(
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+	)
+
 	return CompletedServerRunOptions{&completedServerRunOptions{s}}, nil
 }
 
