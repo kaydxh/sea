@@ -1,5 +1,5 @@
 log:
-  formatter: text
+  formatter: glog
   level: info
   filepath: ./log
   max_age: 10h
@@ -17,19 +17,25 @@ web:
     prometheus:
       enabled_metric_timer_cost: true
       enabled_metric_code_message: true
-  
+reslover:
+  enabled: true
+  resolve_interval: 10s
+  reslover_type: reslover_type_dns
+  load_balance_mode: load_balance_mode_consist
+  domains: []
 database:
   mysql:
-    enabled: false
+    enabled: true
     address: "localhost:3306"
     username: "root"
-    password: "password"
+    password: ""
     db_name: "sealet"
     max_connections: 100
     max_idle_connections: 10
     dial_timeout: 5s
     max_wait_duration: 20s
     fail_after_duration: 1m
+    interpolate_params: true
   redis:
     enabled:  false 
     addresses: 
