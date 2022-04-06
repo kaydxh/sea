@@ -26,6 +26,7 @@ func BenchmarkAddTask(t *testing.B) {
 	}
 }
 
+//go test -v dao_benchmark_test.go  -test.bench=" BenchmarkParallelAddTask" .
 func BenchmarkParallelAddTask(t *testing.B) {
 	t.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
