@@ -22,7 +22,10 @@ func Router(router *gw_.GRPCGateway) *gw_.GRPCGateway {
 	err := router.RegisterHTTPHandler(
 		context.Background(),
 		func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
-			return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+			//return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+			//https://github.com/grpc-ecosystem/grpc-gateway/issues/1458,
+			//impove performace, but grpc interceptor is disabled
+			return date.RegisterDateServiceHandlerServer(ctx, mux, &s)
 		},
 	)
 	if err != nil {
