@@ -5,7 +5,7 @@
 set -euo pipefail
 # set -o xtrace
 
-SCRIPT_PATH=$(cd `dirname $0`;pwd)
+SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
 
 <<'COMMENT'
 SCRIPT=$(readlink -f "$0")
