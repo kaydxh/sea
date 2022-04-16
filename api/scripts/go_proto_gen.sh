@@ -1,8 +1,12 @@
 # Created by kayxhding on 2020-10-11 12:40:37
 #!/usr/bin/env bash
 
+# exit by command return non-zero exit code
+set -o errexit
+# Indicate an error when it encounters an undefined variable
+set -o nounset
 # Fail on any error.
-# set -euo pipefail
+set -o pipefail
 # set -o xtrace
 
 # if script called by source, $0 is the name of father script, not the name of source run script
