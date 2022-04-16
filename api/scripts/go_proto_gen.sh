@@ -2,13 +2,14 @@
 #!/usr/bin/env bash
 
 # Fail on any error.
-set -euo pipefail
+# set -euo pipefail
 # set -o xtrace
 
+# if script called by source, $0 is the name of father script, not the name of source run script
 SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
 
 <<'COMMENT'
-SCRIPT=$(readlink -f "$0")
+SCRIPT=$(readlink -f "${BASH_SOURCE[0]}")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 echo ${SCRIPT_PATH}
 COMMENT
