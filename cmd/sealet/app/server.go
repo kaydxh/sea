@@ -17,38 +17,16 @@ const (
 // NewSealetCommand creates a *cobra.Command object with default parameters
 func NewSealetCommand(ctx context.Context) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "sealet",
-		Short: "sealet Public HTTP/2 and GRPC APIs",
+		Use:   "sea-let",
+		Short: "sea-let Public HTTP/2 and GRPC APIs",
 		// stop printing usage when the command errors
-		Long: `To get started run the serve subcommand which will start a gateway server
-			   You can use curl over HTTP 1.1, 
-			   eg: curl -X POST -k https://localhost:port/Now `,
-		SilenceUsage: true,
+		Long: `The Sea let is a gateway serve which you can use curl over HTTP 1.1 or grpc protocal on the same host:port.
+Example: curl -X POST -k https://localhost:port/Now
+See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more information.`,
+		//SilenceUsage: true,
 
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cfgFile, err := cmd.Flags().GetString("config")
-			if err != nil {
-				return err
-			}
-			s := options.NewServerRunOptions(cfgFile)
-
-			// set default options
-			completedOptions, err := s.Complete()
-			if err != nil {
-				return err
-			}
-
-			// validate options
-			if err := completedOptions.Validate(nil); err != nil {
-				return err
-			}
-
-			if err := completedOptions.Run(ctx); err != nil {
-				fmt.Printf("failed to run server")
-				os.Exit(1)
-			}
-
-			return nil
+			return runCommand(ctx, cmd)
 		},
 
 		PostRunE: func(cmd *cobra.Command, args []string) error {
@@ -81,6 +59,32 @@ func NewSealetCommand(ctx context.Context) *cobra.Command {
 	}
 
 	return cmd
+}
+
+func runCommand(ctx context.Context, cmd *cobra.Command) error {
+	cfgFile, err := cmd.Flags().GetString("config")
+	if err != nil {
+		return err
+	}
+	s := options.NewServerRunOptions(cfgFile)
+
+	// set default options
+	completedOptions, err := s.Complete()
+	if err != nil {
+		return err
+	}
+
+	// validate options
+	if err := completedOptions.Validate(nil); err != nil {
+		return err
+	}
+
+	if err := completedOptions.Run(ctx); err != nil {
+		fmt.Printf("failed to run server")
+		os.Exit(1)
+	}
+
+	return nil
 }
 
 // defaultConfigPath returns config file's default path
