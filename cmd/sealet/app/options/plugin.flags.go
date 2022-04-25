@@ -10,13 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-/*
-const (
-	defaultSeaConfigFile    = "./conf/sealet.yaml"
-	defaultUseSeaConfigFile = "./conf/.use.sealet.yaml"
-)
-*/
-
 // defaultConfigPath returns config file's default path
 func defaultConfigPath() string {
 	return fmt.Sprintf("./conf/%s.yaml", filepath.Base(os.Args[0]))
@@ -24,7 +17,7 @@ func defaultConfigPath() string {
 
 func defaultUseConfigPath() string {
 	return fmt.Sprintf(
-		fmt.Sprint(filepath.Join(filepath.Dir(defaultConfigPath()), ".use.%s.yaml"), filepath.Base(os.Args[0])),
+		filepath.Join(filepath.Dir(defaultConfigPath()), ".use.%s.yaml"), filepath.Base(os.Args[0]),
 	)
 }
 
