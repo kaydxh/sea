@@ -7,11 +7,6 @@ import (
 
 	"github.com/kaydxh/sea/cmd/sealet/app/options"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-)
-
-const (
-	componentSealet = "sealet"
 )
 
 // NewSealetCommand creates a *cobra.Command object with default parameters
@@ -45,18 +40,23 @@ See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more informat
 		},
 	}
 
-	cobra.OnInitialize(func() {})
+	sealetFlag := options.NewSealetFlags(cmd)
+	sealetFlag.Install()
 
-	var cfgFile string
-	cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", defaultConfigPath(),
-		fmt.Sprintf("Config file (default is %q)", defaultConfigPath()))
+	/*
+		var cfgFile string
+		cmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", defaultConfigPath(),
+			fmt.Sprintf("Config file (default is %q)", defaultConfigPath()))
+	*/
 
-	cmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
-		cmd.Flags().VisitAll(func(flag *pflag.Flag) {
-			fmt.Printf("FLAG: --%s=%q\n", flag.Name, flag.Value)
-		})
-		return nil
-	}
+	/*
+		cmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
+			cmd.Flags().VisitAll(func(flag *pflag.Flag) {
+				fmt.Printf("FLAG: --%s=%q\n", flag.Name, flag.Value)
+			})
+			return nil
+		}
+	*/
 
 	return cmd
 }
@@ -85,9 +85,4 @@ func runCommand(ctx context.Context, cmd *cobra.Command) error {
 	}
 
 	return nil
-}
-
-// defaultConfigPath returns config file's default path
-func defaultConfigPath() string {
-	return fmt.Sprintf("./conf/%s.yaml", componentSealet)
 }
