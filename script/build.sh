@@ -13,11 +13,14 @@ GIT_DIRTY=$(test -n "`git status --porcelain`" && echo "+CHANGES" || true)
 export CGO_ENABLED=0
 export GOFLAGS="-mod=readonly"
 
-OUT_PUT_PATH=output/bin
+OUT_PUT_PATH=output
+OUT_PUT_BIN_PATH=${OUT_PUT_PATH}/bin
 echo "==> Building..."
+rm -rf ${OUT_PUT_PATH}/*
 #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
 go mod tidy
-go build -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
+go build -o ${OUT_PUT_BIN_PATH}/sealet ./cmd/sealet
+cp -rf conf ${OUT_PUT_PATH}
 
 # Done!
 echo
