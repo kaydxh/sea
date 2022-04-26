@@ -3,8 +3,6 @@ package options
 import (
 	"context"
 
-	"github.com/go-playground/validator/v10"
-	errors_ "github.com/kaydxh/golang/go/errors"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
@@ -48,13 +46,22 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 }
 
 // Validate checks ServerRunOptions and return a slice of found errs.
-func (s *ServerRunOptions) Validate(validate *validator.Validate) error {
+/*
+func (s *ServerRunOptions) Validate(ctx context.Context, validate *validator.Validate) error {
 	var errs []error
 	return errors_.NewAggregate(errs)
 }
+*/
 
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
+
+	/*
+		//inout packet
+		s.webServerConfig.WithWebConfigOptions(
+			webserver_.WithGRPCGatewayOptions(gw_.WithHttpHandlerInterceptorInOutPacketOptions()),
+		)
+	*/
 
 	//api30 response formatter
 	s.webServerConfig.WithWebConfigOptions(
