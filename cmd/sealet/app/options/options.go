@@ -3,6 +3,7 @@ package options
 import (
 	"context"
 
+	app_ "github.com/kaydxh/golang/pkg/app"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
@@ -10,6 +11,7 @@ import (
 	reslover_ "github.com/kaydxh/golang/pkg/reslover"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
+	"github.com/sirupsen/logrus"
 )
 
 type ServerRunOptions struct {
@@ -70,6 +72,7 @@ func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
 // Run runs the specified APIServer.  This should never exit.
 func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
+	logrus.Infof("Starting Sea let version: %v", app_.GetVersion())
 	ws, err := s.webServerConfig.Complete().New()
 	if err != nil {
 		return err
