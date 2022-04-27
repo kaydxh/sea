@@ -74,11 +74,6 @@ func runCommand(ctx context.Context, cmd *cobra.Command) error {
 		return err
 	}
 
-	// validate options
-	if err := completedOptions.Validate(nil); err != nil {
-		return err
-	}
-
 	if err := completedOptions.Run(ctx); err != nil {
 		fmt.Printf("failed to run server")
 		os.Exit(1)
