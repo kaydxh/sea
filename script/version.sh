@@ -43,5 +43,10 @@ function ldflags() {
  add_ldflag "gitVersion" "${GIT_TAG}"
  add_ldflag "gitCommit" "${GIT_COMMIT}"
  add_ldflag "gitTreeState" "${GIT_TREE_STATE}"
+
+ # "$*" => get arg1 arg2 arg3 as a single argument "a1 a2 a3"
+ # "$@" => gets arg1, arg2 and arg3 as a separate arguments "a1" "a2" "a3"
+ # if no quotes, $* is the same to $@, as a separate arguments "a1" "a2" "a3"
+
  echo "${ldflags[*]}"
 }

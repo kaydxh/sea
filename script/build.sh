@@ -23,24 +23,32 @@ function platform() {
   echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"
 }
 
-echo "==> Building in $(platform)"
+function make_build_args() {
+  local goldflags
+
+  goldflags="all=$(ldflags) ${GOLDFLAGS:-}"
+  local -a build_args
+   build_args=(
+   -ldflags="${goldflags}"
+   ) 
+
+   echo "${build_args[*]}"
+}
 
 function build() {
-  local goldflags
-  goldflags="all=$(ldflags) ${GOLDFLAGS:-}"
-  echo "==${goldflags}"
+  GO_BUILD_ARGS="$(make_build_args)"
 
   rm -rf ${SEA_OUTPUT_PATH}/*
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
   go mod tidy
-  go build -o ${SEA_OUTPUT_BIN_PATH}/sealet ./cmd/sealet
-  cp -rf conf ${SEA_OUTPUT_PATH}
+  go build "${GO_BUILD_ARGS}" -o "${SEA_OUTPUT_BIN_PATH}/sealet" ./cmd/sealet
+  cp -rf conf "${SEA_OUTPUT_PATH}"
 
+  # Done!
+  echo
+  echo "==> Results:"
+  ls -hl ${SEA_OUTPUT_PATH}/
 }
 
+echo "==> Building in $(platform)"
 build
-
-# Done!
-echo
-echo "==> Results:"
-ls -hl ${SEA_OUTPUT_PATH}/

@@ -45,14 +45,6 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 
 }
 
-// Validate checks ServerRunOptions and return a slice of found errs.
-/*
-func (s *ServerRunOptions) Validate(ctx context.Context, validate *validator.Validate) error {
-	var errs []error
-	return errors_.NewAggregate(errs)
-}
-*/
-
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
