@@ -13,9 +13,10 @@ web:
     timeout: 10s
   max_concurrency_unary: 0 # max concurrency for grpc unary api
   max_concurrency_stream: 0 # max concurrency for grpc stream api
+  mode: release # gin mode
   monitor:
     prometheus:
-      enabled_metric_timer_cost: true
+      enabled_metric_timer_cost: false
       enabled_metric_code_message: true
 reslover:
   enabled: true
@@ -25,7 +26,7 @@ reslover:
   domains: []
 database:
   mysql:
-    enabled: true
+    enabled: false 
     address: "localhost:3306"
     username: "root"
     password: ""
