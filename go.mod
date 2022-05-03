@@ -46,4 +46,4 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 )
 
-replace github.com/kaydxh/golang v0.0.74 => ../../../github.com/kaydxh/golang
+//replace github.com/kaydxh/golang v0.0.74 => ../../../github.com/kaydxh/golang
