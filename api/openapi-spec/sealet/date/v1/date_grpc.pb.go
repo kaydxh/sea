@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DateServiceClient interface {
+	// 生成当前时间
 	Now(ctx context.Context, in *DateRequest, opts ...grpc.CallOption) (*DateResponse, error)
 }
 
@@ -42,6 +43,7 @@ func (c *dateServiceClient) Now(ctx context.Context, in *DateRequest, opts ...gr
 // All implementations must embed UnimplementedDateServiceServer
 // for forward compatibility
 type DateServiceServer interface {
+	// 生成当前时间
 	Now(context.Context, *DateRequest) (*DateResponse, error)
 	mustEmbedUnimplementedDateServiceServer()
 }
