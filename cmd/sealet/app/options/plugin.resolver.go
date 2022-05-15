@@ -8,8 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (s *CompletedServerRunOptions) installResloverOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
-	c := s.resloverConfig.Complete()
+func (s *CompletedServerRunOptions) installResolverOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
+	c := s.resolverConfig.Complete()
 	if !c.Proto.GetEnabled() {
 		return
 	}
@@ -20,10 +20,10 @@ func (s *CompletedServerRunOptions) installResloverOrDie(ctx context.Context, ws
 		return
 	}
 
-	ws.AddPostStartHookOrDie("reslover-service", func(ctx context.Context) error {
+	ws.AddPostStartHookOrDie("resolver-service", func(ctx context.Context) error {
 		return rs.Run(ctx)
 	})
-	ws.AddPreShutdownHookOrDie("reslover-service", func() error {
+	ws.AddPreShutdownHookOrDie("resolver-service", func() error {
 		rs.Shutdown()
 		return nil
 	})
