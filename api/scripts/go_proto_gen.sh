@@ -28,11 +28,14 @@ function die() {
 <<'COMMENT'
 # This will place three binaries in your $GOBIN
 # Make sure that your $GOBIN is in your $PATH
+# install protoc-gen-doc on mac=> https:
+# github.com/pseudomuto/protoc-gen-doc/issues/20  (make build, cp bin/protoc-gen-doc ${GOBIN})
  go install \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
     github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
     google.golang.org/protobuf/cmd/protoc-gen-go \
     google.golang.org/grpc/cmd/protoc-gen-go-grpc \
+    github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger 
 COMMENT
 
@@ -53,6 +56,8 @@ proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/g
 source_relative_option="paths=source_relative:."
 go_tag_option="--go-tag_out=${source_relative_option}"
 go_grpc_option="--go-grpc_out=${source_relative_option}"
+doc_option="--doc_opt=markdown,docs.md"
+doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
 grpc_gateway_option=""
 grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
@@ -69,6 +74,6 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
     grpc_gateway_option="${grpc_gateway_out_option},${grpc_api_yaml_option} ${grpc_gateway_delete_option}"
   fi
 
-  protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} "${proto}"
+  protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${doc_option} ${doc_out_option} "${proto}"
   #protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=${api_conf_yaml},paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
 done

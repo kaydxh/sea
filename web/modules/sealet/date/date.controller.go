@@ -8,8 +8,8 @@ import (
 	"context"
 	"time"
 
+	logs_ "github.com/kaydxh/golang/pkg/logs"
 	"github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
-	"github.com/sirupsen/logrus"
 )
 
 type Controller struct {
@@ -20,17 +20,20 @@ type Controller struct {
 
 // 日期查询
 func (c *Controller) Now(
-	_ context.Context,
+	ctx context.Context,
 	req *date.DateRequest,
 ) (resp *date.DateResponse, err error) {
-	logrus.WithField("func", "Now").Infof(">>>>Now")
+	logger := logs_.GetLogger(ctx)
+	logger.Infof(">>>>Now")
 
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
+		//	Image: [][]byte{[]byte(uuid.New().String())},
 	}, nil
 
-	// return error response
-	//		err = fmt.Errorf("InvalidArgument")
-	//		return nil, status.Error(codes.InvalidArgument, err.Error())
+	/*
+		err = fmt.Errorf("InvalidArgument")
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	*/
 }
