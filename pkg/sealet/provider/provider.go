@@ -3,14 +3,14 @@ package provider
 import (
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
-	reslover_ "github.com/kaydxh/golang/pkg/reslover"
+	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 )
 
 // Provider for global instance
 type Provider struct {
 	SqlDB           *sqlx.DB
 	RedisDB         *redis.Client
-	ResolverService *reslover_.ResloverService
+	ResolverService *resolver_.ResolverService
 }
 
 var provider = &Provider{}
@@ -27,6 +27,6 @@ func GetRedisDB() *redis.Client {
 	return provider.RedisDB
 }
 
-func GetResolverService() *reslover_.ResloverService {
+func GetResolverService() *resolver_.ResolverService {
 	return provider.ResolverService
 }
