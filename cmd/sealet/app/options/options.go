@@ -8,7 +8,7 @@ import (
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	reslover_ "github.com/kaydxh/golang/pkg/reslover"
+	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	"github.com/sirupsen/logrus"
@@ -19,7 +19,7 @@ type ServerRunOptions struct {
 	logConfig       *logs_.Config
 	mysqlConfig     *mysql_.Config
 	redisConfig     *redis_.Config
-	resloverConfig  *reslover_.Config
+	resolverConfig  *resolver_.Config
 }
 
 // completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
@@ -42,7 +42,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
 		mysqlConfig:     mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
 		redisConfig:     redis_.NewConfig(redis_.WithViper(viper_.GetViper(configFile, "database.redis"))),
-		resloverConfig:  reslover_.NewConfig(reslover_.WithViper(viper_.GetViper(configFile, "reslover"))),
+		resolverConfig:  resolver_.NewConfig(resolver_.WithViper(viper_.GetViper(configFile, "reslover"))),
 	}
 
 }
@@ -85,7 +85,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	s.installRedisOrDie(ctx)
 	//	s.installPrometheusOrDie(ctx)
 
-	s.installResloverOrDie(ctx, ws)
+	s.installResolverOrDie(ctx, ws)
 	//install web handler
 	s.installWebHandler(ws)
 
