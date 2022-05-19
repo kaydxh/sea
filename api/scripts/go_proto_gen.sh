@@ -7,7 +7,7 @@ set -o errexit
 set -o nounset
 # Fail on any error.
 set -o pipefail
-set -o xtrace
+# set -o xtrace
 
 # if script called by source, $0 is the name of father script, not the name of source run script
 SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
@@ -59,12 +59,6 @@ function getopts() {
  # echo "${protodirs[*]}"
 }
 
-getopts $@
-# PROTOC_FILE_DIR="$(getopts $@)"
-# echo "---------${PROTOC_FILE_DIR}"
-# echo "---------${THIRD_PARTY_DIR}"
-# echo "---------${WITH_DOC}"
-
 <<'COMMENT'
 # This will place three binaries in your $GOBIN
 # Make sure that your $GOBIN is in your $PATH
@@ -80,6 +74,8 @@ getopts $@
 COMMENT
 
 echo `pwd`
+
+getopts $@
 
 echo "==> Checking tools..."
 #GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway protoc-gen-govalidators)
