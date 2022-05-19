@@ -19,6 +19,7 @@ echo ${SCRIPT_PATH}
 COMMENT
 
 PROTOC_FILE_DIR="$1"
+THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
 
 function die() {
   echo 1>&2 "$*"
@@ -51,8 +52,10 @@ done
 
 
 echo "==> Generating proto..."
-proto_headers="-I ${SCRIPT_PATH}/../../third_party"
-proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/grpc-ecosystem/grpc-gateway"
+#proto_headers="-I ${SCRIPT_PATH}/../../third_party"
+proto_headers="-I ${THIRD_PARTY_DIR}"
+proto_headers="${proto_headers} -I ${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway"
+# proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/grpc-ecosystem/grpc-gateway"
 source_relative_option="paths=source_relative:."
 go_tag_option="--go-tag_out=${source_relative_option}"
 go_grpc_option="--go-grpc_out=${source_relative_option}"
