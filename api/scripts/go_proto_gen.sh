@@ -7,7 +7,7 @@ set -o errexit
 set -o nounset
 # Fail on any error.
 set -o pipefail
-# set -o xtrace
+set -o xtrace
 
 # if script called by source, $0 is the name of father script, not the name of source run script
 SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
@@ -18,13 +18,52 @@ SCRIPT_PATH=$(dirname "$SCRIPT")
 echo ${SCRIPT_PATH}
 COMMENT
 
-PROTOC_FILE_DIR="$1"
-THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
+PROTOC_FILE_DIR=
+PROTO_HEADERS=
+# THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
+THIRD_PARTY_DIR="${SCRIPT_PATH}/../../third_party}"
+WITH_DOC=
 
 function die() {
   echo 1>&2 "$*"
   exit 1
 }
+
+function getopts() {
+  local -a protodirs
+  while test $# -ne 0
+  do
+    case "$1" in
+       -I|--proto_path=PATH)
+             protodirs+=(
+             "-I $(realpath "$2")"
+            )
+            shift
+            ;;
+       -T|--third_party_path=PATH)
+           THIRD_PARTY_DIR=$(realpath "$2")
+            shift
+            ;;
+       -D|--with-doc)
+            WITH_DOC=1
+            ;;
+       -P|--find_proto_file_path=PATH)
+            PROTOC_FILE_DIR=$(realpath "$2")
+            shift
+            ;;
+     esac
+     shift
+ done
+
+ PROTO_HEADERS="${protodirs[*]}"
+ # echo "${protodirs[*]}"
+}
+
+getopts $@
+# PROTOC_FILE_DIR="$(getopts $@)"
+# echo "---------${PROTOC_FILE_DIR}"
+# echo "---------${THIRD_PARTY_DIR}"
+# echo "---------${WITH_DOC}"
 
 <<'COMMENT'
 # This will place three binaries in your $GOBIN
@@ -53,14 +92,15 @@ done
 
 echo "==> Generating proto..."
 #proto_headers="-I ${SCRIPT_PATH}/../../third_party"
-proto_headers="-I ${THIRD_PARTY_DIR}"
+#proto_headers="-I .. -I ${THIRD_PARTY_DIR}"
+proto_headers=${PROTO_HEADERS}
 proto_headers="${proto_headers} -I ${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway"
 # proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/grpc-ecosystem/grpc-gateway"
 source_relative_option="paths=source_relative:."
 go_tag_option="--go-tag_out=${source_relative_option}"
 go_grpc_option="--go-grpc_out=${source_relative_option}"
-doc_option="--doc_opt=markdown,docs.md"
-doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
+doc_option=""
+doc_out_option=""
 grpc_gateway_option=""
 grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
@@ -75,6 +115,11 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   if [[ -f "${api_conf_yaml}" ]];then
     grpc_api_yaml_option="grpc_api_configuration=${api_conf_yaml},${source_relative_option}"
     grpc_gateway_option="${grpc_gateway_out_option},${grpc_api_yaml_option} ${grpc_gateway_delete_option}"
+  fi
+
+  if [[ "${WITH_DOC}" -eq 1 ]]; then
+    doc_option="--doc_opt=markdown,docs.md"
+    doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
   fi
 
   protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${doc_option} ${doc_out_option} "${proto}"

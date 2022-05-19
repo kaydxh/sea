@@ -45,9 +45,8 @@ function build() {
   cp -rf conf "${SEA_OUTPUT_PATH}"
 
   # Done!
-  echo
-  echo "==> Results:"
-  ls -hl ${SEA_OUTPUT_PATH}/
+  echo -e "\n==> Results:"
+  ls -Rhl ${SEA_OUTPUT_PATH}/
 }
 
 echo "==> Building in $(platform)"
