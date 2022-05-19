@@ -89,7 +89,8 @@ done
 echo "==> Generating proto..."
 #proto_headers="-I ${SCRIPT_PATH}/../../third_party"
 #proto_headers="-I .. -I ${THIRD_PARTY_DIR}"
-proto_headers=${PROTO_HEADERS}
+# "-I ." need behind PROTO_HEADERS, or remove it
+proto_headers="${PROTO_HEADERS} -I ."
 proto_headers="${proto_headers} -I ${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway"
 # proto_headers="${proto_headers} -I ${SCRIPT_PATH}/../../third_party/github.com/grpc-ecosystem/grpc-gateway"
 source_relative_option="paths=source_relative:."
@@ -118,6 +119,6 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
     doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
   fi
 
-  protoc -I . ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${doc_option} ${doc_out_option} "${proto}"
+  protoc ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${doc_option} ${doc_out_option} "${proto}"
   #protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=${api_conf_yaml},paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
 done
