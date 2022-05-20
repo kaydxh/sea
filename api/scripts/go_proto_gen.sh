@@ -23,6 +23,7 @@ PROTO_HEADERS=
 # THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
 THIRD_PARTY_DIR="${SCRIPT_PATH}/../../third_party}"
 WITH_DOC=
+WITH_CPP=
 
 function die() {
   echo 1>&2 "$*"
@@ -51,6 +52,9 @@ function getopts() {
             PROTOC_FILE_DIR=$(realpath "$2")
             shift
             ;;
+       --with-cpp)
+           WITH_CPP=1
+           ;;
      esac
      shift
  done
@@ -98,6 +102,7 @@ go_tag_option="--go-tag_out=${source_relative_option}"
 go_grpc_option="--go-grpc_out=${source_relative_option}"
 doc_option=""
 doc_out_option=""
+cpp_option=""
 grpc_gateway_option=""
 grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
@@ -119,6 +124,10 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
     doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
   fi
 
-  protoc ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${doc_option} ${doc_out_option} "${proto}"
+  if [[ "${WITH_CPP}" -eq 1 ]]; then
+    cpp_option="--cpp_out=."
+  fi
+
+  protoc ${proto_headers} ${go_tag_option} ${go_grpc_option} ${grpc_gateway_option} ${cpp_option} ${doc_option} ${doc_out_option} "${proto}"
   #protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=${api_conf_yaml},paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
 done
