@@ -36,20 +36,20 @@ function getopts() {
   while test $# -ne 0
   do
     case "$1" in
-       -I|--proto_path=PATH)
+       -I|--proto_path)
              protodirs+=(
              "-I $(realpath "$2")"
             )
             shift
             ;;
-       --third_party_path=PATH)
+       --third_party_path)
            THIRD_PARTY_DIR=$(realpath "$2")
             shift
             ;;
        --with-doc)
             WITH_DOC=1
             ;;
-       --proto_file_path=PATH)
+       --proto_file_path)
             PROTOC_FILE_DIR=$(realpath "$2")
             shift
             ;;
