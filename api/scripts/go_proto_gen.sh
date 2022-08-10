@@ -21,7 +21,7 @@ COMMENT
 PROTOC_FILE_DIR=
 PROTO_HEADERS=
 # THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
-THIRD_PARTY_DIR="${SCRIPT_PATH}/../../third_party}"
+THIRD_PARTY_DIR="${SCRIPT_PATH}/../../third_party"
 WITH_DOC=
 WITH_CPP=
 WITH_GO=
