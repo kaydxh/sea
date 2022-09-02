@@ -50,15 +50,14 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
-	//api30 response formatter
 	s.webServerConfig.WithWebConfigOptions(
+		//api30 response formatter
 		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPResponseOptions()),
-	)
-
-	//format error response
-	s.webServerConfig.WithWebConfigOptions(
 		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+
+		//trivial v1 response formatter
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPResponseOptions()),
+		//format error response
 		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HttpErrorOptions()),
 	)
 
