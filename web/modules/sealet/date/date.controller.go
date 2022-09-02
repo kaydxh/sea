@@ -25,15 +25,13 @@ func (c *Controller) Now(
 ) (resp *date.DateResponse, err error) {
 	logger := logs_.GetLogger(ctx)
 	logger.Infof(">>>>Now")
-
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
-		//	Image: [][]byte{[]byte(uuid.New().String())},
 	}, nil
 
-	/*
-		err = fmt.Errorf("InvalidArgument")
-		return nil, status.Error(codes.InvalidArgument, err.Error())
-	*/
+	//	fmt.Printf("req: %v", req.Image[0])
+
+	//	err = fmt.Errorf("InvalidArgument")
+	//	return nil, status.Error(codes.InvalidArgument, err.Error())
 }
