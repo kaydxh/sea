@@ -29,31 +29,17 @@ func main() {
 
 	rand.Seed(time.Now().UnixNano())
 
-	//ctxp := context.Background()
-	ctxp, cancelp := context.WithCancel(context.Background())
-	_ = cancelp
-
-	ctx, cancel := signal.NotifyContext(ctxp, os_.ShutdownSignals...)
+	ctx, cancel := signal.NotifyContext(context.Background(), os_.ShutdownSignals...)
 	defer cancel()
 
 	command := app.NewSealetCommand(ctx)
 	// profile
 	{
-
 		//env variable PROFILING=cpu[mem,mutex,block,trace,thread_create,goroutine]
 		//sudo PROFILING="cpu" PROFILEPATH="./profile" ./bin/sealet --config ./conf/sealet.yaml
 		//<ctrl-c>
 		defer profile_.StartWithEnv().Stop()
-		//	rootCmd.SetHelpTemplate(fmt.Sprintf("%s\n%s", rootCmd.HelpTemplate(), profile.HelpMessage()))
 	}
-
-	//	cancelp()
-
-	//	pflag.CommandLine.SetNormalizeFunc(cliflag.WordSepNormalizeFunc)
-	//	pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
-	// utilflag.InitFlags()
-	//	logs.InitLogs()
-	//	defer logs.FlushLogs()
 
 	if err := command.ExecuteContext(ctx); err != nil {
 		os.Exit(1)
