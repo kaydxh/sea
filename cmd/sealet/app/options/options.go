@@ -56,15 +56,23 @@ func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 			webserver_.WithGRPCGatewayOptions(gw_.WithHttpHandlerInterceptorInOutPacketOptions()),
 		)
 	*/
+	/*
+		s.webServerConfig.WithWebConfigOptions(
+			webserver_.WithGRPCGatewayOptions(gw_.WithHttpHandlerInterceptorTraceIDOptions()),
+		)
+	*/
 
 	//api30 response formatter
 	s.webServerConfig.WithWebConfigOptions(
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
+		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPResponseOptions()),
+	//	webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPForwardResponseOptions()),
 	)
 
 	//format error response
 	s.webServerConfig.WithWebConfigOptions(
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HttpErrorOptions()),
 	)
 
 	return CompletedServerRunOptions{&completedServerRunOptions{s}}, nil
