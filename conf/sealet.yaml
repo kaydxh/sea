@@ -7,13 +7,17 @@ log:
   rotate_interval: 1h
   rotate_size: 104857600
   report_caller: true
+  redirct: stdout
 web:
   bind_address:
     port: 10001
-    timeout: 10s
-  max_concurrency_unary: 0 # max concurrency for grpc unary api
-  max_concurrency_stream: 0 # max concurrency for grpc stream api
-  mode: release # gin mode
+  grpc:
+    max_concurrency_unary: 0 # max concurrency for grpc unary api
+    max_concurrency_stream: 0 # max concurrency for grpc stream api
+  http:
+    max_concurrency: 0 # max concurrency for http api
+  debug:
+    enable_profiling: true
   monitor:
     prometheus:
       enabled_metric_timer_cost: false
