@@ -8,9 +8,9 @@ import (
 	"context"
 
 	"github.com/kaydxh/golang/pkg/webserver"
-	controller_ "github.com/kaydxh/golang/pkg/webserver/controller"
 
 	//proxy_ "github.com/kaydxh/golang/pkg/proxy"
+
 	"github.com/kaydxh/sea/web/modules/sealet/date"
 )
 
@@ -61,7 +61,7 @@ func (h *Handler) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) 
 
 func NewWebHandlers(ws *webserver.GenericWebServer, c *date.Controller) []webserver.WebHandler {
 	ws.AddPostStartHookOrDie("web_handler", func(ctx context.Context) error {
-		ws.InstallWebHandlers(c, controller_.NewController(true))
+		ws.InstallWebHandlers(c)
 		return nil
 	})
 	return []webserver.WebHandler{c}
