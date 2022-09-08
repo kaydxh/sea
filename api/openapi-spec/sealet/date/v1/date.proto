@@ -15,11 +15,9 @@ service DateService {
 
 message DateRequest {
   string request_id = 1 [json_name = "RequestId"];  //请求ID
-  bytes image = 2 [json_name = "Image"];            //图片数据
 }
 
 message DateResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
   string date = 2 [json_name = "Date"];             //当前时间
-  // repeated bytes image = 3 [json_name = "Image"]; //
 }
