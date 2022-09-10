@@ -2,8 +2,8 @@ log:
   formatter: glog
   level: info
   filepath: ./log
-  max_age: 10h
-  max_count: 0
+  max_age: 168h
+  max_count: 50
   rotate_interval: 1h
   rotate_size: 104857600
   report_caller: true
@@ -16,6 +16,7 @@ web:
     max_concurrency_stream: 0 # max concurrency for grpc stream api
   http:
     max_concurrency: 0 # max concurrency for http api
+    enable_inoutput_printer: false
   debug:
     enable_profiling: true
   monitor:
