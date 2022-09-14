@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	http_ "github.com/kaydxh/golang/go/net/http"
-	v1 "github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
+	v1 "github.com/kaydxh/sea/api/openapi-spec/date/v1"
 	"google.golang.org/protobuf/proto"
 )
 

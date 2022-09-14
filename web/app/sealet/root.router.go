@@ -11,7 +11,7 @@ import (
 
 	//proxy_ "github.com/kaydxh/golang/pkg/proxy"
 
-	"github.com/kaydxh/sea/web/modules/sealet/date"
+	"github.com/kaydxh/sea/web/modules/date"
 )
 
 /*
