@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
-	"github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -50,7 +50,7 @@ func (c *Controller) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGatewa
 	_ = grpcRouter.RegisterHTTPHandler(
 		context.Background(),
 		func(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
-			//		return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+			//return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 			//https://github.com/grpc-ecosystem/grpc-gateway/issues/1458,
 			//impove performace, but grpc interceptor is disabled
 			return date.RegisterDateServiceHandlerServer(ctx, mux, c)

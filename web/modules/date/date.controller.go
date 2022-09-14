@@ -9,7 +9,7 @@ import (
 	"time"
 
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	"github.com/kaydxh/sea/api/openapi-spec/sealet/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
 )
 
 type Controller struct {
@@ -25,6 +25,7 @@ func (c *Controller) Now(
 ) (resp *date.DateResponse, err error) {
 	logger := logs_.GetLogger(ctx)
 	logger.Infof(">>>>Now")
+
 	return &date.DateResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
