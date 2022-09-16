@@ -36,7 +36,7 @@ http:
     # Client example (Assuming your service is hosted at the given 'DOMAIN_NAME'):
     #   curl http://DOMAIN_NAME/v1/shelves
     #
-     - selector: sea.api.date.v1.DateService.Now
+     - selector: sea.api.date.DateService.Now
        # just for gin, ignore this path for grpc_gateway
        get: '/Now'
        additional_bindings:
