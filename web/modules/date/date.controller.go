@@ -9,7 +9,7 @@ import (
 	"time"
 
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	"github.com/kaydxh/sea/api/openapi-spec/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/date"
 )
 
 type Controller struct {
