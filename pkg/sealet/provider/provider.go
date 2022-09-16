@@ -4,10 +4,13 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
+	v1 "github.com/kaydxh/sea/api/openapi-spec/sealet/v1"
 )
 
 // Provider for global instance
 type Provider struct {
+	Config *v1.Configuration
+
 	SqlDB           *sqlx.DB
 	RedisDB         *redis.Client
 	ResolverService *resolver_.ResolverService
