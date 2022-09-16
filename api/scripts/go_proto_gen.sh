@@ -117,6 +117,7 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   api_conf_yaml_dir="$(dirname ${proto})"
   api_conf_yaml="${api_conf_yaml_dir}/$api_conf_yaml_base_name"
   grpc_api_yaml_option=""
+  grpc_gateway_option=""
 
   if [[ -f "${api_conf_yaml}" ]];then
     grpc_api_yaml_option="grpc_api_configuration=${api_conf_yaml},${source_relative_option}"
