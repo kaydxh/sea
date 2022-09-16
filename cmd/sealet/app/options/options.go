@@ -11,10 +11,12 @@ import (
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
+	"github.com/kaydxh/sea/cmd/sealet/app/config"
 	"github.com/sirupsen/logrus"
 )
 
 type ServerRunOptions struct {
+	Config          *config.Config
 	webServerConfig *webserver_.Config
 	logConfig       *logs_.Config
 	mysqlConfig     *mysql_.Config
@@ -38,6 +40,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
 	return &ServerRunOptions{
+		Config:          config.NewConfig(config.WithViper(viper_.GetViper(configFile, ""))),
 		webServerConfig: webserver_.NewConfig(gatewayOpts...),
 		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
 		mysqlConfig:     mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
@@ -73,6 +76,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	}
 
 	s.installLogsOrDie()
+	s.installConfigOrDie()
 
 	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie(ctx)

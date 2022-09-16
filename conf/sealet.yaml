@@ -14,16 +14,17 @@ web:
   grpc:
     max_concurrency_unary: 0 # max concurrency for grpc unary api
     max_concurrency_stream: 0 # max concurrency for grpc stream api
+    timeout: 0s
   http:
     max_concurrency: 0 # max concurrency for http api
-    enable_inoutput_printer: false
+    enable_inoutput_printer: true
   debug:
     enable_profiling: true
   monitor:
     prometheus:
       enabled_metric_timer_cost: false
       enabled_metric_code_message: true
-reslover:
+resolver:
   enabled: true
   resolve_interval: 10s
   reslover_type: reslover_type_dns
@@ -53,3 +54,9 @@ database:
     dial_timeout: 5s
     max_wait_duration: 20s
     fail_after_duration: 5m
+debug:
+   dump:
+     enabled: false
+     dump_dir: "./debug/dump"
+   
+
