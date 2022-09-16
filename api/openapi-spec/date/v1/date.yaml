@@ -36,10 +36,10 @@ http:
     # Client example (Assuming your service is hosted at the given 'DOMAIN_NAME'):
     #   curl http://DOMAIN_NAME/v1/shelves
     #
-    - selector: sea.api.sealet.date.v1.DateService.Now
-      # just for gin, ignore this path for grpc_gateway
-      get: '/Now'
-      additional_bindings:
-        #- get: '/Now'
-        - post: '/Now'
-          body: "*"
+     - selector: sea.api.date.v1.DateService.Now
+       # just for gin, ignore this path for grpc_gateway
+       get: '/Now'
+       additional_bindings:
+          #- get: '/Now'
+          - post: '/Now'
+            body: "*"
