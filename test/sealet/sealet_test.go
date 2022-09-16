@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 	http_ "github.com/kaydxh/golang/go/net/http"
-	v1 "github.com/kaydxh/sea/api/openapi-spec/date/v1"
+	"github.com/kaydxh/sea/api/openapi-spec/date"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -34,7 +34,7 @@ func TestHttpJsonNow(t *testing.T) {
 	}
 	for i := range testCases {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			req := &v1.DateRequest{
+			req := &date.DateRequest{
 				RequestId: uuid.NewString(),
 			}
 			dataReq, err := json.Marshal(req)
@@ -51,7 +51,7 @@ func TestHttpJsonNow(t *testing.T) {
 				t.Fatalf("failed to post json got: %v", err)
 			}
 
-			var resp v1.DateResponse
+			var resp date.DateResponse
 			err = json.Unmarshal(dataResp, &resp)
 			if err != nil {
 				t.Fatalf("failed to json unmarshal got: %v", err)
@@ -76,7 +76,7 @@ func TestHttpPbNow(t *testing.T) {
 	}
 	for i := range testCases {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			req := &v1.DateRequest{
+			req := &date.DateRequest{
 				RequestId: uuid.NewString(),
 			}
 			dataReq, err := proto.Marshal(req)
@@ -91,7 +91,7 @@ func TestHttpPbNow(t *testing.T) {
 				t.Fatalf("failed to post proto got: %v", err)
 			}
 
-			var resp v1.DateResponse
+			var resp date.DateResponse
 			err = proto.Unmarshal(dataResp, &resp)
 			if err != nil {
 				t.Fatalf("failed to proto unmarshal got: %v", err)

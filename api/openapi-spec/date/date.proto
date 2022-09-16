@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package sea.api.date.v1;
+package sea.api.date;
 import "google/protobuf/descriptor.proto";
 // import
 // "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/options/annotations.proto";
 // import "github.com/mwitkow/go-proto-validators/validator.proto";
 
-option go_package = "github.com/kaydxh/sea/api/openapi-spec/date/v1;date";
+option go_package = "github.com/kaydxh/sea/api/openapi-spec/date;date";
 
 service DateService {
   // 生成当前时间
