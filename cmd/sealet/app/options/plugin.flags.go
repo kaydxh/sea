@@ -61,13 +61,14 @@ func (f *SealetFlags) AddFlags(mainfs *pflag.FlagSet) {
 func (f *SealetFlags) initFlags() {
 
 	fs := f.flags.FlagSet("misc")
-	fs.StringVar(&f.ConfigFile, "config", f.ConfigFile, "The path to the configuration file.")
+	fs.StringVarP(&f.ConfigFile, "config", "c", f.ConfigFile, "The path to the configuration file.")
 	fs.StringVar(
 		&f.UseConfigFile,
 		"use-config",
 		f.UseConfigFile,
 		"If set, write the configuration values to this file and exit.",
 	)
+
 }
 
 func (f *SealetFlags) SetUsageAndHelpFunc() {
