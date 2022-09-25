@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	plugin_ "github.com/kaydxh/golang/pkg/webserver/plugin"
 	"github.com/kaydxh/sea/cmd/sealet/app/options"
 	"github.com/spf13/cobra"
 )
@@ -40,8 +41,8 @@ See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more informat
 		},
 	}
 
-	sealetFlag := options.NewSealetFlags(cmd)
-	sealetFlag.Install()
+	appFlag := plugin_.NewAppFlags(cmd)
+	appFlag.Install()
 
 	/*
 		var cfgFile string
