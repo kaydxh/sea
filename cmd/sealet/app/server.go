@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	plugin_ "github.com/kaydxh/golang/pkg/webserver/plugin"
+	app_ "github.com/kaydxh/golang/pkg/webserver/app"
 	"github.com/kaydxh/sea/cmd/sealet/app/options"
 	"github.com/spf13/cobra"
 )
@@ -41,7 +41,7 @@ See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more informat
 		},
 	}
 
-	appFlag := plugin_.NewAppFlags(cmd)
+	appFlag := app_.NewAppFlags(cmd)
 	appFlag.Install()
 
 	/*
