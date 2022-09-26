@@ -11,7 +11,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/kaydxh/golang v0.0.97
+	github.com/kaydxh/golang v0.0.99
 	github.com/prometheus/client_golang v1.13.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.4.0
@@ -25,4 +25,4 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-replace github.com/kaydxh/golang v0.0.97 => ../../../github.com/kaydxh/golang
+//replace github.com/kaydxh/golang v0.0.98 => ../../../github.com/kaydxh/golang
