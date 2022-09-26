@@ -33,9 +33,9 @@ function ldflags() {
     local key=${1}
     local val=${2}
 
-    # update the list github.com/kaydxh/golang/pkg/app.
+    # update the list github.com/kaydxh/golang/pkg/webserver//app.
     ldflags+=(
-      "-X 'github.com/kaydxh/golang/pkg/app.${key}=${val}'"
+      "-X 'github.com/kaydxh/golang/pkg/webserver/app.${key}=${val}'"
     )
   }
 

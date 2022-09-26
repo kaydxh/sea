@@ -3,7 +3,6 @@ package options
 import (
 	"context"
 
-	app_ "github.com/kaydxh/golang/pkg/app"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
@@ -11,6 +10,7 @@ import (
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
+	app_ "github.com/kaydxh/golang/pkg/webserver/app"
 	"github.com/kaydxh/sea/cmd/sealet/app/config"
 	"github.com/sirupsen/logrus"
 )
