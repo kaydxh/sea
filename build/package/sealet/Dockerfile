@@ -32,5 +32,7 @@ EXPOSE 10001
 #ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
 
 # [suggest] use command array
-ENTRYPOINT ENTRYPOINT ["sh", "start.sh"]
-
+# ENTRYPOINT指定默认的运行命令
+ENTRYPOINT ["/bin/bash","-c"]
+# CMD指定默认的运行参数
+CMD ["start.sh"]
