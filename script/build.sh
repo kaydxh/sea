@@ -46,7 +46,7 @@ function build() {
 
   # Done!
   echo -e "\n==> Results:"
-  ls -Rhl ${SEA_OUTPUT_PATH}/
+  ls -Rhl ${SEA_OUTPUT_PATH}
 }
 
 echo "==> Building in $(platform)"

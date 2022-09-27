@@ -6,9 +6,9 @@ set -euo pipefail
 
 echo " ==> Clean..."
 
-OUT_PUT_PATH=output/bin
+OUT_PUT_PATH=output
 if [[ -d  ${OUT_PUT_PATH} ]]; then
-  rm ${OUT_PUT_PATH}/sea >/dev/null 2>&1 || true
+  rm -rf ${OUT_PUT_PATH} >/dev/null 2>&1 || true
 fi
 
 echo "==> Clean finish"
