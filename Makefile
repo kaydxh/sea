@@ -7,6 +7,13 @@ all:
 generate:
 	@echo "make generate"
 	@bash  script/go_proto_gen.sh -I . --proto_file_path api/openapi-spec --with-go --with-doc
+.PHONY: copyright 
+copyright:
+	@echo "auto generate copyright"
+	@bash -c "curl -s -L -o ./script/copyright.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.sh"
+	@bash -c "curl -s -L -o ./script/copyright.txt https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.txt"
+	@bash script/copyright.sh
+
 .PHONY: clean
 clean:
 	@echo "clean"
