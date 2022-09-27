@@ -6,7 +6,7 @@ all:
 .PHONY: generate 
 generate:
 	@echo "make generate"
-	@bash  api/scripts/go_proto_gen.sh -I . --proto_file_path api/openapi-spec --with-go
+	@bash  script/go_proto_gen.sh -I . --proto_file_path api/openapi-spec --with-go
 .PHONY: clean
 clean:
 	@echo "clean"
