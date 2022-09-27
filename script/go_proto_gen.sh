@@ -113,7 +113,8 @@ grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
 
 for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -0); do
   echo "Generating ${proto}"
-  api_conf_yaml_base_name="$(basename ${proto} .proto).yaml"
+  proto_base_name="$(basename ${proto} .proto)"
+  api_conf_yaml_base_name="${proto_base_name}.yaml"
   api_conf_yaml_dir="$(dirname ${proto})"
   api_conf_yaml="${api_conf_yaml_dir}/$api_conf_yaml_base_name"
   grpc_api_yaml_option=""
@@ -125,8 +126,9 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   fi
 
   if [[ "${WITH_DOC}" -eq 1 ]]; then
-    doc_option="--doc_opt=markdown,docs.md"
-    doc_out_option="--doc_out=${SCRIPT_PATH}/../../doc"
+    # output file name
+    doc_option="--doc_opt=markdown,${proto_base_name}.md"
+    doc_out_option="--doc_out=${SCRIPT_PATH}/../doc"
   fi
 
   if [[ "${WITH_CPP}" -eq 1 ]]; then

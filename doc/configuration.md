@@ -3,49 +3,62 @@
 
 ## Table of Contents
 
-- [api/openapi-spec/sealet/date/v1/date.proto](#api_openapi-spec_sealet_date_v1_date-proto)
-    - [DateRequest](#sea-api-sealet-date-v1-DateRequest)
-    - [DateResponse](#sea-api-sealet-date-v1-DateResponse)
-  
-    - [DateService](#sea-api-sealet-date-v1-DateService)
+- [api/openapi-spec/sealet/v1/configuration.proto](#api_openapi-spec_sealet_v1_configuration-proto)
+    - [Configuration](#sea-api-sealet-v1-Configuration)
+    - [Configuration.Debug](#sea-api-sealet-v1-Configuration-Debug)
+    - [Configuration.Debug.Dump](#sea-api-sealet-v1-Configuration-Debug-Dump)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_openapi-spec_sealet_date_v1_date-proto"></a>
+<a name="api_openapi-spec_sealet_v1_configuration-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/openapi-spec/sealet/date/v1/date.proto
+## api/openapi-spec/sealet/v1/configuration.proto
 
 
 
-<a name="sea-api-sealet-date-v1-DateRequest"></a>
+<a name="sea-api-sealet-v1-Configuration"></a>
 
-### DateRequest
+### Configuration
+config file yaml
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| debug | [Configuration.Debug](#sea-api-sealet-v1-Configuration-Debug) |  |  |
+
+
+
+
+
+
+<a name="sea-api-sealet-v1-Configuration-Debug"></a>
+
+### Configuration.Debug
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| image | [bytes](#bytes) |  | 图片数据 |
+| dump | [Configuration.Debug.Dump](#sea-api-sealet-v1-Configuration-Debug-Dump) |  |  |
 
 
 
 
 
 
-<a name="sea-api-sealet-date-v1-DateResponse"></a>
+<a name="sea-api-sealet-v1-Configuration-Debug-Dump"></a>
 
-### DateResponse
+### Configuration.Debug.Dump
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| date | [string](#string) |  | 当前时间 |
+| enabled | [bool](#bool) |  |  |
+| dump_dir | [string](#string) |  |  |
 
 
 
@@ -56,16 +69,6 @@
  
 
  
-
-
-<a name="sea-api-sealet-date-v1-DateService"></a>
-
-### DateService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Now | [DateRequest](#sea-api-sealet-date-v1-DateRequest) | [DateResponse](#sea-api-sealet-date-v1-DateResponse) | 生成当前时间 |
 
  
 
