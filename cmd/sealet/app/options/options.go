@@ -28,6 +28,7 @@ import (
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
+	opentelemetry_ "github.com/kaydxh/golang/pkg/monitor/opentelemetry"
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
@@ -37,12 +38,13 @@ import (
 )
 
 type ServerRunOptions struct {
-	Config          *config.Config
-	webServerConfig *webserver_.Config
-	logConfig       *logs_.Config
-	mysqlConfig     *mysql_.Config
-	redisConfig     *redis_.Config
-	resolverConfig  *resolver_.Config
+	Config              *config.Config
+	webServerConfig     *webserver_.Config
+	logConfig           *logs_.Config
+	mysqlConfig         *mysql_.Config
+	redisConfig         *redis_.Config
+	resolverConfig      *resolver_.Config
+	opentelemetryConfig *opentelemetry_.Config
 }
 
 // completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
@@ -61,12 +63,13 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
 	return &ServerRunOptions{
-		Config:          config.NewConfig(config.WithViper(viper_.GetViper(configFile, ""))),
-		webServerConfig: webserver_.NewConfig(gatewayOpts...),
-		logConfig:       logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
-		mysqlConfig:     mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
-		redisConfig:     redis_.NewConfig(redis_.WithViper(viper_.GetViper(configFile, "database.redis"))),
-		resolverConfig:  resolver_.NewConfig(resolver_.WithViper(viper_.GetViper(configFile, "reslover"))),
+		Config:              config.NewConfig(config.WithViper(viper_.GetViper(configFile, ""))),
+		webServerConfig:     webserver_.NewConfig(gatewayOpts...),
+		logConfig:           logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
+		mysqlConfig:         mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
+		redisConfig:         redis_.NewConfig(redis_.WithViper(viper_.GetViper(configFile, "database.redis"))),
+		resolverConfig:      resolver_.NewConfig(resolver_.WithViper(viper_.GetViper(configFile, "reslover"))),
+		opentelemetryConfig: opentelemetry_.NewConfig(opentelemetry_.WithViper(viper_.GetViper(configFile, "web.monitor.open_telemetry"))),
 	}
 
 }
@@ -102,6 +105,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie(ctx)
 	s.installRedisOrDie(ctx)
+	s.installOpenTelemetryOrDie(ctx)
 	//	s.installPrometheusOrDie(ctx)
 
 	s.installResolverOrDie(ctx, ws)
