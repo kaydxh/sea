@@ -40,6 +40,11 @@ http:
        # just for gin, ignore this path for grpc_gateway
        get: '/Now'
        additional_bindings:
-          #- get: '/Now'
           - post: '/Now'
+            body: "*"
+     - selector: sea.api.date.DateService.NowError
+       # just for gin, ignore this path for grpc_gateway
+       get: '/NowError'
+       additional_bindings:
+          - post: '/NowError'
             body: "*"

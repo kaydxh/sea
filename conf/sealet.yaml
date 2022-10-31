@@ -16,7 +16,7 @@ web:
     max_concurrency_stream: 0 # max concurrency for grpc stream api
     timeout: 0s
   http:
-    api_formatter: default_api_none # tcloud_api_v30 # trivial_api_v10 
+    api_formatter: trivial_api_v10 # default_api_none # tcloud_api_v30 # trivial_api_v10 
     max_concurrency: 0 # max concurrency for http api
     enable_inoutput_printer: true
   debug:
