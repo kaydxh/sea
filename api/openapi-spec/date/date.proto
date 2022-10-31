@@ -10,14 +10,24 @@ option go_package = "github.com/kaydxh/sea/api/openapi-spec/date;date";
 
 service DateService {
   // 生成当前时间
-  rpc Now(DateRequest) returns (DateResponse) {};
+  rpc Now(NowRequest) returns (NowResponse) {};
+  rpc NowError(NowErrorRequest) returns (NowErrorResponse) {};
 }
 
-message DateRequest {
+message NowRequest {
   string request_id = 1 [json_name = "RequestId"];  //请求ID
 }
 
-message DateResponse {
+message NowResponse {
+  string request_id = 1 [json_name = "RequestId"];  // 请求ID
+  string date = 2 [json_name = "Date"];             //当前时间
+}
+
+message NowErrorRequest {
+  string request_id = 1 [json_name = "RequestId"];  //请求ID
+}
+
+message NowErrorResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
   string date = 2 [json_name = "Date"];             //当前时间
 }

@@ -23,7 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DateServiceClient interface {
 	// 生成当前时间
-	Now(ctx context.Context, in *DateRequest, opts ...grpc.CallOption) (*DateResponse, error)
+	Now(ctx context.Context, in *NowRequest, opts ...grpc.CallOption) (*NowResponse, error)
+	NowError(ctx context.Context, in *NowErrorRequest, opts ...grpc.CallOption) (*NowErrorResponse, error)
 }
 
 type dateServiceClient struct {
@@ -34,9 +35,18 @@ func NewDateServiceClient(cc grpc.ClientConnInterface) DateServiceClient {
 	return &dateServiceClient{cc}
 }
 
-func (c *dateServiceClient) Now(ctx context.Context, in *DateRequest, opts ...grpc.CallOption) (*DateResponse, error) {
-	out := new(DateResponse)
+func (c *dateServiceClient) Now(ctx context.Context, in *NowRequest, opts ...grpc.CallOption) (*NowResponse, error) {
+	out := new(NowResponse)
 	err := c.cc.Invoke(ctx, "/sea.api.date.DateService/Now", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dateServiceClient) NowError(ctx context.Context, in *NowErrorRequest, opts ...grpc.CallOption) (*NowErrorResponse, error) {
+	out := new(NowErrorResponse)
+	err := c.cc.Invoke(ctx, "/sea.api.date.DateService/NowError", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +58,8 @@ func (c *dateServiceClient) Now(ctx context.Context, in *DateRequest, opts ...gr
 // for forward compatibility
 type DateServiceServer interface {
 	// 生成当前时间
-	Now(context.Context, *DateRequest) (*DateResponse, error)
+	Now(context.Context, *NowRequest) (*NowResponse, error)
+	NowError(context.Context, *NowErrorRequest) (*NowErrorResponse, error)
 	mustEmbedUnimplementedDateServiceServer()
 }
 
@@ -56,8 +67,11 @@ type DateServiceServer interface {
 type UnimplementedDateServiceServer struct {
 }
 
-func (UnimplementedDateServiceServer) Now(context.Context, *DateRequest) (*DateResponse, error) {
+func (UnimplementedDateServiceServer) Now(context.Context, *NowRequest) (*NowResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Now not implemented")
+}
+func (UnimplementedDateServiceServer) NowError(context.Context, *NowErrorRequest) (*NowErrorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NowError not implemented")
 }
 func (UnimplementedDateServiceServer) mustEmbedUnimplementedDateServiceServer() {}
 
@@ -73,7 +87,7 @@ func RegisterDateServiceServer(s grpc.ServiceRegistrar, srv DateServiceServer) {
 }
 
 func _DateService_Now_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DateRequest)
+	in := new(NowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -85,7 +99,25 @@ func _DateService_Now_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/sea.api.date.DateService/Now",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DateServiceServer).Now(ctx, req.(*DateRequest))
+		return srv.(DateServiceServer).Now(ctx, req.(*NowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DateService_NowError_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NowErrorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DateServiceServer).NowError(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sea.api.date.DateService/NowError",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DateServiceServer).NowError(ctx, req.(*NowErrorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,6 +132,10 @@ var DateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Now",
 			Handler:    _DateService_Now_Handler,
+		},
+		{
+			MethodName: "NowError",
+			Handler:    _DateService_NowError_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

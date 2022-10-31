@@ -6,10 +6,12 @@ package date
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	logs_ "github.com/kaydxh/golang/pkg/logs"
 	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Controller struct {
@@ -21,18 +23,18 @@ type Controller struct {
 // 日期查询
 func (c *Controller) Now(
 	ctx context.Context,
-	req *date.DateRequest,
-) (resp *date.DateResponse, err error) {
-	logger := logs_.GetLogger(ctx)
-	logger.Infof(">>>>Now")
-
-	return &date.DateResponse{
+	req *date.NowRequest,
+) (resp *date.NowResponse, err error) {
+	return &date.NowResponse{
 		RequestId: req.GetRequestId(),
 		Date:      time.Now().String(),
 	}, nil
+}
 
-	//	fmt.Printf("req: %v", req.Image[0])
-
-	//	err = fmt.Errorf("InvalidArgument")
-	//	return nil, status.Error(codes.InvalidArgument, err.Error())
+func (c *Controller) NowError(
+	ctx context.Context,
+	req *date.NowErrorRequest,
+) (resp *date.NowErrorResponse, err error) {
+	err = fmt.Errorf("InvalidArgument")
+	return nil, status.Error(codes.InvalidArgument, err.Error())
 }
