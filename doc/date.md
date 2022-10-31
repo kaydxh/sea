@@ -4,8 +4,10 @@
 ## Table of Contents
 
 - [api/openapi-spec/date/date.proto](#api_openapi-spec_date_date-proto)
-    - [DateRequest](#sea-api-date-DateRequest)
-    - [DateResponse](#sea-api-date-DateResponse)
+    - [NowErrorRequest](#sea-api-date-NowErrorRequest)
+    - [NowErrorResponse](#sea-api-date-NowErrorResponse)
+    - [NowRequest](#sea-api-date-NowRequest)
+    - [NowResponse](#sea-api-date-NowResponse)
   
     - [DateService](#sea-api-date-DateService)
   
@@ -20,9 +22,9 @@
 
 
 
-<a name="sea-api-date-DateRequest"></a>
+<a name="sea-api-date-NowErrorRequest"></a>
 
-### DateRequest
+### NowErrorRequest
 
 
 
@@ -35,9 +37,40 @@
 
 
 
-<a name="sea-api-date-DateResponse"></a>
+<a name="sea-api-date-NowErrorResponse"></a>
 
-### DateResponse
+### NowErrorResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| request_id | [string](#string) |  | 请求ID |
+| date | [string](#string) |  | 当前时间 |
+
+
+
+
+
+
+<a name="sea-api-date-NowRequest"></a>
+
+### NowRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| request_id | [string](#string) |  | 请求ID |
+
+
+
+
+
+
+<a name="sea-api-date-NowResponse"></a>
+
+### NowResponse
 
 
 
@@ -64,7 +97,8 @@
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Now | [DateRequest](#sea-api-date-DateRequest) | [DateResponse](#sea-api-date-DateResponse) | 生成当前时间 |
+| Now | [NowRequest](#sea-api-date-NowRequest) | [NowResponse](#sea-api-date-NowResponse) | 生成当前时间 |
+| NowError | [NowErrorRequest](#sea-api-date-NowErrorRequest) | [NowErrorResponse](#sea-api-date-NowErrorResponse) |  |
 
  
 

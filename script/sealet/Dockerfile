@@ -35,4 +35,5 @@ EXPOSE 10001
 # ENTRYPOINT指定默认的运行命令
 ENTRYPOINT ["/bin/bash","-c"]
 # CMD指定默认的运行参数
+# CMD ["start.sh param1 param2"]
 CMD ["start.sh"]
