@@ -26,7 +26,6 @@ import (
 
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
-	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	opentelemetry_ "github.com/kaydxh/golang/pkg/monitor/opentelemetry"
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
@@ -77,16 +76,18 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
-	s.webServerConfig.WithWebConfigOptions(
-		//api30 response formatter
-		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
-		//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
+	/*
+		s.webServerConfig.WithWebConfigOptions(
+			//api30 response formatter
+			//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTCloud30HTTPResponseOptions()),
+			//webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsHttpErrorOptions()),
 
-		//trivial v1 response formatter
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPResponseOptions()),
-		//format error response
-		webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HttpErrorOptions()),
-	)
+			//trivial v1 response formatter
+			webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HTTPResponseOptions()),
+			//format error response
+			webserver_.WithGRPCGatewayOptions(gw_.WithServerInterceptorsTrivialV1HttpErrorOptions()),
+		)
+	*/
 
 	return CompletedServerRunOptions{&completedServerRunOptions{s}}, nil
 }
