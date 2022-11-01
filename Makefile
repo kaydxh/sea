@@ -1,7 +1,13 @@
+# example
+# make TARGET=sealet
+#
+# set default target to sealet
+TARGET=sealet
+
 .PHONY: all
 all:
-	@echo "building all"
-	@bash script/build.sh
+	@echo "building all ${TARGET}"
+	@bash script/build.sh -t ${TARGET}
 
 .PHONY: generate 
 generate:
