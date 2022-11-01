@@ -9,8 +9,26 @@ set -o nounset
 set -o pipefail
 # set -o xtrace
 
+TARGET=sealet
+
+help() {
+    echo "Usage:"
+    echo "getopts.sh [-t target]"
+    echo "Description:"
+    echo "target,the name of server."
+    exit -1
+}
+
+while getopts 't:' option; do
+  case ${option} in
+    t) TARGET=${OPTARG};;
+    ?) help ;;
+  esac
+done
+
+
 SEA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
-SEA_OUTPUT_SUB_PATH=${SEA_OUTPUT_SUB_PATH:-output}
+SEA_OUTPUT_SUB_PATH=${SEA_OUTPUT_SUB_PATH:-output/${TARGET}}
 SEA_OUTPUT_PATH=${SEA_ROOT}/${SEA_OUTPUT_SUB_PATH}
 SEA_OUTPUT_BIN_PATH=${SEA_OUTPUT_PATH}/bin
 
@@ -26,7 +44,7 @@ function platform() {
 function make_build_args() {
   local goldflags
 
-  goldflags="all=$(ldflags) ${GOLDFLAGS:-}"
+  goldflags="all=$(ldflags ${TARGET}) ${GOLDFLAGS:-}"
   local -a build_args
    build_args=(
    -ldflags="${goldflags}"
@@ -41,7 +59,7 @@ function build() {
   rm -rf ${SEA_OUTPUT_PATH}/*
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
   go mod tidy
-  go build "${GO_BUILD_ARGS}" -o "${SEA_OUTPUT_BIN_PATH}/sealet" ./cmd/sealet
+  go build "${GO_BUILD_ARGS}" -o "${SEA_OUTPUT_BIN_PATH}/${TARGET}" ./cmd/${TARGET}
   cp -rf conf "${SEA_OUTPUT_PATH}"
 
   # Done!

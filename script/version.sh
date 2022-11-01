@@ -33,7 +33,7 @@ function ldflags() {
     local key=${1}
     local val=${2}
 
-    # update the list github.com/kaydxh/golang/pkg/webserver//app.
+    # update the list github.com/kaydxh/golang/pkg/webserver/app.
     ldflags+=(
       "-X 'github.com/kaydxh/golang/pkg/webserver/app.${key}=${val}'"
     )
@@ -43,6 +43,7 @@ function ldflags() {
  add_ldflag "gitVersion" "${GIT_TAG}"
  add_ldflag "gitCommit" "${GIT_COMMIT}"
  add_ldflag "gitTreeState" "${GIT_TREE_STATE}"
+ add_ldflag "appName" "$1"
 
  # "$*" => get arg1 arg2 arg3 as a single argument "a1 a2 a3"
  # "$@" => gets arg1, arg2 and arg3 as a separate arguments "a1" "a2" "a3"
