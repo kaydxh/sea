@@ -3,83 +3,30 @@
 
 ## Table of Contents
 
-- [api/openapi-spec/date/date.proto](#api_openapi-spec_date_date-proto)
-    - [NowErrorRequest](#sea-api-date-NowErrorRequest)
-    - [NowErrorResponse](#sea-api-date-NowErrorResponse)
-    - [NowRequest](#sea-api-date-NowRequest)
-    - [NowResponse](#sea-api-date-NowResponse)
-  
-    - [DateService](#sea-api-date-DateService)
+- [api/openapi-spec/types/error.proto](#api_openapi-spec_types_error-proto)
+    - [Error](#sea-api-types-Error)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_openapi-spec_date_date-proto"></a>
+<a name="api_openapi-spec_types_error-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/openapi-spec/date/date.proto
+## api/openapi-spec/types/error.proto
 
 
 
-<a name="sea-api-date-NowErrorRequest"></a>
+<a name="sea-api-types-Error"></a>
 
-### NowErrorRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-
-
-
-
-
-
-<a name="sea-api-date-NowErrorResponse"></a>
-
-### NowErrorResponse
+### Error
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| date | [string](#string) |  | 当前时间 |
-| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
-
-
-
-
-
-
-<a name="sea-api-date-NowRequest"></a>
-
-### NowRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-
-
-
-
-
-
-<a name="sea-api-date-NowResponse"></a>
-
-### NowResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| date | [string](#string) |  | 当前时间 |
-| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
+| code | [string](#string) |  |  |
+| message | [string](#string) |  |  |
 
 
 
@@ -90,17 +37,6 @@
  
 
  
-
-
-<a name="sea-api-date-DateService"></a>
-
-### DateService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Now | [NowRequest](#sea-api-date-NowRequest) | [NowResponse](#sea-api-date-NowResponse) | 生成当前时间 |
-| NowError | [NowErrorRequest](#sea-api-date-NowErrorRequest) | [NowErrorResponse](#sea-api-date-NowErrorResponse) |  |
 
  
 
