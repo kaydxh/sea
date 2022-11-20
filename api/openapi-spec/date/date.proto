@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package sea.api.date;
 import "google/protobuf/descriptor.proto";
-// import
-// "github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/options/annotations.proto";
-// import "github.com/mwitkow/go-proto-validators/validator.proto";
+import "api/openapi-spec/types/error.proto";
 
 option go_package = "github.com/kaydxh/sea/api/openapi-spec/date;date";
 
@@ -21,6 +19,7 @@ message NowRequest {
 message NowResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
   string date = 2 [json_name = "Date"];             //当前时间
+  types.Error error = 1000 [json_name = "Error"];
 }
 
 message NowErrorRequest {
@@ -30,4 +29,5 @@ message NowErrorRequest {
 message NowErrorResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
   string date = 2 [json_name = "Date"];             //当前时间
+  types.Error error = 1000 [json_name = "Error"];
 }
