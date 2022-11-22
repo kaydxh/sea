@@ -33,13 +33,14 @@ import (
 
 // NewSealetCommand creates a *cobra.Command object with default parameters
 func NewSealetCommand(ctx context.Context) *cobra.Command {
+	name := app_.GetVersion().AppName
 	cmd := &cobra.Command{
-		Use:   "sea-let",
-		Short: "sea-let Public HTTP/2 and GRPC APIs",
+		Use:   name,
+		Short: fmt.Sprintf("%s Public HTTP/2 and GRPC APIs", name),
 		// stop printing usage when the command errors
-		Long: `The Sea let is a gateway serve which you can use curl over HTTP 1.1 or grpc protocal on the same host:port.
+		Long: fmt.Sprintf(`%s is a gateway serve which you can use curl over HTTP 1.1 or grpc protocal on the same host:port.
 Example: curl -X POST -k https://localhost:port/Now
-See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more information.`,
+See [Sea](https://github.com/kaydxh/sea/blob/master/README.md) for more information.`, name),
 		//SilenceUsage: true,
 
 		RunE: func(cmd *cobra.Command, args []string) error {
