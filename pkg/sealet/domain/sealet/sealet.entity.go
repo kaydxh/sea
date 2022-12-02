@@ -13,25 +13,25 @@ type Sealet struct {
 	DateRepository kitdate_.Repository
 }
 
-type DateRequest struct {
+type NowRequest struct {
 	RequestId string
 }
 
-type DateResponse struct {
+type NowResponse struct {
 	Date string
 }
 
-func (s *Sealet) Date(ctx context.Context, req *DateRequest) (resp *DateResponse, err error) {
+func (s *Sealet) Now(ctx context.Context, req *NowRequest) (resp *NowResponse, err error) {
 	logger := logs_.GetLoggerOrFallback(ctx, req.RequestId)
 
-	dateReq := &kitdate_.DateRequest{}
-	dateResp, err := s.DateRepository.Date(ctx, dateReq)
+	dateReq := &kitdate_.NowRequest{}
+	dateResp, err := s.DateRepository.Now(ctx, dateReq)
 	if err != nil {
 		logger.Errorf("failed to call Date, err: %v", err)
 		return nil, err
 	}
 
-	resp = &DateResponse{
+	resp = &NowResponse{
 		Date: dateResp.Date,
 	}
 

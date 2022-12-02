@@ -2,13 +2,13 @@ package date
 
 import "context"
 
-type DateRequest struct {
+type NowRequest struct {
 }
 
-type DateResponse struct {
+type NowResponse struct {
 	Date string
 }
 
 type Repository interface {
-	Date(ctx context.Context, req *DateRequest) (resp *DateResponse, err error)
+	Now(ctx context.Context, req *NowRequest) (resp *NowResponse, err error)
 }

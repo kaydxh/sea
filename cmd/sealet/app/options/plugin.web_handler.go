@@ -28,13 +28,15 @@ import (
 	local_ "github.com/kaydxh/sea/pkg/sealet/infrastructure/local"
 	sealet_ "github.com/kaydxh/sea/web/app/sealet"
 	"github.com/kaydxh/sea/web/modules/date"
+	"github.com/sirupsen/logrus"
 )
 
-func (s *CompletedServerRunOptions) installWebHandler(ws *webserver_.GenericWebServer) {
+func (s *CompletedServerRunOptions) installWebHandlerOrDie(ws *webserver_.GenericWebServer) {
 	sealetFactory, err := sealet.NewFactory(sealet.FactoryConfig{
 		DateRepository: &local_.Repository{},
 	})
 	if err != nil {
+		logrus.WithError(err).Fatalf("install WebHandler, exit")
 		return
 	}
 	app := application.Application{
