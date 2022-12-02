@@ -7,14 +7,17 @@ package date
 import (
 	"context"
 	"fmt"
-	"time"
 
+	logs_ "github.com/kaydxh/golang/pkg/logs"
 	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"github.com/kaydxh/sea/pkg/sealet/application"
+	"github.com/kaydxh/sea/pkg/sealet/domain/sealet"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type Controller struct {
+	app application.Application
 
 	// Embed the unimplemented server
 	date.UnimplementedDateServiceServer
@@ -25,10 +28,21 @@ func (c *Controller) Now(
 	ctx context.Context,
 	req *date.NowRequest,
 ) (resp *date.NowResponse, err error) {
-	return &date.NowResponse{
+	logger := logs_.GetLoggerOrFallback(ctx, req.GetRequestId())
+	dateReq := &sealet.DateRequest{
 		RequestId: req.GetRequestId(),
-		Date:      time.Now().String(),
-	}, nil
+	}
+	dateResp, err := c.app.Commands.SealetHandler.Date(ctx, dateReq)
+	if err != nil {
+		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Date] command")
+		return nil, err
+	}
+
+	resp = &date.NowResponse{
+		Date: dateResp.Date,
+	}
+
+	return resp, nil
 }
 
 func (c *Controller) NowError(
