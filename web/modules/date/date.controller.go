@@ -29,10 +29,10 @@ func (c *Controller) Now(
 	req *date.NowRequest,
 ) (resp *date.NowResponse, err error) {
 	logger := logs_.GetLoggerOrFallback(ctx, req.GetRequestId())
-	dateReq := &sealet.DateRequest{
+	dateReq := &sealet.NowRequest{
 		RequestId: req.GetRequestId(),
 	}
-	dateResp, err := c.app.Commands.SealetHandler.Date(ctx, dateReq)
+	dateResp, err := c.app.Commands.SealetHandler.Now(ctx, dateReq)
 	if err != nil {
 		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Date] command")
 		return nil, err

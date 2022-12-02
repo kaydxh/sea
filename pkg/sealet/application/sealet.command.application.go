@@ -16,12 +16,12 @@ func NewSealetHandler(f sealet.Factory) SealetHandler {
 	}
 }
 
-func (s SealetHandler) Date(ctx context.Context, req *sealet.DateRequest) (resp *sealet.DateResponse, err error) {
+func (s SealetHandler) Now(ctx context.Context, req *sealet.NowRequest) (resp *sealet.NowResponse, err error) {
 
 	handler, err := s.sealetFactory.NewSealet(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return handler.Date(ctx, req)
+	return handler.Now(ctx, req)
 }

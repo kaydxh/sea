@@ -98,7 +98,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 
 	s.installResolverOrDie(ctx, ws)
 	//install web handler
-	s.installWebHandler(ws)
+	s.installWebHandlerOrDie(ws)
 
 	prepared, err := ws.PrepareRun()
 	if err != nil {
