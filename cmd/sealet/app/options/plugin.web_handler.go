@@ -24,14 +24,22 @@ package options
 import (
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	"github.com/kaydxh/sea/pkg/sealet/application"
+	"github.com/kaydxh/sea/pkg/sealet/domain/sealet"
+	local_ "github.com/kaydxh/sea/pkg/sealet/infrastructure/local"
 	sealet_ "github.com/kaydxh/sea/web/app/sealet"
 	"github.com/kaydxh/sea/web/modules/date"
 )
 
 func (s *CompletedServerRunOptions) installWebHandler(ws *webserver_.GenericWebServer) {
+	sealetFactory, err := sealet.NewFactory(sealet.FactoryConfig{
+		DateRepository: &local_.Repository{},
+	})
+	if err != nil {
+		return
+	}
 	app := application.Application{
 		Commands: application.Commands{
-			//SealetHandler:
+			SealetHandler: application.NewSealetHandler(sealetFactory),
 		},
 	}
 	dateCtrl := date.NewController(app)
