@@ -124,4 +124,4 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-//replace github.com/kaydxh/golang v0.0.104 => ../../../github.com/kaydxh/golang
+replace github.com/kaydxh/golang => ../../../github.com/kaydxh/golang

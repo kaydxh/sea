@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"github.com/kaydxh/sea/pkg/sealet/application"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -39,8 +40,10 @@ func Router(router *gw_.GRPCGateway) *gw_.GRPCGateway {
 */
 
 // can add handler in Controller
-func NewController() *Controller {
-	return &Controller{}
+func NewController(app application.Application) *Controller {
+	return &Controller{
+		app: app,
+	}
 }
 
 func (c *Controller) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) {
