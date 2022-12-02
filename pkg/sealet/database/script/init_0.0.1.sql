@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `task`
     `is_deleted`          TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'soft delete, 0 for not deleted, 1 for deleted',
     `deleted_at`          DATETIME                  DEFAULT NULL COMMENT '最近删除时间',
     # 版本控制
-    `version`             INT              NOT NULL DEFAULT 0 COMMENT '记录版本',
+    `version`                                                      INT              NOT NULL DEFAULT 0 COMMENT '记录版本',
 
     `task_name`           VARCHAR(200)     NOT NULL DEFAULT '' COMMENT '任务名称',
     `task_id`             VARCHAR(200)     NOT NULL DEFAULT '' COMMENT '任务ID',
@@ -29,3 +29,4 @@ CREATE TABLE IF NOT EXISTS `task`
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'task table';
 
 SHOW TABLES;
+
