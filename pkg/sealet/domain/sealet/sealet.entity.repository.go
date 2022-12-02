@@ -3,5 +3,5 @@ package sealet
 import "context"
 
 type Repository interface {
-	Date(ctx context.Context, req *DateRequest) (resp *DateResponse, err error)
+	Now(ctx context.Context, req *NowRequest) (resp *NowResponse, err error)
 }
