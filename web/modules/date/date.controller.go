@@ -6,14 +6,11 @@ package date
 
 import (
 	"context"
-	"fmt"
 
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	"github.com/kaydxh/sea/api/openapi-spec/date"
 	"github.com/kaydxh/sea/pkg/sealet/application"
 	"github.com/kaydxh/sea/pkg/sealet/domain/sealet"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type Controller struct {
@@ -34,7 +31,7 @@ func (c *Controller) Now(
 	}
 	dateResp, err := c.app.Commands.SealetHandler.Now(ctx, dateReq)
 	if err != nil {
-		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Date] command")
+		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Now] command")
 		return nil, err
 	}
 
@@ -49,6 +46,19 @@ func (c *Controller) NowError(
 	ctx context.Context,
 	req *date.NowErrorRequest,
 ) (resp *date.NowErrorResponse, err error) {
-	err = fmt.Errorf("InvalidArgument")
-	return nil, status.Error(codes.InvalidArgument, err.Error())
+	logger := logs_.GetLoggerOrFallback(ctx, req.GetRequestId())
+	dateReq := &sealet.NowErrorRequest{
+		RequestId: req.GetRequestId(),
+	}
+	dateResp, err := c.app.Commands.SealetHandler.NowError(ctx, dateReq)
+	if err != nil {
+		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [NowError] command")
+		return nil, err
+	}
+
+	resp = &date.NowErrorResponse{
+		Date: dateResp.Date,
+	}
+
+	return resp, nil
 }

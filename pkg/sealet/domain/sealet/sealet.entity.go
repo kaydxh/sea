@@ -21,17 +21,42 @@ type NowResponse struct {
 	Date string
 }
 
+type NowErrorRequest struct {
+	RequestId string
+}
+
+type NowErrorResponse struct {
+	Date string
+}
+
 func (s *Sealet) Now(ctx context.Context, req *NowRequest) (resp *NowResponse, err error) {
 	logger := logs_.GetLoggerOrFallback(ctx, req.RequestId)
 
 	dateReq := &kitdate_.NowRequest{}
 	dateResp, err := s.DateRepository.Now(ctx, dateReq)
 	if err != nil {
-		logger.Errorf("failed to call Date, err: %v", err)
+		logger.Errorf("failed to call Now, err: %v", err)
 		return nil, err
 	}
 
 	resp = &NowResponse{
+		Date: dateResp.Date,
+	}
+
+	return resp, nil
+}
+
+func (s *Sealet) NowError(ctx context.Context, req *NowErrorRequest) (resp *NowErrorResponse, err error) {
+	logger := logs_.GetLoggerOrFallback(ctx, req.RequestId)
+
+	dateReq := &kitdate_.NowErrorRequest{}
+	dateResp, err := s.DateRepository.NowError(ctx, dateReq)
+	if err != nil {
+		logger.Errorf("failed to call NowError, err: %v", err)
+		return nil, err
+	}
+
+	resp = &NowErrorResponse{
 		Date: dateResp.Date,
 	}
 
