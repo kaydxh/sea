@@ -25,3 +25,13 @@ func (s SealetHandler) Now(ctx context.Context, req *sealet.NowRequest) (resp *s
 
 	return handler.Now(ctx, req)
 }
+
+func (s SealetHandler) NowError(ctx context.Context, req *sealet.NowErrorRequest) (resp *sealet.NowErrorResponse, err error) {
+
+	handler, err := s.sealetFactory.NewSealet(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return handler.NowError(ctx, req)
+}
