@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sea.api.date;
 import "google/protobuf/descriptor.proto";
-import "api/openapi-spec/types/error.proto";
+import "api/protoapi-spec/types/error.proto";
 
 option go_package = "github.com/kaydxh/sea/api/openapi-spec/date;date";
 

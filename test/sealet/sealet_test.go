@@ -31,7 +31,7 @@ import (
 
 	"github.com/google/uuid"
 	http_ "github.com/kaydxh/golang/go/net/http"
-	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"github.com/kaydxh/sea/api/protoapi-spec/date"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -13,7 +13,7 @@ all:
 generate:
 	@echo "make generate"
 	@bash -c "curl -s -L -o ./script/proto-gen.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/go_proto_gen.sh"
-	@bash  script/proto-gen.sh -I . --proto_file_path api/openapi-spec --with-go --with-doc
+	@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec --with-go --with-doc
 .PHONY: copyright 
 copyright:
 	@echo "make copyright"

@@ -8,7 +8,7 @@ import (
 	"context"
 
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"github.com/kaydxh/sea/api/protoapi-spec/date"
 	"github.com/kaydxh/sea/pkg/sealet/application"
 	"github.com/kaydxh/sea/pkg/sealet/domain/sealet"
 )
