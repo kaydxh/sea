@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-- [api/openapi-spec/sealet/v1/configuration.proto](#api_openapi-spec_sealet_v1_configuration-proto)
+- [api/protoapi-spec/sealet/v1/configuration.proto](#api_protoapi-spec_sealet_v1_configuration-proto)
     - [Configuration](#sea-api-sealet-v1-Configuration)
     - [Configuration.Debug](#sea-api-sealet-v1-Configuration-Debug)
     - [Configuration.Debug.Dump](#sea-api-sealet-v1-Configuration-Debug-Dump)
@@ -12,10 +12,10 @@
 
 
 
-<a name="api_openapi-spec_sealet_v1_configuration-proto"></a>
+<a name="api_protoapi-spec_sealet_v1_configuration-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/openapi-spec/sealet/v1/configuration.proto
+## api/protoapi-spec/sealet/v1/configuration.proto
 
 
 

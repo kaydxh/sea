@@ -3,7 +3,7 @@ syntax = "proto3";
 package sea.api.types;
 import "google/protobuf/descriptor.proto";
 
-option go_package = "github.com/kaydxh/sea/api/openapi-spec/types;types";
+option go_package = "github.com/kaydxh/sea/api/protoapi-spec/types;types";
 
 message Error {
   string code = 1 [json_name = "Code"];

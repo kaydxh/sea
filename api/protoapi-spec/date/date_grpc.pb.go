@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.13.0
-// source: api/openapi-spec/date/date.proto
+// source: api/protoapi-spec/date/date.proto
 
 package date
 
@@ -139,5 +139,5 @@ var DateService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/openapi-spec/date/date.proto",
+	Metadata: "api/protoapi-spec/date/date.proto",
 }

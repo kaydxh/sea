@@ -4,7 +4,7 @@ import (
 	"context"
 
 	middleware_ "github.com/kaydxh/golang/pkg/middleware"
-	"github.com/kaydxh/sea/api/openapi-spec/date"
+	"github.com/kaydxh/sea/api/protoapi-spec/date"
 )
 
 type LocalController struct {

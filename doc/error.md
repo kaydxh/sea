@@ -3,17 +3,17 @@
 
 ## Table of Contents
 
-- [api/openapi-spec/types/error.proto](#api_openapi-spec_types_error-proto)
+- [api/protoapi-spec/types/error.proto](#api_protoapi-spec_types_error-proto)
     - [Error](#sea-api-types-Error)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_openapi-spec_types_error-proto"></a>
+<a name="api_protoapi-spec_types_error-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/openapi-spec/types/error.proto
+## api/protoapi-spec/types/error.proto
 
 
 
