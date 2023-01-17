@@ -24,7 +24,7 @@ package config
 import (
 	"github.com/go-playground/validator/v10"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
-	v1 "github.com/kaydxh/sea/api/openapi-spec/sealet/v1"
+	v1 "github.com/kaydxh/sea/api/protoapi-spec/sealet/v1"
 	"github.com/spf13/viper"
 )
 

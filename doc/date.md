@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-- [api/openapi-spec/date/date.proto](#api_openapi-spec_date_date-proto)
+- [api/protoapi-spec/date/date.proto](#api_protoapi-spec_date_date-proto)
     - [NowErrorRequest](#sea-api-date-NowErrorRequest)
     - [NowErrorResponse](#sea-api-date-NowErrorResponse)
     - [NowRequest](#sea-api-date-NowRequest)
@@ -15,10 +15,10 @@
 
 
 
-<a name="api_openapi-spec_date_date-proto"></a>
+<a name="api_protoapi-spec_date_date-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/openapi-spec/date/date.proto
+## api/protoapi-spec/date/date.proto
 
 
 
