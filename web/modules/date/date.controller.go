@@ -32,7 +32,7 @@ func (c *Controller) Now(
 	dateResp, err := c.app.Commands.SealetHandler.Now(ctx, dateReq)
 	if err != nil {
 		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Now] command")
-		return nil, err
+		return nil, APIError(err)
 	}
 
 	resp = &date.NowResponse{
@@ -53,7 +53,7 @@ func (c *Controller) NowError(
 	dateResp, err := c.app.Commands.SealetHandler.NowError(ctx, dateReq)
 	if err != nil {
 		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [NowError] command")
-		return nil, err
+		return nil, APIError(err)
 	}
 
 	resp = &date.NowErrorResponse{
