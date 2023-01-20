@@ -3,6 +3,7 @@ package sealet
 import (
 	"context"
 
+	errors_ "github.com/kaydxh/golang/go/errors"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	kitdate_ "github.com/kaydxh/sea/pkg/sealet/domain/kit/date"
 )
@@ -36,7 +37,10 @@ func (s *Sealet) Now(ctx context.Context, req *NowRequest) (resp *NowResponse, e
 	dateResp, err := s.DateRepository.Now(ctx, dateReq)
 	if err != nil {
 		logger.Errorf("failed to call Now, err: %v", err)
-		return nil, err
+		return nil, errors_.Errore(
+			err,
+			ErrInterval,
+		)
 	}
 
 	resp = &NowResponse{
@@ -53,7 +57,10 @@ func (s *Sealet) NowError(ctx context.Context, req *NowErrorRequest) (resp *NowE
 	dateResp, err := s.DateRepository.NowError(ctx, dateReq)
 	if err != nil {
 		logger.Errorf("failed to call NowError, err: %v", err)
-		return nil, err
+		return nil, errors_.Errore(
+			err,
+			ErrInterval,
+		)
 	}
 
 	resp = &NowErrorResponse{

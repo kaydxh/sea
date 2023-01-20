@@ -4,7 +4,7 @@ package sea.api.date;
 import "google/protobuf/descriptor.proto";
 import "api/protoapi-spec/types/error.proto";
 
-option go_package = "github.com/kaydxh/sea/api/openapi-spec/date;date";
+option go_package = "github.com/kaydxh/sea/api/protoapi-spec/date;date";
 
 service DateService {
   // 生成当前时间
