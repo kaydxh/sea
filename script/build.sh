@@ -38,7 +38,7 @@ SEA_OUTPUT_BIN_PATH=${SEA_OUTPUT_PATH}/bin
 
 
 VERSION_PATH="${SEA_ROOT}/script/version.sh"
-if [[ ! -f "${VERSION_PATH}" ]]; then curl -s -L -o ${VERSION_PATH} https://raw.githubusercontent.com/kaydxh/sea/master/script/clean.sh; fi
+if [[ ! -f "${VERSION_PATH}" ]]; then curl -s -L -o ${VERSION_PATH} https://raw.githubusercontent.com/kaydxh/sea/master/script/version.sh; fi
 source "${VERSION_PATH}"
 
 export CGO_ENABLED=1
