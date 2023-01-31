@@ -21,8 +21,6 @@ while getopts 'd::' option; do
 done
 
 echo " ==> Clean..."
-
-OUT_PUT_PATH=output
 if [[ -d  ${OUT_PUT_PATH} ]]; then
   rm -rf ${OUT_PUT_PATH} >/dev/null 2>&1 || true
 fi
