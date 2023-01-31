@@ -10,31 +10,35 @@ set -o pipefail
 # set -o xtrace
 
 TARGET=sealet
+ENV=
 
 help() {
     echo "Usage:"
-    echo "getopts.sh [-t target]"
+    echo "getopts.sh [-t target -e env]"
     echo "Description:"
     echo "target,the name of server."
+    echo "env,environment variable of server."
     exit -1
 }
 
-while getopts 't:' option; do
+while getopts 't:e:' option; do
   case ${option} in
     t) TARGET=${OPTARG};;
+    e) ENV=${OPTARG};;
     ?) help ;;
   esac
 done
 
 
 SEA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+SEA_CMD_ROOT=${SEA_ROOT}/cmd
 SEA_OUTPUT_SUB_PATH=${SEA_OUTPUT_SUB_PATH:-output/${TARGET}}
 SEA_OUTPUT_PATH=${SEA_ROOT}/${SEA_OUTPUT_SUB_PATH}
 SEA_OUTPUT_BIN_PATH=${SEA_OUTPUT_PATH}/bin
 
 source "${SEA_ROOT}/script/version.sh"
 
-export CGO_ENABLED=0
+export CGO_ENABLED=1
 export GOFLAGS="-mod=readonly"
 
 function platform() {
@@ -56,15 +60,10 @@ function make_build_args() {
 function build() {
   GO_BUILD_ARGS="$(make_build_args)"
 
-  rm -rf ${SEA_OUTPUT_PATH}/*
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
   go mod tidy
-  go build "${GO_BUILD_ARGS}" -o "${SEA_OUTPUT_BIN_PATH}/${TARGET}" ./cmd/${TARGET}
-  cp -rf conf "${SEA_OUTPUT_PATH}"
-
-  # Done!
-  echo -e "\n==> Results:"
-  ls -Rhl ${SEA_OUTPUT_PATH}
+  if [[ ! -z "${ENV}" ]]; then (set -x; export ${ENV}); fi
+  (set -x; go build "${GO_BUILD_ARGS}" -o "${SEA_CMD_ROOT}/${TARGET}/${TARGET}" ${SEA_CMD_ROOT}/${TARGET}/*.go)
 }
 
 echo "==> Building in $(platform)"
