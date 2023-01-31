@@ -3,7 +3,7 @@ syntax = "proto3";
 package sea.api.sealet.v1;
 import "google/protobuf/duration.proto";
 
-option go_package = "github.com/kaydxh/sea/protoapi-spec/sealet/v1;sealet";
+option go_package = "github.com/kaydxh/sea/protoapi-spec/sealet/v1;v1";
 
 // config file yaml
 message Configuration {
