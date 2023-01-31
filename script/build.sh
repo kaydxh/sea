@@ -36,7 +36,10 @@ SEA_OUTPUT_SUB_PATH=${SEA_OUTPUT_SUB_PATH:-output/${TARGET}}
 SEA_OUTPUT_PATH=${SEA_ROOT}/${SEA_OUTPUT_SUB_PATH}
 SEA_OUTPUT_BIN_PATH=${SEA_OUTPUT_PATH}/bin
 
-source "${SEA_ROOT}/script/version.sh"
+
+VERSION_PATH="${SEA_ROOT}/script/version.sh"
+if [[ ! -f "${VERSION_PATH}" ]]; then curl -s -L -o ${VERSION_PATH} https://raw.githubusercontent.com/kaydxh/sea/master/script/clean.sh; fi
+source "${VERSION_PATH}"
 
 export CGO_ENABLED=1
 export GOFLAGS="-mod=readonly"
