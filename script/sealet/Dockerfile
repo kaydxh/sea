@@ -29,11 +29,11 @@ WORKDIR /app
 
 # [suggest] declare exposed port
 EXPOSE 10001
-#ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
 
 # [suggest] use command array
 # ENTRYPOINT指定默认的运行命令
 ENTRYPOINT ["/bin/bash","-c"]
 # CMD指定默认的运行参数
 # CMD ["start.sh param1 param2"]
-CMD ["start.sh"]
+CMD ["bash start.sh"]
