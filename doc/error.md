@@ -3,23 +3,23 @@
 
 ## Table of Contents
 
-- [api/protoapi-spec/date/error.proto](#api_protoapi-spec_date_error-proto)
-    - [SeaDateReasonEnum](#sea-api-date-SeaDateReasonEnum)
+- [api/protoapi-spec/sea-date/v1/error.proto](#api_protoapi-spec_sea-date_v1_error-proto)
+    - [SeaDateReasonEnum](#sea-api-seadate-SeaDateReasonEnum)
   
-    - [SeaDateReasonEnum.SeaDateReason](#sea-api-date-SeaDateReasonEnum-SeaDateReason)
+    - [SeaDateReasonEnum.SeaDateReason](#sea-api-seadate-SeaDateReasonEnum-SeaDateReason)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_protoapi-spec_date_error-proto"></a>
+<a name="api_protoapi-spec_sea-date_v1_error-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/protoapi-spec/date/error.proto
+## api/protoapi-spec/sea-date/v1/error.proto
 
 
 
-<a name="sea-api-date-SeaDateReasonEnum"></a>
+<a name="sea-api-seadate-SeaDateReasonEnum"></a>
 
 ### SeaDateReasonEnum
 
@@ -31,7 +31,7 @@
  
 
 
-<a name="sea-api-date-SeaDateReasonEnum-SeaDateReason"></a>
+<a name="sea-api-seadate-SeaDateReasonEnum-SeaDateReason"></a>
 
 ### SeaDateReasonEnum.SeaDateReason
 Enum describing possible face fusion reasons.
