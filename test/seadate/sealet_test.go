@@ -32,6 +32,7 @@ import (
 	"github.com/google/uuid"
 	http_ "github.com/kaydxh/golang/go/net/http"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
+	"golang.org/x/net/context"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -49,13 +50,14 @@ func TestHttpJsonNow(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	client, err := http_.NewClient(http_.WithTimeout(timeout))
 	if err != nil {
 		t.Fatalf("failed to new http client got: %v", err)
 	}
 	for i := range testCases {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			req := &v1.DateRequest{
+			req := &v1.NowRequest{
 				RequestId: uuid.NewString(),
 			}
 			dataReq, err := json.Marshal(req)
@@ -67,12 +69,12 @@ func TestHttpJsonNow(t *testing.T) {
 			t.Logf("url: %v", u.String())
 
 			//dataResp, err := client.PostJson("http://"+serverAddr+"/Now", nil, dataReq)
-			dataResp, err := client.PostJson(u.String(), nil, dataReq)
+			dataResp, err := client.PostJson(ctx, u.String(), nil, dataReq)
 			if err != nil {
 				t.Fatalf("failed to post json got: %v", err)
 			}
 
-			var resp v1.DateResponse
+			var resp v1.NowResponse
 			err = json.Unmarshal(dataResp, &resp)
 			if err != nil {
 				t.Fatalf("failed to json unmarshal got: %v", err)
@@ -91,13 +93,14 @@ func TestHttpPbNow(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
 	client, err := http_.NewClient(http_.WithTimeout(timeout))
 	if err != nil {
 		t.Fatalf("failed to new http client got: %v", err)
 	}
 	for i := range testCases {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
-			req := &v1.DateRequest{
+			req := &v1.NowRequest{
 				RequestId: uuid.NewString(),
 			}
 			dataReq, err := proto.Marshal(req)
@@ -107,12 +110,12 @@ func TestHttpPbNow(t *testing.T) {
 
 			u, _ := url.Parse("http://" + serverAddr)
 			u.Path = path.Join(u.Path, "Now")
-			dataResp, err := client.PostPb(u.String(), nil, dataReq)
+			dataResp, err := client.PostPb(ctx, u.String(), nil, dataReq)
 			if err != nil {
 				t.Fatalf("failed to post proto got: %v", err)
 			}
 
-			var resp v1.DateResponse
+			var resp v1.NowResponse
 			err = proto.Unmarshal(dataResp, &resp)
 			if err != nil {
 				t.Fatalf("failed to proto unmarshal got: %v", err)
