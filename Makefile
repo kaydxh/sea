@@ -1,8 +1,8 @@
 # example
-# make TARGET=sealet
+# make TARGET=seadate
 #
-# set default target to sealet
-TARGET=sealet
+# set default target to seadate
+TARGET=seadate
 DEPS_NAME=deps.yaml
 DO_PARSE_DEPS="ON"
 
@@ -50,13 +50,13 @@ install: all clean
 	@$(eval LINK_THIRD_LIB_PATHS := $(shell find -L ${PROJECT_CMD_ROOT_DIR}/third_path/ -maxdepth 3 -mindepth 2 -type d -iname "lib*" -print0 |xargs -0 -I {} sh -c 'echo {}'|grep -v "stubs"))
 	@echo "${LINK_THIRD_LIB_PATHS}"
 	@$(eval JOINED_LINK_THIRD_LIB_PATHS := $(call joinwith,:,$(LINK_THIRD_LIB_PATHS)))
-	@LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "third_path" | grep -v "^/lib64" | grep -v "^/lib" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
-	@LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libgomp" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
-	@LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libjbig" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
-	@LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libstdc++.so" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
+	@#LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "third_path" | grep -v "^/lib64" | grep -v "^/lib" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
+	@#LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libgomp" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
+	@#LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libjbig" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
+	@#LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libstdc++.so" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
 
 	@echo " > install model..."
-	@find -L ${PROJECT_CMD_ROOT_DIR}/third_path/ -maxdepth 3 -type d \( -iname "model" -o -iname "sdk_data" -o -iname "config" \) -print0 | xargs -0 -I {} sh -c 'mkdir -p ${OUTPUT_MODEL_DIR}/{}; cp -r -v -d {}/* ${OUTPUT_MODEL_DIR}/{}'
+	@#find -L ${PROJECT_CMD_ROOT_DIR}/third_path/ -maxdepth 3 -type d \( -iname "model" -o -iname "sdk_data" -o -iname "config" \) -print0 | xargs -0 -I {} sh -c 'mkdir -p ${OUTPUT_MODEL_DIR}/{}; cp -r -v -d {}/* ${OUTPUT_MODEL_DIR}/{}'
 
 	@echo " > install script..."
 	@cp -Rv "${PROJECT_ROOT_DIR}/script/${TARGET}/"* ${OUTPUT_DIR}

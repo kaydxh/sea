@@ -3,62 +3,83 @@
 
 ## Table of Contents
 
-- [api/protoapi-spec/sea-date/v1/configuration.proto](#api_protoapi-spec_sea-date_v1_configuration-proto)
-    - [Configuration](#sea-api-seadate-Configuration)
-    - [Configuration.Debug](#sea-api-seadate-Configuration-Debug)
-    - [Configuration.Debug.Dump](#sea-api-seadate-Configuration-Debug-Dump)
+- [api/protoapi-spec/sea-date/v1/api.proto](#api_protoapi-spec_sea-date_v1_api-proto)
+    - [NowErrorRequest](#sea-api-seadate-NowErrorRequest)
+    - [NowErrorResponse](#sea-api-seadate-NowErrorResponse)
+    - [NowRequest](#sea-api-seadate-NowRequest)
+    - [NowResponse](#sea-api-seadate-NowResponse)
+  
+    - [SeaDateService](#sea-api-seadate-SeaDateService)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_protoapi-spec_sea-date_v1_configuration-proto"></a>
+<a name="api_protoapi-spec_sea-date_v1_api-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/protoapi-spec/sea-date/v1/configuration.proto
+## api/protoapi-spec/sea-date/v1/api.proto
 
 
 
-<a name="sea-api-seadate-Configuration"></a>
+<a name="sea-api-seadate-NowErrorRequest"></a>
 
-### Configuration
-config file yaml
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| debug | [Configuration.Debug](#sea-api-seadate-Configuration-Debug) |  |  |
-
-
-
-
-
-
-<a name="sea-api-seadate-Configuration-Debug"></a>
-
-### Configuration.Debug
+### NowErrorRequest
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| dump | [Configuration.Debug.Dump](#sea-api-seadate-Configuration-Debug-Dump) |  |  |
+| request_id | [string](#string) |  | 请求ID |
 
 
 
 
 
 
-<a name="sea-api-seadate-Configuration-Debug-Dump"></a>
+<a name="sea-api-seadate-NowErrorResponse"></a>
 
-### Configuration.Debug.Dump
+### NowErrorResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| enabled | [bool](#bool) |  |  |
-| dump_dir | [string](#string) |  |  |
+| request_id | [string](#string) |  | 请求ID |
+| date | [string](#string) |  | 当前时间 |
+| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
+
+
+
+
+
+
+<a name="sea-api-seadate-NowRequest"></a>
+
+### NowRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| request_id | [string](#string) |  | 请求ID |
+
+
+
+
+
+
+<a name="sea-api-seadate-NowResponse"></a>
+
+### NowResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| request_id | [string](#string) |  | 请求ID |
+| date | [string](#string) |  | 当前时间 |
+| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
 
 
 
@@ -69,6 +90,17 @@ config file yaml
  
 
  
+
+
+<a name="sea-api-seadate-SeaDateService"></a>
+
+### SeaDateService
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Now | [NowRequest](#sea-api-seadate-NowRequest) | [NowResponse](#sea-api-seadate-NowResponse) | 生成当前时间 |
+| NowError | [NowErrorRequest](#sea-api-seadate-NowErrorRequest) | [NowErrorResponse](#sea-api-seadate-NowErrorResponse) |  |
 
  
 

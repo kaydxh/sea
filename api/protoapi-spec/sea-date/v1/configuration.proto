@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sea.api.seadate;
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/kaydxh/sea/protoapi-spec/seadate/v1;v1";
+
+// config file yaml
+message Configuration {
+  Debug debug = 20;
+  message Debug {
+    Dump dump = 1;
+    message Dump {
+      bool enabled = 1;
+      string dump_dir = 2;
+    }
+  }
+}
