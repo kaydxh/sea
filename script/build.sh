@@ -65,9 +65,10 @@ function build() {
 
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
   go mod tidy
+
   set -x
-  export ${ENV}
-  (set -x; go build "${GO_BUILD_ARGS}" -o "${SEA_CMD_ROOT}/${TARGET}/${TARGET}" ${SEA_CMD_ROOT}/${TARGET}/*.go)
+  if [[ ! -z ${ENV} ]]; then export ${ENV}; fi
+  go build "${GO_BUILD_ARGS}" -o "${SEA_CMD_ROOT}/${TARGET}/${TARGET}" ${SEA_CMD_ROOT}/${TARGET}/*.go
 }
 
 echo "==> Building in $(platform)"
