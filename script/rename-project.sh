@@ -53,7 +53,7 @@ function renameProjectDir {
     #newFile=`echo ${oldFile} | sed -e "s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g"`
     newFile=`echo ${oldFile} | sed -e "s/$2/$3/g"`
     newDir=${newFile%/*}
-    if [[ -f ${oldFile} && ${oldFile} != ${newFile} ]]; then mkdir -p ${newDir}; mv  ${oldFile} ${newFile}; echo "${oldFile} ==> ${newFile}"; fi
+    if [[ -f ${oldFile} ]]; then mkdir -p ${newDir}; mv -nv ${oldFile} ${newFile}; echo "${oldFile} ==> ${newFile}"; fi
 }
 
 function rmDirectories {
