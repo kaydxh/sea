@@ -68,7 +68,7 @@ function replaceContentOfFiles {
   UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
   UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
   #for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*output*} '${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}' .)
-  for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*output*} "${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}" .)
+  for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*script*,*output* } "${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}" .)
   do
     echo "${it}"
     # skip soft link file
