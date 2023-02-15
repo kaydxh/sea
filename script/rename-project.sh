@@ -38,9 +38,9 @@ function checkParams {
 function renameFilesAndDirectories {
   for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type f -path "*${OLD_PROJECT_NAME}*")
   do
+    renameProjectDir ${it} ${OLD_PROJECT_NAME} ${NEW_PROJECT_NAME}
     renameProjectDir ${it} ${OLD_PROJECT_DASH_NAME} ${NEW_PROJECT_DASH_NAME}
     renameProjectDir ${it} ${OLD_PROJECT_JOINT_NAME} ${NEW_PROJECT_JOINT_NAME}
-    renameProjectDir ${it} ${OLD_PROJECT_NAME} ${NEW_PROJECT_NAME}
   done
 
   rmDirectories 
@@ -53,14 +53,13 @@ function renameProjectDir {
     #newFile=`echo ${oldFile} | sed -e "s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g"`
     newFile=`echo ${oldFile} | sed -e "s/$2/$3/g"`
     newDir=${newFile%/*}
-    if [[ -f ${oldFile} ]]; then mkdir -p ${newDir}; mv  ${oldFile} ${newFile}; fi
+    if [[ -f ${oldFile} && ${oldFile} != ${newFile} ]]; then mkdir -p ${newDir}; mv  ${oldFile} ${newFile}; echo "${oldFile} ==> ${newFile}"; fi
 }
 
 function rmDirectories {
   for it in $(find . ! -path "*third_party*" ! -path "*node_modules*"  -type d -path "*${OLD_PROJECT_NAME}*")
   do
     oldDir=${it}
-    echo "${oldDir}"
     rm -rf ${oldDir}
   done
 }
