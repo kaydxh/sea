@@ -7,7 +7,7 @@ set -euo pipefail
 SEA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 NEW_PROJECT_NAME=
 NEW_GIT_REPOSITORY_NAME=
-DOWNLOAD_DIR=${SEA_ROOT}/download
+DOWNLOAD_DIR=${SEA_ROOT}/.download
 SEA_TEMPLATE_TAR_FILE="${DOWNLOAD_DIR}/master.zip"
 SEA_MASTER_TEMPLATE_ROOT_DIR="${DOWNLOAD_DIR}/sea-master"
 SEA_TEMPLATE_ROOT_DIR="${DOWNLOAD_DIR}/sea"
@@ -63,6 +63,8 @@ function newProject() {
    mkdir -p $(dirname ${SEA_ROOT}/${it})
    mv -nv ${it} ${SEA_ROOT}/${it}
   done
+
+  rm  -rf ${DOWNLOAD_DIR}
 }
 
 checkParams 
