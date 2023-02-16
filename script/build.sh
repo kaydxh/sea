@@ -48,28 +48,29 @@ function platform() {
   echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"
 }
 
-function make_build_args() {
+function make_build_ld_args() {
   local goldflags
 
-  # -a force rebuilding of packages that are already up-to-date
-  goldflags="-a all=$(ldflags ${TARGET}) ${GOLDFLAGS:-}"
-  local -a build_args
-   build_args=(
+  goldflags="all=$(ldflags ${TARGET}) ${GOLDFLAGS:-}"
+  local -a build_ld_args
+   build_ld_args=(
    -ldflags="${goldflags}"
    ) 
 
-   echo "${build_args[*]}"
+   echo "${build_ld_args[*]}"
 }
 
 function build() {
-  GO_BUILD_ARGS="$(make_build_args)"
+  # -a force rebuilding of packages that are already up-to-date
+  GO_BUILD_ARGS="-a"
+  GO_BUILD_LD_ARGS="$(make_build_ld_args)"
 
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
   go mod tidy
 
   set -x
   if [[ ! -z ${ENV} ]]; then export ${ENV}; fi
-  go build "${GO_BUILD_ARGS}" -o "${SEA_CMD_ROOT}/${TARGET}/${TARGET}" ${SEA_CMD_ROOT}/${TARGET}/*.go
+  go build "${GO_BUILD_ARGS}" "${GO_BUILD_LD_ARGS}" -o "${SEA_CMD_ROOT}/${TARGET}/${TARGET}" ${SEA_CMD_ROOT}/${TARGET}/*.go
 }
 
 echo "==> Building in $(platform)"
