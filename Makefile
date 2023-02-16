@@ -88,6 +88,11 @@ new:
 	@echo "make new project ${TARGET}"
 	@bash script/new-project.sh -t "${TARGET}"  -g "${NEW_GIT_REPOSITORY_NAME}"
 
+.PHONY: delete
+delete:
+	@echo "make delete project ${TARGET}"
+	@bash script/delete-project.sh -t "${TARGET}" 
+
 .PHONY: clean
 clean:
 	@echo "clean"
