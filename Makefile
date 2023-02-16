@@ -1,6 +1,6 @@
 # example
 # make TARGET=seadate
-#
+# make new TARGET=date NEW_GIT_REPOSITORY_NAME="github.com/kaydxh/sea" 
 # set default target to seadate
 TARGET=seadate
 DEPS_NAME=deps.yaml
@@ -18,6 +18,8 @@ OUTPUT_LIB_DIR=${OUTPUT_DIR}/lib
 OUTPUT_BIN_DIR=${OUTPUT_DIR}/bin
 OUTPUT_MODEL_DIR=${OUTPUT_DIR}/model
 OUTPUT_BIN_PATH=${OUTPUT_DIR}/bin/${TARGET}
+
+NEW_GIT_REPOSITORY_NAME=
 
 .PHONY: all
 all:
@@ -80,6 +82,11 @@ copyright:
 	@bash -c "curl -s -L -o ./script/copyright.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.sh"
 	@bash -c "curl -s -L -o ./script/copyright.txt https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.txt"
 	@bash script/copyright.sh
+
+.PHONY: new 
+new:
+	@echo "make new project ${TARGET}"
+	@bash script/new-project.sh -t "${TARGET}"  -g "${NEW_GIT_REPOSITORY_NAME}"
 
 .PHONY: clean
 clean:
