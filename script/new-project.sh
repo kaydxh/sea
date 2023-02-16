@@ -45,6 +45,7 @@ function checkParams {
 }
 
 function downloadSeaProject() {
+  rm -rf ${DOWNLOAD_DIR}
   mkdir -p ${DOWNLOAD_DIR}
   curl -s -L -o ${SEA_TEMPLATE_TAR_FILE} https://github.com/kaydxh/sea/archive/refs/heads/master.zip
 }
@@ -64,7 +65,7 @@ function newProject() {
    mv -nv ${it} ${SEA_ROOT}/${it}
   done
 
-  rm  -rf ${DOWNLOAD_DIR}
+ # rm  -rf ${DOWNLOAD_DIR}
 }
 
 checkParams 
