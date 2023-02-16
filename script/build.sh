@@ -51,7 +51,8 @@ function platform() {
 function make_build_args() {
   local goldflags
 
-  goldflags="all=$(ldflags ${TARGET}) ${GOLDFLAGS:-}"
+  # -a force rebuilding of packages that are already up-to-date
+  goldflags="-a all=$(ldflags ${TARGET}) ${GOLDFLAGS:-}"
   local -a build_args
    build_args=(
    -ldflags="${goldflags}"
