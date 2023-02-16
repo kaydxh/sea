@@ -12,8 +12,8 @@ NEW_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${NEW_PROJECT_NAME}"
 OLD_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${OLD_PROJECT_NAME}"
 NEW_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${NEW_PROJECT_NAME}"
 
-OLD_GIT_REPOSITORY_NAME=$3 #github.com/kaydxh
-NEW_GIT_REPOSITORY_NAME=$4 #git.code.oa.com/kaydxh
+OLD_GIT_REPOSITORY_NAME=$3 #github.com/kaydxh/sea
+NEW_GIT_REPOSITORY_NAME=$4 #gitlab.com/kaydxh/sea
 
 function usage() {
     echo >&2 "Usage: $0 OLD_PROJECT_NAME NEW_PROJECT_NAME"
@@ -82,7 +82,7 @@ function replaceContentOfFiles {
    #将OLD_PROJECT_NAME变量值的首字母转化为大写，并保存在UPPER_BEGIN_OLD_PROJECT_NAME变量中
    #UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
    #UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
-   sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME}/g" "${it}"
+   sed -i "" "s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g" "${it}"
 
    # replace git name
    sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME} /${UPPER_BEGIN_NEW_PROJECT_NAME}/g" "${it}"

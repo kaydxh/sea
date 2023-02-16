@@ -38,7 +38,7 @@ function usage() {
 }
 
 function checkParams {
-  if [[ -z "${NEW_PROJECT_NAME}" || -z "${NEW_GIT_REPOSITORY_NAME}" ]]; then
+  if [[ -z "${NEW_PROJECT_NAME}" ]]; then
     help
     exit 1
   fi
