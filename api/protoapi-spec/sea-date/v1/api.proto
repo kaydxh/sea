@@ -13,21 +13,24 @@ service SeaDateService {
 }
 
 message NowRequest {
-  string request_id = 1 [json_name = "RequestId"];  //请求ID
+  // proto name 默认为变量名，proto json默认为小驼峰模式, json默认为变量名
+  // [json_name = "RequestId"]将指定proto json的标签, 此时需要设置
+  // protojson编解码器选项UseProtoNames为false
+  string request_id = 1 [json_name = "RequestId"];  // 请求ID
 }
 
 message NowResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
-  string date = 2 [json_name = "Date"];             //当前时间
+  string date = 2 [json_name = "Date"];             // 当前时间
   types.Error error = 1000 [json_name = "Error"];
 }
 
 message NowErrorRequest {
-  string request_id = 1 [json_name = "RequestId"];  //请求ID
+  string request_id = 1 [json_name = "RequestId"];  // 请求ID
 }
 
 message NowErrorResponse {
   string request_id = 1 [json_name = "RequestId"];  // 请求ID
-  string date = 2 [json_name = "Date"];             //当前时间
+  string date = 2 [json_name = "Date"];             // 当前时间
   types.Error error = 1000 [json_name = "Error"];
 }
