@@ -46,11 +46,6 @@ function checkParams() {
     exit 1
   fi
 
-  if [[ x"${OLD_PROJECT_NAME}" == x"${NEW_PROJECT_NAME}" ]]; then
-    echo "OLD_PROJECT_NAME is equal NEW_PROJECT_NAME"
-    exit 1
-  fi
-
   if [[ -z "${OLD_GIT_REPOSITORY_NAME}" ]]  && [[ ! -z "${NEW_GIT_REPOSITORY_NAME}" ]]; then
     echo "OLD_GIT_REPOSITORY_NAME is empty"
     exit 1
@@ -78,7 +73,9 @@ function renameFilesAndDirectories() {
     renameProjectDir ${it} ${OLD_PROJECT_JOINT_NAME} ${NEW_PROJECT_JOINT_NAME}
   done
 
-  rmDirectories 
+  if [[ x"${OLD_PROJECT_NAME}" != x"${NEW_PROJECT_NAME}" ]]; then
+    rmDirectories 
+  fi
 }
 
 # $1 file or dir name
