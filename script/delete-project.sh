@@ -23,11 +23,11 @@ while getopts 't:' option; do
 done
 
 function usage() {
-    echo >&2 "Usage: $0 NEW_PROJECT_NAME"
+    echo >&2 "Usage: $0 PROJECT_NAME"
 }
 
 function checkParams {
-  if [[ -z "${NEW_PROJECT_NAME}" ]]; then
+  if [[ -z "${PROJECT_NAME}" ]]; then
     help
     exit 1
   fi
