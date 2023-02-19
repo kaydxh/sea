@@ -56,7 +56,7 @@ function tarFile() {
 }
 
 function newProject() {
-  cd ${SEA_TEMPLATE_ROOT_DIR}; bash ${RENAME_PRJECT_SCRIPT} ${SEA_TEMPLATE_PROJECT_NAME} ${NEW_PROJECT_NAME} ${OLD_GIT_REPOSITORY_NAME} ${NEW_GIT_REPOSITORY_NAME}
+  cd ${SEA_TEMPLATE_ROOT_DIR}; bash ${RENAME_PRJECT_SCRIPT} -s "${SEA_TEMPLATE_PROJECT_NAME}" -t "${NEW_PROJECT_NAME}" -l "${OLD_GIT_REPOSITORY_NAME}" -r "${NEW_GIT_REPOSITORY_NAME}"
   for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type f)
   do
    echo "src file: ${it}, dst file: ${SEA_ROOT}/${it}" 
