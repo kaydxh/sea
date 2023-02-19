@@ -2,27 +2,62 @@
 
 # Fail on any error
 set -euo pipefail
-#set -o xtrace
-
+set -o xtrace
+#
+#
 PROJECT_ROOT_NAME=sea
-OLD_PROJECT_NAME=$1
-NEW_PROJECT_NAME=$2
+OLD_PROJECT_NAME=
+NEW_PROJECT_NAME=
 OLD_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${OLD_PROJECT_NAME}"
 NEW_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${NEW_PROJECT_NAME}"
 OLD_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${OLD_PROJECT_NAME}"
 NEW_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${NEW_PROJECT_NAME}"
 
-OLD_GIT_REPOSITORY_NAME=$3 #github.com/kaydxh/sea
-NEW_GIT_REPOSITORY_NAME=$4 #gitlab.com/kaydxh/sea
+OLD_GIT_REPOSITORY_NAME=  #github.com/kaydxh/sea
+NEW_GIT_REPOSITORY_NAME=  #gitlab.com/kaydxh/sea
 
-function usage() {
-    echo >&2 "Usage: $0 OLD_PROJECT_NAME NEW_PROJECT_NAME"
+help() {
+    echo "Usage:"
+    echo "rename-project.sh [-s source -t target -l old_git_address -r new_git_address]"
+    echo "Description:"
+    echo "source, the name of old project."
+    echo "target, the name of new project."
+    echo "old_git_address, the name of old git address."
+    echo "new_git_address, the name of new git address."
+    echo "sourc and target must have value"
+    echo "old_git_address and new_git_address must have value in the same time"
+    exit -1
 }
 
+while getopts 's:t:l:r::' option; do
+  case ${option} in
+    s) OLD_PROJECT_NAME=${OPTARG};;
+    t) NEW_PROJECT_NAME=${OPTARG};;
+    l) OLD_GIT_REPOSITORY_NAME=${OPTARG};;
+    r) NEW_GIT_REPOSITORY_NAME=${OPTARG};;
+    ?) help ;;
+  esac
+done
 
-function checkParams {
+
+function checkParams() {
   if [[ -z "${OLD_PROJECT_NAME}" ]]  || [[ -z "${NEW_PROJECT_NAME}" ]]; then
-    usage
+    help
+    exit 1
+  fi
+
+  if [[ x"${OLD_PROJECT_NAME}" == x"${NEW_PROJECT_NAME}" ]]; then
+    echo "OLD_PROJECT_NAME is equal NEW_PROJECT_NAME"
+    exit 1
+  fi
+
+  if [[ -z "${OLD_GIT_REPOSITORY_NAME}" ]]  && [[ ! -z "${NEW_GIT_REPOSITORY_NAME}" ]]; then
+    echo "OLD_GIT_REPOSITORY_NAME is empty"
+    exit 1
+  fi
+
+  if [[ ! -z "${OLD_GIT_REPOSITORY_NAME}" ]]  && [[ -z "${NEW_GIT_REPOSITORY_NAME}" ]]; then
+    echo "NEW_GIT_REPOSITORY_NAM is empty"
     exit 1
   fi
 
@@ -35,7 +70,7 @@ function checkParams {
 # */代表去取从第一个slash之后的所有内容
 
 # sed 默认大小写敏感，/i参数不区分大小写
-function renameFilesAndDirectories {
+function renameFilesAndDirectories() {
   for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type f -path "*${OLD_PROJECT_NAME}*")
   do
     renameProjectDir ${it} ${OLD_PROJECT_NAME} ${NEW_PROJECT_NAME}
@@ -48,7 +83,7 @@ function renameFilesAndDirectories {
 
 # $1 file or dir name
 # 老服务文件名/目录名 替换为 新服务文件名/目录名
-function renameProjectDir {
+function renameProjectDir() {
     oldFile=$1
     #newFile=`echo ${oldFile} | sed -e "s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g"`
     newFile=`echo ${oldFile} | sed -e "s/$2/$3/g"`
@@ -64,7 +99,7 @@ function rmDirectories {
   done
 }
 
-function replaceContentOfFiles {
+function replaceContentOfFiles() {
   UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
   UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
   #for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*output*} '${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}' .)
@@ -90,8 +125,20 @@ function replaceContentOfFiles {
   done
 }
 
-function replaceGitRespositoryNameOfFiles {
-  for it in $(grep -RIl --exclude-dir={*third_party*,*node_modules*,*output*} --exclude=*rename-project.sh "${OLD_GIT_REPOSITORY_NAME}" .)
+function replaceString() {
+    ESCAPED_OLD_GIT_NAME=$(printf '%s\n' "$1" | sed -e 's/[]\/$*.^[]/\\&/g')
+    ESCAPED_NEW_GIT_NAME=$(printf '%s\n' "$2" | sed -e 's/[]\/$*.^[]/\\&/g')
+    sed -i "" "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
+   # support by base 4.0
+   #sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
+}
+
+
+function replaceGitRespositoryNameOfFiles() {
+  if [[ -z ${OLD_GIT_REPOSITORY_NAME} || -z ${NEW_GIT_REPOSITORY_NAME} ]]; then
+    exit
+  fi
+  for it in $(grep -RIl --exclude-dir={third_party,node_modules,script,output} --exclude={rename-project.sh,Makefile} "${OLD_GIT_REPOSITORY_NAME}" .)
   do
     echo "${it}"
     # skip soft link file
@@ -107,16 +154,7 @@ function replaceGitRespositoryNameOfFiles {
 }
 
 
-function replaceString {
-    ESCAPED_OLD_GIT_NAME=$(printf '%s\n' "$1" | sed -e 's/[]\/$*.^[]/\\&/g')
-    ESCAPED_NEW_GIT_NAME=$(printf '%s\n' "$2" | sed -e 's/[]\/$*.^[]/\\&/g')
-    sed -i "" "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
-   # support by base 4.0
-   #sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
-}
-
-
-function replaceProjectRootName {
+function replaceProjectRootName() {
   if [[ -d ../${OLD_PROJECT_NAME} ]]; then
     mv ../${OLD_PROJECT_NAME} ../${NEW_PROJECT_NAME}
   fi
