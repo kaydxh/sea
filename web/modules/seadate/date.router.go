@@ -33,7 +33,7 @@ func (c *Controller) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGatewa
 			//return date.RegisterDateServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 			//https://github.com/grpc-ecosystem/grpc-gateway/issues/1458,
 			//impove performace, but grpc interceptor is disabled
-			//return date.RegisterDateServiceHandlerServer(ctx, mux, c)
+			//return v1.RegisterSeaDateServiceHandlerServer(ctx, mux, c)
 			return v1.RegisterSeaDateServiceHandlerServer(ctx, mux, &LocalController{Controller: c})
 		},
 	)

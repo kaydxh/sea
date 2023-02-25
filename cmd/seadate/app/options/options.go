@@ -82,7 +82,7 @@ func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 // Run runs the specified APIServer.  This should never exit.
 func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	logrus.Infof("Starting Sea let version: %v", app_.GetVersion())
-	ws, err := s.webServerConfig.Complete().New()
+	ws, err := s.webServerConfig.Complete().New(ctx)
 	if err != nil {
 		return err
 	}
