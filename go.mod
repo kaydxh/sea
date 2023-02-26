@@ -1,5 +1,7 @@
 module github.com/kaydxh/sea
 
+//module git.woa.com/YouTu-BizRD-1/sea
+
 go 1.18
 
 require (
@@ -10,7 +12,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 	github.com/jmoiron/sqlx v1.3.4
-	github.com/kaydxh/golang v0.0.112
+	github.com/kaydxh/golang v0.0.115
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.12.0
