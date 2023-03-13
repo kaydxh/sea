@@ -32,7 +32,7 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os_.ShutdownSignals...)
 	defer cancel()
 
-	command := app.NewSeaDateCommand(ctx)
+	command := app.NewCommand(ctx)
 	// profile
 	{
 		//env variable PROFILING=cpu[mem,mutex,block,trace,thread_create,goroutine]
