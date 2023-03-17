@@ -9,8 +9,8 @@ import (
 
 	logs_ "github.com/kaydxh/golang/pkg/logs"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
-	"github.com/kaydxh/sea/pkg/seadate/application"
-	"github.com/kaydxh/sea/pkg/seadate/domain/date"
+	"github.com/kaydxh/sea/pkg/sea-date/application"
+	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
 )
 
 type Controller struct {

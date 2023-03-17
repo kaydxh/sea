@@ -19,37 +19,65 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package options
+package date
 
 import (
 	"context"
+	"fmt"
 
-	webserver_ "github.com/kaydxh/golang/pkg/webserver"
-	"github.com/kaydxh/sea/pkg/seadate/provider"
-	"github.com/sirupsen/logrus"
+	"github.com/go-playground/validator/v10"
+	kitdate_ "github.com/kaydxh/sea/pkg/sea-date/domain/kit/date"
 )
 
-func (s *CompletedServerRunOptions) installResolverOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
-	c := s.resolverConfig.Complete()
-	if !c.Proto.GetEnabled() {
-		return
+type FactoryConfigFunc func(c *FactoryConfig) error
+
+type FactoryConfig struct {
+	Validator *validator.Validate
+
+	DateRepository kitdate_.Repository
+}
+
+func (fc *FactoryConfig) ApplyOptions(configFuncs ...FactoryConfigFunc) error {
+
+	for _, f := range configFuncs {
+		err := f(fc)
+		if err != nil {
+			return fmt.Errorf("failed to apply factory config, err: %v", err)
+		}
 	}
 
-	rs, err := c.New(ctx)
+	return nil
+}
+
+func (fc FactoryConfig) Validate() error {
+	valid := fc.Validator
+	if valid == nil {
+		valid = validator.New()
+	}
+	return valid.Struct(fc)
+}
+
+type Factory struct {
+	fc FactoryConfig
+}
+
+func NewFactory(fc FactoryConfig, configFuncs ...FactoryConfigFunc) (Factory, error) {
+	err := fc.ApplyOptions(configFuncs...)
 	if err != nil {
-		logrus.WithError(err).Fatalf("install Reslover, exit")
-		return
+		return Factory{}, err
 	}
 
-	ws.AddPostStartHookOrDie("resolver-service", func(ctx context.Context) error {
-		return rs.Run(ctx)
-	})
-	ws.AddPreShutdownHookOrDie("resolver-service", func() error {
-		rs.Shutdown()
-		return nil
-	})
+	err = fc.Validate()
+	if err != nil {
+		return Factory{}, err
+	}
 
-	//use default domains in reslover filed from yaml file
-	//you can also add by self, use rs.AddService method
-	provider.GlobalProvider().ResolverService = rs
+	return Factory{fc: fc}, nil
+}
+
+func (f Factory) NewSeaDate(ctx context.Context) (*SeaDate, error) {
+	s := &SeaDate{
+		DateRepository: f.fc.DateRepository,
+	}
+	return s, nil
 }

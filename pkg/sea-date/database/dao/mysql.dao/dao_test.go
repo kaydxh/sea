@@ -28,8 +28,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	mysqldao "github.com/kaydxh/sea/pkg/seadate/database/dao/mysql.dao"
-	"github.com/kaydxh/sea/pkg/seadate/database/model"
+	mysqldao "github.com/kaydxh/sea/pkg/sea-date/database/dao/mysql.dao"
+	"github.com/kaydxh/sea/pkg/sea-date/database/model"
 
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	viper_ "github.com/kaydxh/golang/pkg/viper"

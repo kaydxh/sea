@@ -1,8 +1,8 @@
 # example
-# make TARGET=seadate
+# make TARGET=sea-date
 # make new TARGET=date NEW_GIT_REPOSITORY_NAME="github.com/kaydxh/sea" 
-# set default target to seadate
-TARGET=seadate
+# set default target to sea-date
+TARGET=sea-date
 DEPS_NAME=deps.yaml
 DO_PARSE_DEPS="ON"
 

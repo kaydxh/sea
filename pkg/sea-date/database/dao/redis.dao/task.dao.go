@@ -19,40 +19,54 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package app
+package redisdao
 
 import (
 	"context"
-	"fmt"
-	"os"
 
-	app_ "github.com/kaydxh/golang/pkg/webserver/app"
-	"github.com/kaydxh/sea/cmd/seadate/app/options"
-	"github.com/spf13/cobra"
+	"github.com/go-redis/redis/v8"
+
+	runtime_ "github.com/kaydxh/golang/go/runtime"
+	time_ "github.com/kaydxh/golang/go/time"
+	database_ "github.com/kaydxh/golang/pkg/database"
+	redis_ "github.com/kaydxh/golang/pkg/database/redis"
+
+	"github.com/kaydxh/sea/pkg/sea-date/database/dao"
+	"github.com/kaydxh/sea/pkg/sea-date/database/model"
+	"github.com/sirupsen/logrus"
 )
 
-// NewCommand creates a *cobra.Command object with default parameters
-func NewCommand(ctx context.Context) *cobra.Command {
-	return app_.NewCommand(ctx, runCommand)
+type TaskDao struct {
+	db *redis.Client
 }
 
-func runCommand(ctx context.Context, cmd *cobra.Command) error {
-	cfgFile, err := cmd.Flags().GetString("config")
+func NewTaskDao(db *redis.Client) *TaskDao {
+	return &TaskDao{db: db}
+}
+
+// AddTask
+func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
+
+	tc := time_.New(true)
+	caller := runtime_.GetShortCaller()
+	logger := logrus.WithField("caller", caller)
+	clean := func() {
+		tc.Tick(caller)
+		logger.WithField("cost", tc.String()).Infof("REDIS EXECL")
+	}
+	defer clean()
+
+	logger.WithField("request", arg).Infof("AddTask")
+
+	ctx, cancel := database_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
+	defer cancel()
+
+	err := redis_.HSetStruct(ctx, d.db, arg.TaskId, arg)
 	if err != nil {
 		return err
 	}
-	s := options.NewServerRunOptions(cfgFile)
 
-	// set default options
-	completedOptions, err := s.Complete()
-	if err != nil {
-		return err
-	}
-
-	if err := completedOptions.Run(ctx); err != nil {
-		fmt.Printf("failed to run server")
-		os.Exit(1)
-	}
+	logger.WithField("cost", tc.String()).Infof("successed HSet")
 
 	return nil
 }

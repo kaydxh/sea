@@ -28,8 +28,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	context_ "github.com/kaydxh/golang/go/context"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
-	"github.com/kaydxh/sea/pkg/seadate/database/dao"
-	"github.com/kaydxh/sea/pkg/seadate/database/model"
+	"github.com/kaydxh/sea/pkg/sea-date/database/dao"
+	"github.com/kaydxh/sea/pkg/sea-date/database/model"
 )
 
 const taskTableName = "task"

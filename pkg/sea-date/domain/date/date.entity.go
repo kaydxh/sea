@@ -26,7 +26,7 @@ import (
 
 	errors_ "github.com/kaydxh/golang/go/errors"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	kitdate_ "github.com/kaydxh/sea/pkg/seadate/domain/kit/date"
+	kitdate_ "github.com/kaydxh/sea/pkg/sea-date/domain/kit/date"
 )
 
 var _ Repository = (*SeaDate)(nil)

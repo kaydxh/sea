@@ -19,27 +19,40 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package options
+package app
 
 import (
 	"context"
+	"fmt"
+	"os"
 
-	"github.com/kaydxh/sea/pkg/seadate/provider"
-	"github.com/sirupsen/logrus"
+	app_ "github.com/kaydxh/golang/pkg/webserver/app"
+	"github.com/kaydxh/sea/cmd/sea-date/app/options"
+	"github.com/spf13/cobra"
 )
 
-func (s *CompletedServerRunOptions) installRedisOrDie(ctx context.Context) {
-	c := s.redisConfig.Complete()
-	if !c.Proto.GetEnabled() {
-		return
-	}
+// NewCommand creates a *cobra.Command object with default parameters
+func NewCommand(ctx context.Context) *cobra.Command {
+	return app_.NewCommand(ctx, runCommand)
+}
 
-	db, err := c.New(ctx)
+func runCommand(ctx context.Context, cmd *cobra.Command) error {
+	cfgFile, err := cmd.Flags().GetString("config")
 	if err != nil {
-		logrus.WithError(err).Fatalf("install Redis, exit")
-		return
+		return err
+	}
+	s := options.NewServerRunOptions(cfgFile)
+
+	// set default options
+	completedOptions, err := s.Complete()
+	if err != nil {
+		return err
 	}
 
-	provider.GlobalProvider().RedisDB = db
+	if err := completedOptions.Run(ctx); err != nil {
+		fmt.Printf("failed to run server")
+		os.Exit(1)
+	}
 
+	return nil
 }

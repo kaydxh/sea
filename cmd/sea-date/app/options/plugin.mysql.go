@@ -19,67 +19,27 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package redisdao_test
+package options
 
 import (
 	"context"
-	"sync"
-	"testing"
 
-	"github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
-
-	redis_ "github.com/kaydxh/golang/pkg/database/redis"
-	viper_ "github.com/kaydxh/golang/pkg/viper"
-	redisdao "github.com/kaydxh/sea/pkg/seadate/database/dao/redis.dao"
-	"github.com/kaydxh/sea/pkg/seadate/database/model"
+	"github.com/kaydxh/sea/pkg/sea-date/provider"
+	"github.com/sirupsen/logrus"
 )
 
-var (
-	onceDB sync.Once
-	db     *redis.Client
-	err    error
-)
-
-func GetDBOrDie() *redis.Client {
-	onceDB.Do(func() {
-		cfgFile := "../../../../../conf/seadate.yaml"
-		config := redis_.NewConfig(redis_.WithViper(viper_.GetViper(cfgFile, "database.redis")))
-
-		db, err = config.Complete().New(context.Background())
-		if err != nil {
-			panic(err)
-		}
-
-		if db == nil {
-			panic("db is not enable")
-		}
-	})
-
-	return db
-}
-
-var (
-	onceDao sync.Once
-	taskDao *redisdao.TaskDao
-)
-
-func GetTaskDao() *redisdao.TaskDao {
-	onceDao.Do(func() {
-		taskDao = redisdao.NewTaskDao(GetDBOrDie())
-	})
-
-	return taskDao
-}
-
-func TestAddTask(t *testing.T) {
-
-	err := GetTaskDao().AddTask(context.Background(), model.Task{
-		TaskName: "task3",
-		TaskId:   uuid.New().String(),
-		TaskType: 3,
-	})
-	if err != nil {
-		t.Fatalf("failed to add tasks, err: %v", err)
+func (s *CompletedServerRunOptions) installMysqlOrDie(ctx context.Context) {
+	c := s.mysqlConfig.Complete()
+	if !c.Proto.GetEnabled() {
+		return
 	}
+
+	db, err := c.New(ctx)
+	if err != nil {
+		logrus.WithError(err).Fatalf("install Mysql, exit")
+		return
+	}
+
+	provider.GlobalProvider().SqlDB = db
+
 }
