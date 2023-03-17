@@ -51,7 +51,8 @@ function downloadSeaProject() {
 }
 
 function tarFile() {
-  tar xvzf ${SEA_TEMPLATE_TAR_FILE} -C ${DOWNLOAD_DIR}
+  #tar xvzf ${SEA_TEMPLATE_TAR_FILE} -C ${DOWNLOAD_DIR}
+  unzip ${SEA_TEMPLATE_TAR_FILE} -d ${DOWNLOAD_DIR}
   mv ${SEA_MASTER_TEMPLATE_ROOT_DIR} ${SEA_TEMPLATE_ROOT_DIR}
 }
 
