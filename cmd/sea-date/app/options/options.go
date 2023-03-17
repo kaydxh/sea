@@ -32,7 +32,7 @@ import (
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	app_ "github.com/kaydxh/golang/pkg/webserver/app"
-	"github.com/kaydxh/sea/cmd/seadate/app/config"
+	"github.com/kaydxh/sea/cmd/sea-date/app/config"
 	"github.com/sirupsen/logrus"
 )
 

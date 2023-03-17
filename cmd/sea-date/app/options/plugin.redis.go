@@ -22,28 +22,24 @@
 package options
 
 import (
-	webserver_ "github.com/kaydxh/golang/pkg/webserver"
-	"github.com/kaydxh/sea/pkg/seadate/application"
-	"github.com/kaydxh/sea/pkg/seadate/domain/date"
-	local_ "github.com/kaydxh/sea/pkg/seadate/infrastructure/local"
-	seadate_ "github.com/kaydxh/sea/web/app/seadate"
-	"github.com/kaydxh/sea/web/modules/seadate"
+	"context"
+
+	"github.com/kaydxh/sea/pkg/sea-date/provider"
 	"github.com/sirupsen/logrus"
 )
 
-func (s *CompletedServerRunOptions) installWebHandlerOrDie(ws *webserver_.GenericWebServer) {
-	seadateFactory, err := date.NewFactory(date.FactoryConfig{
-		DateRepository: &local_.Repository{},
-	})
-	if err != nil {
-		logrus.WithError(err).Fatalf("install WebHandler, exit")
+func (s *CompletedServerRunOptions) installRedisOrDie(ctx context.Context) {
+	c := s.redisConfig.Complete()
+	if !c.Proto.GetEnabled() {
 		return
 	}
-	app := application.Application{
-		Commands: application.Commands{
-			SeaDateHandler: application.NewSeaDateHandler(seadateFactory),
-		},
+
+	db, err := c.New(ctx)
+	if err != nil {
+		logrus.WithError(err).Fatalf("install Redis, exit")
+		return
 	}
-	dateCtrl := seadate.NewController(app)
-	seadate_.NewWebHandlers(ws, dateCtrl)
+
+	provider.GlobalProvider().RedisDB = db
+
 }

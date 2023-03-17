@@ -22,7 +22,7 @@ import (
 
 	os_ "github.com/kaydxh/golang/go/os"
 	profile_ "github.com/kaydxh/golang/pkg/profile"
-	"github.com/kaydxh/sea/cmd/seadate/app"
+	"github.com/kaydxh/sea/cmd/sea-date/app"
 )
 
 func main() {

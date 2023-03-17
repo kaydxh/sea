@@ -19,54 +19,19 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package redisdao
+package options
 
 import (
-	"context"
-
-	"github.com/go-redis/redis/v8"
-
-	runtime_ "github.com/kaydxh/golang/go/runtime"
-	time_ "github.com/kaydxh/golang/go/time"
-	database_ "github.com/kaydxh/golang/pkg/database"
-	redis_ "github.com/kaydxh/golang/pkg/database/redis"
-
-	"github.com/kaydxh/sea/pkg/seadate/database/dao"
-	"github.com/kaydxh/sea/pkg/seadate/database/model"
+	"github.com/kaydxh/sea/pkg/sea-date/provider"
 	"github.com/sirupsen/logrus"
 )
 
-type TaskDao struct {
-	db *redis.Client
-}
+func (s *CompletedServerRunOptions) installConfigOrDie() {
 
-func NewTaskDao(db *redis.Client) *TaskDao {
-	return &TaskDao{db: db}
-}
-
-// AddTask
-func (d *TaskDao) AddTask(ctx context.Context, arg model.Task) error {
-
-	tc := time_.New(true)
-	caller := runtime_.GetShortCaller()
-	logger := logrus.WithField("caller", caller)
-	clean := func() {
-		tc.Tick(caller)
-		logger.WithField("cost", tc.String()).Infof("REDIS EXECL")
-	}
-	defer clean()
-
-	logger.WithField("request", arg).Infof("AddTask")
-
-	ctx, cancel := database_.WithDatabaseExecuteTimeout(ctx, dao.DatabaseExecuteTimeout)
-	defer cancel()
-
-	err := redis_.HSetStruct(ctx, d.db, arg.TaskId, arg)
+	config, err := s.Config.Complete().New()
 	if err != nil {
-		return err
+		logrus.WithError(err).Fatalf("failed to install Config, exit")
+		return
 	}
-
-	logger.WithField("cost", tc.String()).Infof("successed HSet")
-
-	return nil
+	provider.GlobalProvider().Config = config
 }

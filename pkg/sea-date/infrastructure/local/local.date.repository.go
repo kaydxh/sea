@@ -19,46 +19,29 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package mysqldao_test
+package date
 
 import (
 	"context"
 	"fmt"
-	"testing"
+	"time"
 
-	"github.com/google/uuid"
-	"github.com/kaydxh/sea/pkg/seadate/database/model"
+	kitdate_ "github.com/kaydxh/sea/pkg/sea-date/domain/kit/date"
 )
 
-// -count the benchmark times, -benchtime the test execute times(用例执行次数) or execute time(用例执行时间)
-//go test -run=dao_benchmark_test.go  -test.bench="AddTask" -benchtime=5s -count=3 .
-//go test -bench="AddTask" -benchtime=50x -count=3 .
-func BenchmarkAddTask(t *testing.B) {
-	for n := 0; n < t.N; n++ {
-		fmt.Println("n: ", n)
-		err := GetTaskDao().AddTask(context.Background(), &model.Task{
-			TaskName: "task3",
-			TaskId:   uuid.New().String(),
-			TaskType: 3,
-		})
-		if err != nil {
-			t.Fatalf("failed to add tasks, err: %v", err)
-		}
-	}
+var _ kitdate_.Repository = (*Repository)(nil)
+
+type Repository struct {
 }
 
-//go test -v dao_benchmark_test.go  -test.bench=" BenchmarkParallelAddTask" .
-func BenchmarkParallelAddTask(t *testing.B) {
-	t.RunParallel(func(pb *testing.PB) {
-		for pb.Next() {
-			err := GetTaskDao().AddTask(context.Background(), &model.Task{
-				TaskName: "task3",
-				TaskId:   uuid.New().String(),
-				TaskType: 3,
-			})
-			if err != nil {
-				t.Fatalf("failed to add tasks, err: %v", err)
-			}
-		}
-	})
+func (r *Repository) Now(ctx context.Context, req *kitdate_.NowRequest) (resp *kitdate_.NowResponse, err error) {
+	resp = &kitdate_.NowResponse{
+		Date: time.Now().String(),
+	}
+	return resp, nil
+}
+
+func (r *Repository) NowError(ctx context.Context, req *kitdate_.NowErrorRequest) (resp *kitdate_.NowErrorResponse, err error) {
+	err = fmt.Errorf("Internal")
+	return nil, fmt.Errorf("Internal")
 }

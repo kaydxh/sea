@@ -19,65 +19,37 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package date
+package options
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/go-playground/validator/v10"
-	kitdate_ "github.com/kaydxh/sea/pkg/seadate/domain/kit/date"
+	webserver_ "github.com/kaydxh/golang/pkg/webserver"
+	"github.com/kaydxh/sea/pkg/sea-date/provider"
+	"github.com/sirupsen/logrus"
 )
 
-type FactoryConfigFunc func(c *FactoryConfig) error
-
-type FactoryConfig struct {
-	Validator *validator.Validate
-
-	DateRepository kitdate_.Repository
-}
-
-func (fc *FactoryConfig) ApplyOptions(configFuncs ...FactoryConfigFunc) error {
-
-	for _, f := range configFuncs {
-		err := f(fc)
-		if err != nil {
-			return fmt.Errorf("failed to apply factory config, err: %v", err)
-		}
+func (s *CompletedServerRunOptions) installResolverOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
+	c := s.resolverConfig.Complete()
+	if !c.Proto.GetEnabled() {
+		return
 	}
 
-	return nil
-}
-
-func (fc FactoryConfig) Validate() error {
-	valid := fc.Validator
-	if valid == nil {
-		valid = validator.New()
-	}
-	return valid.Struct(fc)
-}
-
-type Factory struct {
-	fc FactoryConfig
-}
-
-func NewFactory(fc FactoryConfig, configFuncs ...FactoryConfigFunc) (Factory, error) {
-	err := fc.ApplyOptions(configFuncs...)
+	rs, err := c.New(ctx)
 	if err != nil {
-		return Factory{}, err
+		logrus.WithError(err).Fatalf("install Reslover, exit")
+		return
 	}
 
-	err = fc.Validate()
-	if err != nil {
-		return Factory{}, err
-	}
+	ws.AddPostStartHookOrDie("resolver-service", func(ctx context.Context) error {
+		return rs.Run(ctx)
+	})
+	ws.AddPreShutdownHookOrDie("resolver-service", func() error {
+		rs.Shutdown()
+		return nil
+	})
 
-	return Factory{fc: fc}, nil
-}
-
-func (f Factory) NewSeaDate(ctx context.Context) (*SeaDate, error) {
-	s := &SeaDate{
-		DateRepository: f.fc.DateRepository,
-	}
-	return s, nil
+	//use default domains in reslover filed from yaml file
+	//you can also add by self, use rs.AddService method
+	provider.GlobalProvider().ResolverService = rs
 }

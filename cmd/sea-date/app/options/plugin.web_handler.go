@@ -22,24 +22,28 @@
 package options
 
 import (
-	"context"
-
-	"github.com/kaydxh/sea/pkg/seadate/provider"
+	webserver_ "github.com/kaydxh/golang/pkg/webserver"
+	"github.com/kaydxh/sea/pkg/sea-date/application"
+	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
+	local_ "github.com/kaydxh/sea/pkg/sea-date/infrastructure/local"
+	seadate_ "github.com/kaydxh/sea/web/app/seadate"
+	"github.com/kaydxh/sea/web/modules/seadate"
 	"github.com/sirupsen/logrus"
 )
 
-func (s *CompletedServerRunOptions) installMysqlOrDie(ctx context.Context) {
-	c := s.mysqlConfig.Complete()
-	if !c.Proto.GetEnabled() {
-		return
-	}
-
-	db, err := c.New(ctx)
+func (s *CompletedServerRunOptions) installWebHandlerOrDie(ws *webserver_.GenericWebServer) {
+	seadateFactory, err := date.NewFactory(date.FactoryConfig{
+		DateRepository: &local_.Repository{},
+	})
 	if err != nil {
-		logrus.WithError(err).Fatalf("install Mysql, exit")
+		logrus.WithError(err).Fatalf("install WebHandler, exit")
 		return
 	}
-
-	provider.GlobalProvider().SqlDB = db
-
+	app := application.Application{
+		Commands: application.Commands{
+			SeaDateHandler: application.NewSeaDateHandler(seadateFactory),
+		},
+	}
+	dateCtrl := seadate.NewController(app)
+	seadate_.NewWebHandlers(ws, dateCtrl)
 }

@@ -19,29 +19,40 @@
  *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *SOFTWARE.
  */
-package date
+package application
 
 import (
 	"context"
-	"fmt"
-	"time"
 
-	kitdate_ "github.com/kaydxh/sea/pkg/seadate/domain/kit/date"
+	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
 )
 
-var _ kitdate_.Repository = (*Repository)(nil)
-
-type Repository struct {
+type SeaDateHandler struct {
+	seaDateFactory date.Factory
 }
 
-func (r *Repository) Now(ctx context.Context, req *kitdate_.NowRequest) (resp *kitdate_.NowResponse, err error) {
-	resp = &kitdate_.NowResponse{
-		Date: time.Now().String(),
+func NewSeaDateHandler(f date.Factory) SeaDateHandler {
+	return SeaDateHandler{
+		seaDateFactory: f,
 	}
-	return resp, nil
 }
 
-func (r *Repository) NowError(ctx context.Context, req *kitdate_.NowErrorRequest) (resp *kitdate_.NowErrorResponse, err error) {
-	err = fmt.Errorf("Internal")
-	return nil, fmt.Errorf("Internal")
+func (s SeaDateHandler) Now(ctx context.Context, req *date.NowRequest) (resp *date.NowResponse, err error) {
+
+	handler, err := s.seaDateFactory.NewSeaDate(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return handler.Now(ctx, req)
+}
+
+func (s SeaDateHandler) NowError(ctx context.Context, req *date.NowErrorRequest) (resp *date.NowErrorResponse, err error) {
+
+	handler, err := s.seaDateFactory.NewSeaDate(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return handler.NowError(ctx, req)
 }

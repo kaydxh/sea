@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	gw_ "github.com/kaydxh/golang/pkg/grpc-gateway"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
-	"github.com/kaydxh/sea/pkg/seadate/application"
+	"github.com/kaydxh/sea/pkg/sea-date/application"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
