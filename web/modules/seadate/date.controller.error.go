@@ -26,7 +26,7 @@ import (
 
 	errors_ "github.com/kaydxh/golang/go/errors"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
-	"github.com/kaydxh/sea/pkg/seadate/domain/date"
+	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
 )
 
 func DateError(err error, handled bool) (error, bool) {
