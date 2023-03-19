@@ -109,6 +109,8 @@ function rmDirectories {
 }
 
 function replaceContentOfFiles() {
+   #首字母大写替换
+   #将OLD_PROJECT_NAME变量值的首字母转化为大写，并保存在UPPER_BEGIN_OLD_PROJECT_NAME变量中
   UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
   UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
   #for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*output*} '${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}' .)
@@ -119,16 +121,15 @@ function replaceContentOfFiles() {
     if [[ -h ${it} ]];then
       continue
     fi
-
-   sed -i "" "/Validate/!s/${OLD_PROJECT_DASH_NAME}/${NEW_PROJECT_DASH_NAME}/g" "${it}" 
-   sed -i "" "/Validate/!s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME//-/}/g" "${it}" 
-
-   #首字母大写替换
-   #将OLD_PROJECT_NAME变量值的首字母转化为大写，并保存在UPPER_BEGIN_OLD_PROJECT_NAME变量中
-   #UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
-   #UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
-   # replace git name
-   sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME//-/}/g" "${it}"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "/Validate/!s/${OLD_PROJECT_DASH_NAME}/${NEW_PROJECT_DASH_NAME}/g" "${it}" 
+    sed -i '' "/Validate/!s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME//-/}/g" "${it}" 
+    sed -i '' "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME//-/}/g" "${it}"
+  else
+    sed -i "/Validate/!s/${OLD_PROJECT_DASH_NAME}/${NEW_PROJECT_DASH_NAME}/g" "${it}" 
+    sed -i "/Validate/!s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME//-/}/g" "${it}" 
+    sed -i "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME//-/}/g" "${it}"
+  fi
 
    # support by base 4.0
    #sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
@@ -138,7 +139,11 @@ function replaceContentOfFiles() {
 function replaceString() {
     ESCAPED_OLD_GIT_NAME=$(printf '%s\n' "$1" | sed -e 's/[]\/$*.^[]/\\&/g')
     ESCAPED_NEW_GIT_NAME=$(printf '%s\n' "$2" | sed -e 's/[]\/$*.^[]/\\&/g')
-    sed -i "" "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
+  else
+    sed -i "s/${ESCAPED_OLD_GIT_NAME}/${ESCAPED_NEW_GIT_NAME}/g" "${it}"
+  fi
    # support by base 4.0
    #sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
 }
