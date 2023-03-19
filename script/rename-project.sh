@@ -11,7 +11,8 @@ NEW_PROJECT_NAME=
 OLD_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${OLD_PROJECT_NAME}"
 NEW_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${NEW_PROJECT_NAME}"
 OLD_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${OLD_PROJECT_NAME}"
-NEW_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${NEW_PROJECT_NAME}"
+# 删除${NEW_PROJECT_NAME}中的-
+NEW_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${NEW_PROJECT_NAME//-/}"
 
 OLD_GIT_REPOSITORY_NAME=  #github.com/kaydxh/sea
 NEW_GIT_REPOSITORY_NAME=  #gitlab.com/kaydxh/sea
@@ -38,6 +39,14 @@ while getopts 's:t:l:r::' option; do
     ?) help ;;
   esac
 done
+
+function init() {
+  OLD_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${OLD_PROJECT_NAME}"
+  NEW_PROJECT_DASH_NAME="${PROJECT_ROOT_NAME}-${NEW_PROJECT_NAME}"
+  OLD_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${OLD_PROJECT_NAME}"
+  # 删除${NEW_PROJECT_NAME}中的-
+  NEW_PROJECT_JOINT_NAME="${PROJECT_ROOT_NAME}${NEW_PROJECT_NAME//-/}"
+}
 
 
 function checkParams() {
@@ -68,12 +77,14 @@ function checkParams() {
 function renameFilesAndDirectories() {
   for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type f -path "*${OLD_PROJECT_NAME}*")
   do
-    renameProjectDir ${it} ${OLD_PROJECT_NAME} ${NEW_PROJECT_NAME}
-    renameProjectDir ${it} ${OLD_PROJECT_DASH_NAME} ${NEW_PROJECT_DASH_NAME}
-    renameProjectDir ${it} ${OLD_PROJECT_JOINT_NAME} ${NEW_PROJECT_JOINT_NAME}
+    newIt="${it//${OLD_PROJECT_JOINT_NAME}/${NEW_PROJECT_JOINT_NAME}}"
+    newIt="${newIt//${OLD_PROJECT_DASH_NAME}/${NEW_PROJECT_DASH_NAME}}"
+    newIt="${newIt//${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME//-/}}"
+    renameProjectDir ${it} ${newIt}
   done
 
   if [[ x"${OLD_PROJECT_NAME}" != x"${NEW_PROJECT_NAME}" ]]; then
+    echo ""
     rmDirectories 
   fi
 }
@@ -82,8 +93,9 @@ function renameFilesAndDirectories() {
 # 老服务文件名/目录名 替换为 新服务文件名/目录名
 function renameProjectDir() {
     oldFile=$1
+    newFile=$2
     #newFile=`echo ${oldFile} | sed -e "s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g"`
-    newFile=`echo ${oldFile} | sed -e "s/$2/$3/g"`
+    #newFile=`echo ${oldFile} | sed -e "s/$2/$3/g"`
     newDir=${newFile%/*}
     if [[ -f ${oldFile} ]]; then mkdir -p ${newDir}; mv -nv ${oldFile} ${newFile}; echo "${oldFile} ==> ${newFile}"; fi
 }
@@ -108,14 +120,15 @@ function replaceContentOfFiles() {
       continue
     fi
 
-   sed -i "" "/Validate/!s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME}/g" "${it}" 
+   sed -i "" "/Validate/!s/${OLD_PROJECT_DASH_NAME}/${NEW_PROJECT_DASH_NAME}/g" "${it}" 
+   sed -i "" "/Validate/!s/${OLD_PROJECT_NAME}/${NEW_PROJECT_NAME//-/}/g" "${it}" 
 
    #首字母大写替换
    #将OLD_PROJECT_NAME变量值的首字母转化为大写，并保存在UPPER_BEGIN_OLD_PROJECT_NAME变量中
    #UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
    #UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
    # replace git name
-   sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME}/g" "${it}"
+   sed -i "" "s/${UPPER_BEGIN_OLD_PROJECT_NAME}/${UPPER_BEGIN_NEW_PROJECT_NAME//-/}/g" "${it}"
 
    # support by base 4.0
    #sed -i "" "s/${OLD_PROJECT_NAME^}/${NEW_PROJECT_NAME^}/g" "${it}"
@@ -157,6 +170,7 @@ function replaceProjectRootName() {
   fi
 }
 
+init
 checkParams 
 renameFilesAndDirectories
 replaceContentOfFiles 
