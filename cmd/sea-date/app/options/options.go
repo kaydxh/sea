@@ -24,6 +24,7 @@ package options
 import (
 	"context"
 
+	config_ "github.com/kaydxh/golang/pkg/config"
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
@@ -32,12 +33,15 @@ import (
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	app_ "github.com/kaydxh/golang/pkg/webserver/app"
-	"github.com/kaydxh/sea/cmd/sea-date/app/config"
+	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
+
+	//"github.com/kaydxh/sea/cmd/sea-date/app/config"
 	"github.com/sirupsen/logrus"
 )
 
 type ServerRunOptions struct {
-	Config              *config.Config
+	//Config              *config.Config
+	Config              *config_.Config[*v1.Configuration]
 	webServerConfig     *webserver_.Config
 	logConfig           *logs_.Config
 	mysqlConfig         *mysql_.Config
@@ -61,8 +65,10 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	var gatewayOpts []webserver_.ConfigOption
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
+	var config v1.Configuration
+
 	return &ServerRunOptions{
-		Config:              config.NewConfig(config.WithViper(viper_.GetViper(configFile, ""))),
+		Config:              config_.NewConfig(&config, config_.WithViper[*v1.Configuration](viper_.GetViper(configFile, ""))),
 		webServerConfig:     webserver_.NewConfig(gatewayOpts...),
 		logConfig:           logs_.NewConfig(logs_.WithViper(viper_.GetViper(configFile, "log"))),
 		mysqlConfig:         mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),

@@ -34,4 +34,5 @@ func (s *CompletedServerRunOptions) installConfigOrDie() {
 		return
 	}
 	provider.GlobalProvider().Config = config
+	logrus.Infof("config: %v", config)
 }

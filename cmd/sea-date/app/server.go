@@ -50,7 +50,7 @@ func runCommand(ctx context.Context, cmd *cobra.Command) error {
 	}
 
 	if err := completedOptions.Run(ctx); err != nil {
-		fmt.Printf("failed to run server")
+		fmt.Printf("failed to run server, err: %v\n", err)
 		os.Exit(1)
 	}
 
