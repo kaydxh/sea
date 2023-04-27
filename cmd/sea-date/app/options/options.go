@@ -87,7 +87,7 @@ func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 
 // Run runs the specified APIServer.  This should never exit.
 func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
-	logrus.Infof("Starting Sea let version: %v", app_.GetVersion())
+	logrus.Infof("Starting %+v", app_.GetVersion())
 	ws, err := s.webServerConfig.Complete().New(ctx)
 	if err != nil {
 		return err
@@ -100,7 +100,6 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	s.installMysqlOrDie(ctx)
 	s.installRedisOrDie(ctx)
 	s.installOpenTelemetryOrDie(ctx)
-	//	s.installPrometheusOrDie(ctx)
 
 	s.installResolverOrDie(ctx, ws)
 	//install web handler
