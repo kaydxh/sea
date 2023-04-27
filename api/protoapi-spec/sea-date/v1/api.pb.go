@@ -27,7 +27,10 @@ type NowRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` //请求ID
+	// proto name 默认为变量名，proto json默认为小驼峰模式, json默认为变量名
+	// [json_name = "RequestId"]将指定proto json的标签, 此时需要设置
+	// protojson编解码器选项UseProtoNames为false
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
 }
 
 func (x *NowRequest) Reset() {
@@ -75,7 +78,7 @@ type NowResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	RequestId string       `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
-	Date      string       `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  //当前时间
+	Date      string       `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  // 当前时间
 	Error     *types.Error `protobuf:"bytes,1000,opt,name=error,json=Error,proto3" json:"error,omitempty"`
 }
 
@@ -137,7 +140,7 @@ type NowErrorRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` //请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
 }
 
 func (x *NowErrorRequest) Reset() {
@@ -185,7 +188,7 @@ type NowErrorResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	RequestId string       `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
-	Date      string       `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  //当前时间
+	Date      string       `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  // 当前时间
 	Error     *types.Error `protobuf:"bytes,1000,opt,name=error,json=Error,proto3" json:"error,omitempty"`
 }
 
