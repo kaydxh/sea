@@ -112,8 +112,12 @@ function rmDirectories {
 function replaceContentOfFiles() {
    #首字母大写替换
    #将OLD_PROJECT_NAME变量值的首字母转化为大写，并保存在UPPER_BEGIN_OLD_PROJECT_NAME变量中
-  UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
-  UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
+ # UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${OLD_PROJECT_NAME:1}
+ # UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME:0:1} | tr '[a-z]' '[A-Z]')${NEW_PROJECT_NAME:1}
+ # 最后1是打印所有行
+ # https://unix.stackexchange.com/questions/701219/convert-the-first-letter-of-all-separated-parts-of-a-filename-to-uppercase-e
+  UPPER_BEGIN_OLD_PROJECT_NAME=$(echo ${OLD_PROJECT_NAME} |  awk 'BEGIN{FS=OFS="-"} {for (i=1;i<=NF;i++) {$i=toupper(substr($i,1,1)) substr($i,2)}}1')
+  UPPER_BEGIN_NEW_PROJECT_NAME=$(echo ${NEW_PROJECT_NAME} |  awk 'BEGIN{FS=OFS="-"} {for (i=1;i<=NF;i++) {$i=toupper(substr($i,1,1)) substr($i,2)}}1')
   #for it in $(grep -E -RIl --exclude-dir={*third_party*,*node_modules*,*output*} '${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}' .)
   for it in $(grep -E -RIl --exclude-dir={third_party,node_modules,script,output} "${OLD_PROJECT_NAME}|${UPPER_BEGIN_OLD_PROJECT_NAME}" .)
   do
