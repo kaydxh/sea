@@ -34,7 +34,8 @@ function checkParams {
 }
 
 function deleteProject() {
-  for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type d -path "*${PROJECT_NAME}*")
+  PROJECT_JOINT_NAME="${PROJECT_NAME//-/}"
+  for it in $(find . ! -path "*third_party*" ! -path "*node_modules*" -type d -path "*${PROJECT_NAME}*" -o -path "*${PROJECT_JOINT_NAME}*")
   do
    echo "delete dir: ${it}" 
    rm -rf ${it}
