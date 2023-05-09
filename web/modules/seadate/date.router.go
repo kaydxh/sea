@@ -25,7 +25,7 @@ func NewController(app application.Application) *Controller {
 
 func (c *Controller) SetRoutes(ginRouter gin.IRouter, grpcRouter *gw_.GRPCGateway) {
 	grpcRouter.RegisterGRPCHandler(func(srv *grpc.Server) {
-		v1.RegisterSeaDateServiceServer(srv, &LocalController{Controller: c})
+		v1.RegisterSeaDateServiceServer(srv, c)
 	})
 	_ = grpcRouter.RegisterHTTPHandler(
 		context.Background(),
