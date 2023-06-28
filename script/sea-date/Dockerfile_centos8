@@ -41,8 +41,6 @@ RUN alternatives --set python-config /usr/bin/python3-config || alternatives --i
 RUN alternatives --set python3-config /usr/bin/python3.8-config || alternatives --install /usr/bin/python3-config python3-config /usr/bin/python3.8-config 100
 RUN alternatives --set pythonso /usr/lib64/pythonso3 || alternatives --install /usr/lib64/pythonso pythonso /usr/lib64/pythonso3 100
 RUN alternatives --set pythonso3 /usr/lib64/libpython3.8.so || alternatives --install /usr/lib64/libpython3.so pythonso3 /usr/lib64/libpython3.8.so 100
-RUN pip3 install -i https://mirrors.tencent.com/pypi/simple  --no-cache-dir  torch==1.13.1 diffusers==0.15.1 xformers==0.0.16 transformers==4.28.1 accelerate==0.18.0 Triton==2.0.0 pillow_heif urllib3==1.26.15 typing-extensions
-RUN pip uninstall -y dataclasses
 
 #RUN yum install -y telnet; yum clean all
 #RUN yum install -y tcpdump; yum clean all
