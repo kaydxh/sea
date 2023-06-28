@@ -1,0 +1,76 @@
+FROM centos:centos8.4.2105
+#FROM centos:7.9.2009
+#FROM nvidia/cuda:11.1.1-runtime-centos8
+
+# [must] maintainer label
+LABEL "maintainer"="xiao_hua_ding@sina.cn"
+
+# [must] timezone must be Asia/Shanghai (CST)
+ENV TIME_ZONE=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone
+
+# https://techglimpse.com/failed-metadata-repo-appstream-centos-8/
+RUN cd /etc/yum.repos.d/;sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+RUN cd /etc/yum.repos.d/;sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
+# RUN dnf -y update && dnf -y upgrade && dnf makecache && dnf -y clean all
+
+RUN dnf -y group install "Development Tools" && dnf -y clean all
+
+RUN dnf -y install --allowerasing epel-release && dnf -y clean all
+  # https://citizix.com/how-to-install-and-enable-remi-repository-in-centos-6-7-8/
+  # https://www.cnblogs.com/devilmaycry812839668/p/8459335.html
+RUN dnf -y install --allowerasing --skip-broken http://rpms.famillecollet.com/enterprise/remi-release-8.rpm && dnf -y clean all
+RUN dnf -y install --allowerasing dnf-utils && dnf -y clean all
+
+RUN dnf -y install --allowerasing telnet tcpdump wget net-tools bind-utils && dnf -y clean all
+
+RUN dnf -y install --allowerasing sysstat lsof lrzsz unzip && dnf -y clean all
+
+RUN dnf -y install --allowerasing epel-release && dnf -y clean all
+RUN dnf -y  localinstall --allowerasing --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm && dnf -y clean all
+RUN dnf -y  localinstall --allowerasing --nogpgcheck https://vault.centos.org/centos/8/PowerTools/x86_64/os/Packages/SDL2-2.0.10-2.el8.x86_64.rpm && dnf -y clean all
+RUN dnf -y install --allowerasing ffmpeg && dnf -y clean all
+RUN dnf -y install --allowerasing python38 python38-devel python38-Cython python38-pip && dnf -y clean all
+# /etc/alternatives
+RUN alternatives --set python /usr/bin/python3 || alternatives --install /usr/bin/python python /usr/bin/unversioned-python 100 && alternatives --set python /usr/bin/python3
+RUN alternatives --set python3 /usr/bin/python3.8 || alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
+RUN alternatives --set pip /usr/bin/pip3 || alternatives --install /usr/bin/pip pip /usr/bin/pip3 100
+RUN alternatives --set pip3 /usr/bin/pip3.8 || alternatives --install /usr/bin/pip3 pip3 /usr/bin/pip3.8 100
+RUN alternatives --set python-config /usr/bin/python3-config || alternatives --install /usr/bin/python-config python-config /usr/bin/python3-config 100
+RUN alternatives --set python3-config /usr/bin/python3.8-config || alternatives --install /usr/bin/python3-config python3-config /usr/bin/python3.8-config 100
+RUN alternatives --set pythonso /usr/lib64/pythonso3 || alternatives --install /usr/lib64/pythonso pythonso /usr/lib64/pythonso3 100
+RUN alternatives --set pythonso3 /usr/lib64/libpython3.8.so || alternatives --install /usr/lib64/libpython3.so pythonso3 /usr/lib64/libpython3.8.so 100
+RUN pip3 install -i https://mirrors.tencent.com/pypi/simple  --no-cache-dir  torch==1.13.1 diffusers==0.15.1 xformers==0.0.16 transformers==4.28.1 accelerate==0.18.0 Triton==2.0.0 pillow_heif urllib3==1.26.15 typing-extensions
+RUN pip uninstall -y dataclasses
+
+#RUN yum install -y telnet; yum clean all
+#RUN yum install -y tcpdump; yum clean all
+#RUN yum install -y wget; yum clean all
+#RUN yum install -y net-tools; yum clean all
+#RUN yum install -y bind-utils; yum clean all
+
+#RUN yum install -y sysstat; yum clean all
+#RUN yum install -y lsof; yum clean all
+#RUN yum install -y lrzsz; yum clean all
+#RUN yum install -y unzip; yum clean all
+
+RUN sed -i 's/^ssl/#ssl/g' /etc/yum.conf
+
+VOLUME /app/log
+VOLUME /app/conf
+
+# [suggest] working dir is app
+ADD . /app
+WORKDIR /app
+
+# [suggest] declare exposed port
+EXPOSE 10001
+ENV LD_LIBRARY_PATH lib:$LD_LIBRARY_PATH
+
+# [suggest] use command array
+# ENTRYPOINT指定默认的运行命令
+ENTRYPOINT ["/bin/bash","-c"]
+# CMD指定默认的运行参数
+# CMD ["start.sh param1 param2"]
+CMD ["bash start.sh"]
