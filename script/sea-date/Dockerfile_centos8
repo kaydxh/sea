@@ -74,3 +74,9 @@ ENTRYPOINT ["/bin/bash","-c"]
 # CMD指定默认的运行参数
 # CMD ["start.sh param1 param2"]
 CMD ["bash start.sh"]
+
+# https://www.redhat.com/sysadmin/tiny-containers
+# docker build ./pack -t hub.docker.com/sea-data:v0.1 --file ./pack/Dockerfile_centos8
+# docker images --format "{{.Repository}}: {{.Size}}"  | head -n 1
+#RUN dnf clean all
+#RUN rm -rf /var/cache/yum && rm -rf /var/cache/dnf/*
