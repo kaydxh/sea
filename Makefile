@@ -30,7 +30,8 @@ all:
 generate:
 	@echo "make generate"
 	@bash -c "curl -s -L -o ./script/proto-gen.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/go_proto_gen.sh"
-	@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec --third_party_path ./third_party --with-go --with-doc
+	#@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec --third_party_path ./third_party --with-go --with-doc
+	@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec  --with-go --with-doc
 
 .PHONY: deps
 deps:
@@ -58,7 +59,7 @@ install: all clean
 	@LD_LIBRARY_PATH="$(JOINED_LINK_THIRD_LIB_PATHS):${LD_LIBRARY_PATH}" ldd "${OUTPUT_BIN_PATH}" | awk '{if (match($$3,"/")){ print $$3  }}' | grep "libstdc++.so" | xargs -I {} sh -c 'cp -v -L {} ${OUTPUT_LIB_DIR}'
 
 	@echo " > install model..."
-	@cd ${PROJECT_CMD_ROOT_DIR}; find -L ./third_path/ -maxdepth 3 -type d \( -iname "model" -o -iname "sdk_data" -o -iname "config" \) -print0 | xargs -0 -I {} sh -c 'mkdir -p ${OUTPUT_MODEL_DIR}; cp -r -v -d {}/* ${OUTPUT_MODEL_DIR}'
+	@cd ${PROJECT_CMD_ROOT_DIR}; find -L ./third_path/ -maxdepth 3 -type d \( -iname "model" -o -iname "sdk_data" -o -iname "config" \) -print0  2>/dev/null | xargs -0 -I {} sh -c 'mkdir -p ${OUTPUT_MODEL_DIR}; cp -r -v -d {}/* ${OUTPUT_MODEL_DIR}'
 	@echo " > install script..."
 	@cp -Rv "${PROJECT_ROOT_DIR}/script/${TARGET}/"* ${OUTPUT_DIR}
 
