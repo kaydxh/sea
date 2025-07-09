@@ -1,128 +1,160 @@
-# Protocol Documentation
-<a name="top"></a>
+# SeaDateService API 文档
 
-## Table of Contents
+## 服务说明
 
-- [api/protoapi-spec/date/date.proto](#api_protoapi-spec_date_date-proto)
-    - [NowErrorRequest](#sea-api-date-NowErrorRequest)
-    - [NowErrorResponse](#sea-api-date-NowErrorResponse)
-    - [NowRequest](#sea-api-date-NowRequest)
-    - [NowResponse](#sea-api-date-NowResponse)
-  
-    - [DateService](#sea-api-date-DateService)
-  
-- [Scalar Value Types](#scalar-value-types)
+`SeaDateService` 提供与日期时间相关的服务，主要用于获取当前时间。所有接口均采用 gRPC 协议，消息体采用 proto3 语法定义。
 
+---
 
+## 1. 接口列表
 
-<a name="api_protoapi-spec_date_date-proto"></a>
-<p align="right"><a href="#top">Top</a></p>
+### 1.1. Now
 
-## api/protoapi-spec/date/date.proto
+- **功能**：生成并返回当前时间。
+- **方法签名**：
+  ```
+  rpc Now(NowRequest) returns (NowResponse);
+  ```
 
+#### 请求参数
 
+| 字段名      | 类型   | 说明                       | 备注                         |
+|-------------|--------|----------------------------|------------------------------|
+| request_id  | string | 请求ID，用于追踪请求链路   | proto字段名: request_id，json字段名: RequestId |
 
-<a name="sea-api-date-NowErrorRequest"></a>
+#### 响应参数
 
-### NowErrorRequest
+| 字段名      | 类型        | 说明                       | 备注                         |
+|-------------|-------------|----------------------------|------------------------------|
+| request_id  | string      | 请求ID，回传请求标识       | proto字段名: request_id，json字段名: RequestId |
+| date        | string      | 当前时间，格式如 `2024-06-01T12:34:56Z` | proto字段名: date，json字段名: Date |
+| error       | types.Error | 错误信息，详见 error.proto | proto字段名: error，json字段名: Error，字段号1000 |
 
+---
 
+### 1.2. NowError
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
+- **功能**：与 Now 类似，但用于测试错误返回场景。
+- **方法签名**：
+  ```
+  rpc NowError(NowErrorRequest) returns (NowErrorResponse);
+  ```
 
+#### 请求参数
 
+| 字段名      | 类型   | 说明                       | 备注                         |
+|-------------|--------|----------------------------|------------------------------|
+| request_id  | string | 请求ID，用于追踪请求链路   | proto字段名: request_id，json字段名: RequestId |
 
+#### 响应参数
 
+| 字段名      | 类型        | 说明                       | 备注                         |
+|-------------|-------------|----------------------------|------------------------------|
+| request_id  | string      | 请求ID，回传请求标识       | proto字段名: request_id，json字段名: RequestId |
+| date        | string      | 当前时间，格式如 `2024-06-01T12:34:56Z` | proto字段名: date，json字段名: Date |
+| error       | types.Error | 错误信息，详见 error.proto | proto字段名: error，json字段名: Error，字段号1000 |
 
+---
 
-<a name="sea-api-date-NowErrorResponse"></a>
+## 2. 数据结构说明
 
-### NowErrorResponse
+### 2.1. NowRequest / NowErrorRequest
 
+| 字段名      | 类型   | 说明                       |
+|-------------|--------|----------------------------|
+| request_id  | string | 请求ID，建议每次请求唯一    |
 
+### 2.2. NowResponse / NowErrorResponse
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| date | [string](#string) |  | 当前时间 |
-| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
+| 字段名      | 类型        | 说明                       |
+|-------------|-------------|----------------------------|
+| request_id  | string      | 请求ID，回传请求标识       |
+| date        | string      | 当前时间字符串             |
+| error       | types.Error | 错误信息，结构见 error.proto |
 
+---
 
+## 3. 错误结构（types.Error）
 
+该结构定义在 `api/protoapi-spec/types/error.proto`，常见字段如下（需参考实际 error.proto 文件）：
 
+| 字段名      | 类型   | 说明                       |
+|-------------|--------|----------------------------|
+| code        | int32  | 错误码                     |
+| message     | string | 错误描述                   |
 
+---
 
-<a name="sea-api-date-NowRequest"></a>
+## 4. 示例
 
-### NowRequest
+### 4.1. Now 接口调用示例
 
+#### 请求
 
+```json
+{
+  "RequestId": "abc123"
+}
+```
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
+#### 响应（成功）
 
+```json
+{
+  "RequestId": "abc123",
+  "Date": "2024-06-01T12:34:56Z",
+  "Error": {
+    "code": 0,
+    "message": "success"
+  }
+}
+```
 
+#### 响应（失败）
 
+```json
+{
+  "RequestId": "abc123",
+  "Date": "",
+  "Error": {
+    "code": 1001,
+    "message": "internal error"
+  }
+}
+```
 
+---
 
+### 4.2. NowError 接口调用示例
 
-<a name="sea-api-date-NowResponse"></a>
+#### 请求
 
-### NowResponse
+```json
+{
+  "RequestId": "xyz789"
+}
+```
 
+#### 响应（模拟错误）
 
+```json
+{
+  "RequestId": "xyz789",
+  "Date": "",
+  "Error": {
+    "code": 1234,
+    "message": "simulated error"
+  }
+}
+```
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
-| date | [string](#string) |  | 当前时间 |
-| error | [sea.api.types.Error](#sea-api-types-Error) |  |  |
+---
 
+## 5. 备注
 
+- 字段的 proto 名称与 JSON 名称不同，JSON 名称采用大驼峰（如 RequestId），proto 名称为小写下划线（如 request_id）。
+- 错误结构需结合 `error.proto` 文件具体定义。
+- 建议每次请求都传递唯一的 `request_id`，便于链路追踪和问题排查。
 
-
-
- 
-
- 
-
- 
-
-
-<a name="sea-api-date-DateService"></a>
-
-### DateService
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Now | [NowRequest](#sea-api-date-NowRequest) | [NowResponse](#sea-api-date-NowResponse) | 生成当前时间 |
-| NowError | [NowErrorRequest](#sea-api-date-NowErrorRequest) | [NowErrorResponse](#sea-api-date-NowErrorResponse) |  |
-
- 
-
-
-
-## Scalar Value Types
-
-| .proto Type | Notes | C++ | Java | Python | Go | C# | PHP | Ruby |
-| ----------- | ----- | --- | ---- | ------ | -- | -- | --- | ---- |
-| <a name="double" /> double |  | double | double | float | float64 | double | float | Float |
-| <a name="float" /> float |  | float | float | float | float32 | float | float | Float |
-| <a name="int32" /> int32 | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
-| <a name="int64" /> int64 | Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead. | int64 | long | int/long | int64 | long | integer/string | Bignum |
-| <a name="uint32" /> uint32 | Uses variable-length encoding. | uint32 | int | int/long | uint32 | uint | integer | Bignum or Fixnum (as required) |
-| <a name="uint64" /> uint64 | Uses variable-length encoding. | uint64 | long | int/long | uint64 | ulong | integer/string | Bignum or Fixnum (as required) |
-| <a name="sint32" /> sint32 | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
-| <a name="sint64" /> sint64 | Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s. | int64 | long | int/long | int64 | long | integer/string | Bignum |
-| <a name="fixed32" /> fixed32 | Always four bytes. More efficient than uint32 if values are often greater than 2^28. | uint32 | int | int | uint32 | uint | integer | Bignum or Fixnum (as required) |
-| <a name="fixed64" /> fixed64 | Always eight bytes. More efficient than uint64 if values are often greater than 2^56. | uint64 | long | int/long | uint64 | ulong | integer/string | Bignum |
-| <a name="sfixed32" /> sfixed32 | Always four bytes. | int32 | int | int | int32 | int | integer | Bignum or Fixnum (as required) |
-| <a name="sfixed64" /> sfixed64 | Always eight bytes. | int64 | long | int/long | int64 | long | integer/string | Bignum |
-| <a name="bool" /> bool |  | bool | boolean | boolean | bool | bool | boolean | TrueClass/FalseClass |
-| <a name="string" /> string | A string must always contain UTF-8 encoded or 7-bit ASCII text. | string | String | str/unicode | string | string | string | String (UTF-8) |
-| <a name="bytes" /> bytes | May contain any arbitrary sequence of bytes. | string | ByteString | str | []byte | ByteString | string | String (ASCII-8BIT) |
+如需更详细的错误码说明或其他接口扩展，请补充相关 proto 文件内容。
 
