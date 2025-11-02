@@ -62,7 +62,9 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| request_id | [string](#string) |  | 请求ID |
+| request_id | [string](#string) |  | proto name 默认为变量名，proto json默认为小驼峰模式, json默认为变量名 [json_name = &#34;RequestId&#34;]将指定proto json的标签, 此时需要设置 protojson编解码器选项UseProtoNames为false
+
+请求ID |
 
 
 
