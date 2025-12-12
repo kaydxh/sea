@@ -42,7 +42,8 @@ if [[ ! -f "${VERSION_PATH}" ]]; then curl -s -L -o ${VERSION_PATH} https://raw.
 source "${VERSION_PATH}"
 
 export CGO_ENABLED=1
-export GOFLAGS="-mod=readonly"
+# 注释掉 -mod=readonly 以支持 go.work
+# export GOFLAGS="-mod=readonly"
 
 function platform() {
   echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"
