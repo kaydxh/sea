@@ -21,6 +21,15 @@ type Controller struct {
 }
 
 // 日期查询
+/*
+curl -X POST http://localhost:10001/Now \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "RequestId": "'"$(uuidgen)"'",
+    "Data": "MTEx"
+  }'
+*/
 func (c *Controller) Now(
 	ctx context.Context,
 	req *v1.NowRequest,

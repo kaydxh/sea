@@ -34,6 +34,7 @@ import (
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	app_ "github.com/kaydxh/golang/pkg/webserver/app"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
+	"github.com/spf13/viper"
 
 	//"github.com/kaydxh/sea/cmd/sea-date/app/config"
 	"github.com/sirupsen/logrus"
@@ -65,6 +66,19 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	var gatewayOpts []webserver_.ConfigOption
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
+	// 加载QPS限流配置（现在在 web.qps_limit 下）
+	qpsLimitViper := viper_.GetViper(configFile, "web.qps_limit")
+	if qpsLimitViper != nil {
+		grpcQPSLimit := loadQPSLimitConfig(qpsLimitViper, "grpc")
+		httpQPSLimit := loadQPSLimitConfig(qpsLimitViper, "http")
+		if grpcQPSLimit != nil {
+			gatewayOpts = append(gatewayOpts, webserver_.WithGRPCQPSLimit(grpcQPSLimit))
+		}
+		if httpQPSLimit != nil {
+			gatewayOpts = append(gatewayOpts, webserver_.WithHTTPQPSLimit(httpQPSLimit))
+		}
+	}
+
 	var config v1.Configuration
 
 	return &ServerRunOptions{
@@ -77,6 +91,66 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 		opentelemetryConfig: opentelemetry_.NewConfig(opentelemetry_.WithViper(viper_.GetViper(configFile, "web.monitor.open_telemetry"))),
 	}
 
+}
+
+// loadQPSLimitConfig 从viper加载QPS限流配置
+func loadQPSLimitConfig(v *viper.Viper, key string) *webserver_.QPSLimitConfig {
+	if v == nil {
+		return nil
+	}
+
+	subViper := v.Sub(key)
+	if subViper == nil {
+		return nil
+	}
+
+	defaultQPS := subViper.GetFloat64("default_qps")
+	defaultBurst := subViper.GetInt("default_burst")
+	maxConcurrency := subViper.GetInt("max_concurrency")
+
+	// 如果没有配置QPS和并发限制，返回nil
+	if defaultQPS <= 0 && maxConcurrency <= 0 {
+		return nil
+	}
+
+	config := &webserver_.QPSLimitConfig{
+		DefaultQPS:     defaultQPS,
+		DefaultBurst:   defaultBurst,
+		MaxConcurrency: maxConcurrency,
+	}
+
+	// 加载方法级配置
+	methodQPS := subViper.Get("method_qps")
+	if methodQPS != nil {
+		if methods, ok := methodQPS.([]interface{}); ok {
+			for _, m := range methods {
+				if methodMap, ok := m.(map[string]interface{}); ok {
+					item := webserver_.MethodQPSConfigItem{}
+					if method, ok := methodMap["method"].(string); ok {
+						item.Method = method
+					}
+					if qps, ok := methodMap["qps"].(float64); ok {
+						item.QPS = qps
+					}
+					if burst, ok := methodMap["burst"].(int); ok {
+						item.Burst = burst
+					} else if burst, ok := methodMap["burst"].(float64); ok {
+						item.Burst = int(burst)
+					}
+					if mc, ok := methodMap["max_concurrency"].(int); ok {
+						item.MaxConcurrency = mc
+					} else if mc, ok := methodMap["max_concurrency"].(float64); ok {
+						item.MaxConcurrency = int(mc)
+					}
+					if item.Method != "" && (item.QPS > 0 || item.MaxConcurrency > 0) {
+						config.MethodQPS = append(config.MethodQPS, item)
+					}
+				}
+			}
+		}
+	}
+
+	return config
 }
 
 // Complete set default ServerRunOptions.

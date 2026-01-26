@@ -67,7 +67,10 @@ function build() {
   GO_BUILD_LD_ARGS="$(make_build_ld_args)"
 
   #go build -mod=vendor -o ${OUT_PUT_PATH}/sealet ./cmd/sealet
-  go mod tidy
+  # 如果使用 go.work，跳过 go mod tidy（go mod tidy 会忽略 go.work）
+  if [[ -z "$(go env GOWORK)" ]]; then
+    go mod tidy
+  fi
 
   set -x
   if [[ ! -z ${ENV} ]]; then export ${ENV}; fi
