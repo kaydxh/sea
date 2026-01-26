@@ -28,7 +28,7 @@ import (
 	mysql_ "github.com/kaydxh/golang/pkg/database/mysql"
 	redis_ "github.com/kaydxh/golang/pkg/database/redis"
 	logs_ "github.com/kaydxh/golang/pkg/logs"
-	opentelemetry_ "github.com/kaydxh/golang/pkg/monitor/opentelemetry"
+	opentelemetry_ "github.com/kaydxh/golang/pkg/opentelemetry"
 	resolver_ "github.com/kaydxh/golang/pkg/resolver"
 	viper_ "github.com/kaydxh/golang/pkg/viper"
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
