@@ -88,7 +88,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 		mysqlConfig:         mysql_.NewConfig(mysql_.WithViper(viper_.GetViper(configFile, "database.mysql"))),
 		redisConfig:         redis_.NewConfig(redis_.WithViper(viper_.GetViper(configFile, "database.redis"))),
 		resolverConfig:      resolver_.NewConfig(resolver_.WithViper(viper_.GetViper(configFile, "reslover"))),
-		opentelemetryConfig: opentelemetry_.NewConfig(opentelemetry_.WithViper(viper_.GetViper(configFile, "web.monitor.open_telemetry"))),
+		opentelemetryConfig: opentelemetry_.NewConfig(opentelemetry_.WithViper(viper_.GetViper(configFile, "web.open_telemetry"))),
 	}
 
 }
@@ -173,7 +173,7 @@ func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie(ctx)
 	s.installRedisOrDie(ctx)
-	s.installOpenTelemetryOrDie(ctx)
+	s.installOpenTelemetryOrDie(ctx, ws)
 
 	s.installResolverOrDie(ctx, ws)
 	//install web handler

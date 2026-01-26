@@ -18,27 +18,87 @@ web:
   debug:
     enable_profiling: true
     disable_print_inoutput_methods: [""]
-  monitor:
-    prometheus:
-      enabled_metric_timer_cost: false
-      enabled_metric_code_message: true
-    open_telemetry:
-      enabled: true
-      metric_collect_duration: 60s
-      otel_trace_exporter_type : trace_stdout
-      otel_metric_exporter_type : metric_stdout
-      otel_log_exporter_type : log_none
-      otel_metric_exporter :
-        stdout:
-          pretty_print: true
-        prometheus:
-          url: noop://localhost/metrics
-      otel_trace_exporter:
-        stdout:
-          pretty_print: true
-        jaeger:
-          url: http://localhost:14268/api/trace
+
+  # ========================================
+  # OpenTelemetry 统一监控配置（去掉 monitor 包装层）
+  # ========================================
+  open_telemetry:
+    enabled: true
+
+    # ========================================
+    # Global MeterProvider - 基础设施/运维指标
+    # ========================================
+    # 用途：CPU、内存、GC、gRPC 调用统计等
+    # API：api.GlobalIncrCounter(), api.GlobalRecordHistogram()
+    metric_collect_duration: 60s
+    otel_metric_exporter_type: metric_prometheus  # 本地 Prometheus 拉取
+    otel_metric_exporter:
+      stdout:
+        pretty_print: true
+      prometheus:
+        url: /metrics
+      otlp:
+        endpoint: ""
+        token: ""
+        protocol: "http"
+        insecure: false
+        url_path: "/v1/metrics"
+        headers: {}
+
+    # ========================================
+    # App MeterProvider - 应用级/业务指标
+    # ========================================
+    # 用途：订单数、用户注册、业务延迟等
+    # API：api.IncrCounter(), api.RecordHistogram()
+    app_meter_provider:
+      enabled: true                       # 启用 App Provider
+      exporter_type: metric_otlp          # 推送到远程 OTLP
+      collect_duration: 30s               # 业务指标采集周期更短
+      exporter:
+        otlp:
+          endpoint: "ap-guangzhou.tencentcloudapi.com:4317"  # 腾讯云 Prometheus 地址（按实际地域修改）
+          token: "your-token-here"        # 认证 Token（从腾讯云控制台获取）
+          protocol: "grpc"
+          insecure: true                  # 禁用 TLS（如果服务端不支持 TLS）
+          url_path: "/v1/metrics"
+          headers: {}
       resource:
+        service_name: "sea-date"          # 业务指标服务名
+        attrs:
+          metric_type: "business"
+
+    # ========================================
+    # Trace 配置
+    # ========================================
+    otel_trace_exporter_type: trace_stdout
+    otel_log_exporter_type: log_none
+    otel_trace_exporter:
+      stdout:
+        pretty_print: true
+      jaeger:
+        url: http://localhost:14268/api/traces
+      otlp:
+        endpoint: ""
+        token: ""
+        protocol: "grpc"
+        insecure: false
+        url_path: "/v1/traces"
+        headers: {}
+
+    # ========================================
+    # 通用资源配置
+    # ========================================
+    resource:
+      service_name: ""
+      service_version: ""
+      attrs: {}
+      k8s:
+        enabled: true
+
+    # 兼容旧 monitor.prometheus 配置
+    enabled_metric_timer_cost: false
+    enabled_metric_code_message: true
+
   # QPS限流配置
   qps_limit:
     # gRPC QPS限流配置

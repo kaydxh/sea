@@ -24,10 +24,15 @@ package options
 import (
 	"context"
 
+	opentelemetry_ "github.com/kaydxh/golang/pkg/opentelemetry"
+	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	"github.com/sirupsen/logrus"
 )
 
-func (s *CompletedServerRunOptions) installOpenTelemetryOrDie(ctx context.Context) {
+func (s *CompletedServerRunOptions) installOpenTelemetryOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
+	// Set gin router for /metrics endpoint registration
+	s.opentelemetryConfig.ApplyOptions(opentelemetry_.WithGinRouter(ws.GetGinEngine()))
+
 	c := s.opentelemetryConfig.Complete()
 
 	err := c.New(ctx)
@@ -35,5 +40,4 @@ func (s *CompletedServerRunOptions) installOpenTelemetryOrDie(ctx context.Contex
 		logrus.WithError(err).Fatalf("install Opentelemetry, exit")
 		return
 	}
-
 }
