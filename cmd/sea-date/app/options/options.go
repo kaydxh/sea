@@ -162,13 +162,17 @@ func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
 // Run runs the specified APIServer.  This should never exit.
 func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	logrus.Infof("Starting %+v", app_.GetVersion())
+
+	s.installLogsOrDie()
+	s.installConfigOrDie()
+
+	// OpenTelemetry is initialized after webserver creation
+	// HTTP trace middleware dynamically gets TracerProvider at request time
+
 	ws, err := s.webServerConfig.Complete().New(ctx)
 	if err != nil {
 		return err
 	}
-
-	s.installLogsOrDie()
-	s.installConfigOrDie()
 
 	//auto installed depend on yaml configure with enabled field
 	s.installMysqlOrDie(ctx)

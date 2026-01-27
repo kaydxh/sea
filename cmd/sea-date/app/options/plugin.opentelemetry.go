@@ -29,15 +29,25 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// installOpenTelemetryOrDie initializes TracerProvider and MeterProvider
+// Must be called after webserver.New() and before webserver.Run()
 func (s *CompletedServerRunOptions) installOpenTelemetryOrDie(ctx context.Context, ws *webserver_.GenericWebServer) {
-	// Set gin router for /metrics endpoint registration
+	// Set gin router for /metrics endpoint registration (Prometheus Pull mode)
 	s.opentelemetryConfig.ApplyOptions(opentelemetry_.WithGinRouter(ws.GetGinEngine()))
 
 	c := s.opentelemetryConfig.Complete()
 
-	err := c.New(ctx)
+	// Install Tracer
+	err := c.InstallTracer(ctx)
 	if err != nil {
-		logrus.WithError(err).Fatalf("install Opentelemetry, exit")
+		logrus.WithError(err).Fatalf("install OpenTelemetry Tracer, exit")
+		return
+	}
+
+	// Install Meter
+	err = c.InstallMeter(ctx)
+	if err != nil {
+		logrus.WithError(err).Fatalf("install OpenTelemetry Meter, exit")
 		return
 	}
 }
