@@ -1,24 +1,3 @@
-/*
- *Copyright (c) 2022, kaydxh
- *
- *Permission is hereby granted, free of charge, to any person obtaining a copy
- *of this software and associated documentation files (the "Software"), to deal
- *in the Software without restriction, including without limitation the rights
- *to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *copies of the Software, and to permit persons to whom the Software is
- *furnished to do so, subject to the following conditions:
- *
- *The above copyright notice and this permission notice shall be included in all
- *copies or substantial portions of the Software.
- *
- *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *SOFTWARE.
- */
 package provider
 
 import (
@@ -28,7 +7,7 @@ import (
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
 )
 
-// Provider for global instance
+// Provider 全局依赖注入容器。
 type Provider struct {
 	Config *v1.Configuration
 
@@ -39,18 +18,27 @@ type Provider struct {
 
 var provider = &Provider{}
 
+// GlobalProvider 返回全局 Provider 实例。
 func GlobalProvider() *Provider {
 	return provider
 }
 
+// GetSqlDB 获取 MySQL 数据库连接。
 func GetSqlDB() *sqlx.DB {
 	return provider.SqlDB
 }
 
+// GetRedisDB 获取 Redis 连接。
 func GetRedisDB() *redis.Client {
 	return provider.RedisDB
 }
 
+// GetResolverService 获取服务发现。
 func GetResolverService() *resolver_.ResolverService {
 	return provider.ResolverService
+}
+
+// GetConfig 获取 protobuf Configuration 配置。
+func GetConfig() *v1.Configuration {
+	return provider.Config
 }
