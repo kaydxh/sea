@@ -1,29 +1,33 @@
-/*
- *Copyright (c) 2022, kaydxh
- *
- *Permission is hereby granted, free of charge, to any person obtaining a copy
- *of this software and associated documentation files (the "Software"), to deal
- *in the Software without restriction, including without limitation the rights
- *to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *copies of the Software, and to permit persons to whom the Software is
- *furnished to do so, subject to the following conditions:
- *
- *The above copyright notice and this permission notice shall be included in all
- *copies or substantial portions of the Software.
- *
- *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *SOFTWARE.
- */
+// Package date 日期领域层，定义领域接口和实体。
 package date
 
 import "context"
 
-type Repository interface {
-	Now(ctx context.Context, req *NowRequest) (resp *NowResponse, err error)
-	NowError(ctx context.Context, req *NowErrorRequest) (resp *NowErrorResponse, err error)
+// NowRequest 获取当前时间请求。
+type NowRequest struct {
+	RequestId string
+}
+
+// NowResponse 获取当前时间响应。
+type NowResponse struct {
+	Date string
+}
+
+// NowErrorRequest 获取当前时间（模拟错误）请求。
+type NowErrorRequest struct {
+	RequestId string
+}
+
+// NowErrorResponse 获取当前时间（模拟错误）响应。
+type NowErrorResponse struct {
+	Date string
+}
+
+// DateRepository 日期数据访问接口（领域层定义）。
+type DateRepository interface {
+	// Now 获取当前时间。
+	Now(ctx context.Context, req *NowRequest) (*NowResponse, error)
+
+	// NowError 获取当前时间（模拟内部错误场景）。
+	NowError(ctx context.Context, req *NowErrorRequest) (*NowErrorResponse, error)
 }
