@@ -1,49 +1,30 @@
-/*
- *Copyright (c) 2022, kaydxh
- *
- *Permission is hereby granted, free of charge, to any person obtaining a copy
- *of this software and associated documentation files (the "Software"), to deal
- *in the Software without restriction, including without limitation the rights
- *to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *copies of the Software, and to permit persons to whom the Software is
- *furnished to do so, subject to the following conditions:
- *
- *The above copyright notice and this permission notice shall be included in all
- *copies or substantial portions of the Software.
- *
- *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *SOFTWARE.
- */
 package options
 
 import (
 	webserver_ "github.com/kaydxh/golang/pkg/webserver"
 	"github.com/kaydxh/sea/pkg/sea-date/application"
-	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
 	local_ "github.com/kaydxh/sea/pkg/sea-date/infrastructure/local"
-	seadate_ "github.com/kaydxh/sea/web/app/seadate"
+	seadateapp_ "github.com/kaydxh/sea/web/app/seadate"
 	"github.com/kaydxh/sea/web/modules/seadate"
 	"github.com/sirupsen/logrus"
 )
 
+// installWebHandlerOrDie 安装 Web Handler（Controller 层），初始化完整的依赖链：
+// DateRepository → SeaDateHandler → Application → Controller → NewWebHandlers
 func (s *CompletedServerRunOptions) installWebHandlerOrDie(ws *webserver_.GenericWebServer) {
-	seadateFactory, err := date.NewFactory(date.FactoryConfig{
-		DateRepository: &local_.Repository{},
-	})
-	if err != nil {
-		logrus.WithError(err).Fatalf("install WebHandler, exit")
-		return
-	}
+	// 1. 初始化 Date 相关依赖
+	dateRepo := &local_.Repository{}
+
+	// 2. 组装 Application
 	app := application.Application{
 		Commands: application.Commands{
-			SeaDateHandler: application.NewSeaDateHandler(seadateFactory),
+			SeaDateHandler: application.NewSeaDateHandler(dateRepo),
 		},
 	}
+
+	// 3. 创建 Controller 并注册到 WebServer
 	dateCtrl := seadate.NewController(app)
-	seadate_.NewWebHandlers(ws, dateCtrl)
+	seadateapp_.NewWebHandlers(ws, dateCtrl)
+
+	logrus.Info("[WebHandler] SeaDate web handlers installed")
 }

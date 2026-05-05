@@ -1,24 +1,3 @@
-/*
- *Copyright (c) 2022, kaydxh
- *
- *Permission is hereby granted, free of charge, to any person obtaining a copy
- *of this software and associated documentation files (the "Software"), to deal
- *in the Software without restriction, including without limitation the rights
- *to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *copies of the Software, and to permit persons to whom the Software is
- *furnished to do so, subject to the following conditions:
- *
- *The above copyright notice and this permission notice shall be included in all
- *copies or substantial portions of the Software.
- *
- *THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *SOFTWARE.
- */
 package options
 
 import (
@@ -36,12 +15,10 @@ import (
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
 	"github.com/spf13/viper"
 
-	//"github.com/kaydxh/sea/cmd/sea-date/app/config"
 	"github.com/sirupsen/logrus"
 )
 
 type ServerRunOptions struct {
-	//Config              *config.Config
 	Config              *config_.Config[*v1.Configuration]
 	webServerConfig     *webserver_.Config
 	logConfig           *logs_.Config
@@ -58,7 +35,6 @@ type completedServerRunOptions struct {
 
 // CompletedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
 type CompletedServerRunOptions struct {
-	// Embed a private pointer that cannot be instantiated outside of this package.
 	*completedServerRunOptions
 }
 
@@ -66,7 +42,7 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 	var gatewayOpts []webserver_.ConfigOption
 	gatewayOpts = append(gatewayOpts, webserver_.WithViper(viper_.GetViper(configFile, "web")))
 
-	// 加载QPS限流配置（现在在 web.qps_limit 下）
+	// 加载QPS限流配置
 	qpsLimitViper := viper_.GetViper(configFile, "web.qps_limit")
 	if qpsLimitViper != nil {
 		grpcQPSLimit := loadQPSLimitConfig(qpsLimitViper, "grpc")
@@ -90,7 +66,6 @@ func NewServerRunOptions(configFile string) *ServerRunOptions {
 		resolverConfig:      resolver_.NewConfig(resolver_.WithViper(viper_.GetViper(configFile, "reslover"))),
 		opentelemetryConfig: opentelemetry_.NewConfig(opentelemetry_.WithViper(viper_.GetViper(configFile, "web.open_telemetry"))),
 	}
-
 }
 
 // loadQPSLimitConfig 从viper加载QPS限流配置
@@ -108,7 +83,6 @@ func loadQPSLimitConfig(v *viper.Viper, key string) *webserver_.QPSLimitConfig {
 	defaultBurst := subViper.GetInt("default_burst")
 	maxConcurrency := subViper.GetInt("max_concurrency")
 
-	// 如果没有配置QPS和并发限制，返回nil
 	if defaultQPS <= 0 && maxConcurrency <= 0 {
 		return nil
 	}
@@ -119,7 +93,6 @@ func loadQPSLimitConfig(v *viper.Viper, key string) *webserver_.QPSLimitConfig {
 		MaxConcurrency: maxConcurrency,
 	}
 
-	// 加载方法级配置
 	methodQPS := subViper.Get("method_qps")
 	if methodQPS != nil {
 		if methods, ok := methodQPS.([]interface{}); ok {
@@ -155,32 +128,28 @@ func loadQPSLimitConfig(v *viper.Viper, key string) *webserver_.QPSLimitConfig {
 
 // Complete set default ServerRunOptions.
 func (s *ServerRunOptions) Complete() (CompletedServerRunOptions, error) {
-
 	return CompletedServerRunOptions{&completedServerRunOptions{s}}, nil
 }
 
-// Run runs the specified APIServer.  This should never exit.
+// Run runs the specified APIServer. This should never exit.
 func (s *CompletedServerRunOptions) Run(ctx context.Context) error {
 	logrus.Infof("Starting %+v", app_.GetVersion())
 
 	s.installLogsOrDie()
 	s.installConfigOrDie()
 
-	// OpenTelemetry is initialized after webserver creation
-	// HTTP trace middleware dynamically gets TracerProvider at request time
-
 	ws, err := s.webServerConfig.Complete().New(ctx)
 	if err != nil {
 		return err
 	}
 
-	//auto installed depend on yaml configure with enabled field
+	// 按需安装插件（依赖 yaml 配置中的 enabled 字段）
 	s.installMysqlOrDie(ctx)
 	s.installRedisOrDie(ctx)
 	s.installOpenTelemetryOrDie(ctx, ws)
-
 	s.installResolverOrDie(ctx, ws)
-	//install web handler
+
+	// 安装 web handler
 	s.installWebHandlerOrDie(ws)
 
 	prepared, err := ws.PrepareRun()
