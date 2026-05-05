@@ -27,8 +27,9 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SeaDateServiceClient interface {
-	// 生成当前时间
+	// 获取当前时间
 	Now(ctx context.Context, in *NowRequest, opts ...grpc.CallOption) (*NowResponse, error)
+	// 获取当前时间（模拟错误场景）
 	NowError(ctx context.Context, in *NowErrorRequest, opts ...grpc.CallOption) (*NowErrorResponse, error)
 }
 
@@ -64,8 +65,9 @@ func (c *seaDateServiceClient) NowError(ctx context.Context, in *NowErrorRequest
 // All implementations must embed UnimplementedSeaDateServiceServer
 // for forward compatibility.
 type SeaDateServiceServer interface {
-	// 生成当前时间
+	// 获取当前时间
 	Now(context.Context, *NowRequest) (*NowResponse, error)
+	// 获取当前时间（模拟错误场景）
 	NowError(context.Context, *NowErrorRequest) (*NowErrorResponse, error)
 	mustEmbedUnimplementedSeaDateServiceServer()
 }

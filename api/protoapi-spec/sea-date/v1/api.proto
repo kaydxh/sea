@@ -1,36 +1,57 @@
 syntax = "proto3";
 
 package sea.api.seadate;
-import "google/protobuf/descriptor.proto";
-import "api/protoapi-spec/types/error.proto";
 
-option go_package = "github.com/kaydxh/sea/api/protoapi-spec/seadate/v1;v1";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1;v1";
 
 service SeaDateService {
-  // 生成当前时间
-  rpc Now(NowRequest) returns (NowResponse) {};
-  rpc NowError(NowErrorRequest) returns (NowErrorResponse) {};
+  // 获取当前时间
+  rpc Now(NowRequest) returns (NowResponse) {
+    option (google.api.http) = {
+      post: "/api/now"
+      body: "*"
+    };
+  };
+
+  // 获取当前时间（模拟错误场景）
+  rpc NowError(NowErrorRequest) returns (NowErrorResponse) {
+    option (google.api.http) = {
+      post: "/api/now_error"
+      body: "*"
+    };
+  };
 }
 
+// 获取当前时间请求
 message NowRequest {
-  // proto name 默认为变量名，proto json默认为小驼峰模式, json默认为变量名
-  // [json_name = "RequestId"]将指定proto json的标签, 此时需要设置
-  // protojson编解码器选项UseProtoNames为false
-  string request_id = 1 [json_name = "RequestId"];  // 请求ID
+  // 请求ID
+  string request_id = 1 [json_name = "RequestId"];
 }
 
+// 获取当前时间响应
 message NowResponse {
-  string request_id = 1 [json_name = "RequestId"];  // 请求ID
-  string date = 2 [json_name = "Date"];             // 当前时间
-  types.Error error = 1000 [json_name = "Error"];
+  // 错误码（0 表示成功）
+  int32 code = 1 [json_name = "Code"];
+  // 错误信息
+  string message = 2 [json_name = "Message"];
+  // 当前时间
+  string date = 3 [json_name = "Date"];
 }
 
+// 获取当前时间（模拟错误）请求
 message NowErrorRequest {
-  string request_id = 1 [json_name = "RequestId"];  // 请求ID
+  // 请求ID
+  string request_id = 1 [json_name = "RequestId"];
 }
 
+// 获取当前时间（模拟错误）响应
 message NowErrorResponse {
-  string request_id = 1 [json_name = "RequestId"];  // 请求ID
-  string date = 2 [json_name = "Date"];             // 当前时间
-  types.Error error = 1000 [json_name = "Error"];
+  // 错误码（0 表示成功）
+  int32 code = 1 [json_name = "Code"];
+  // 错误信息
+  string message = 2 [json_name = "Message"];
+  // 当前时间
+  string date = 3 [json_name = "Date"];
 }

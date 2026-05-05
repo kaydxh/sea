@@ -9,7 +9,6 @@ package v1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/durationpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,10 +21,11 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// config file yaml
+// 配置文件 yaml 映射
 type Configuration struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Debug         *Configuration_Debug   `protobuf:"bytes,20,opt,name=debug,proto3" json:"debug,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 调试配置
+	Debug         *Configuration_Debug `protobuf:"bytes,20,opt,name=debug,proto3" json:"debug,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -112,9 +112,11 @@ func (x *Configuration_Debug) GetDump() *Configuration_Debug_Dump {
 }
 
 type Configuration_Debug_Dump struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	DumpDir       string                 `protobuf:"bytes,2,opt,name=dump_dir,json=dumpDir,proto3" json:"dump_dir,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 是否启用 dump
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// dump 文件输出目录
+	DumpDir       string `protobuf:"bytes,2,opt,name=dump_dir,json=dumpDir,proto3" json:"dump_dir,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -167,14 +169,14 @@ var File_api_protoapi_spec_sea_date_v1_configuration_proto protoreflect.FileDesc
 
 const file_api_protoapi_spec_sea_date_v1_configuration_proto_rawDesc = "" +
 	"\n" +
-	"1api/protoapi-spec/sea-date/v1/configuration.proto\x12\x0fsea.api.seadate\x1a\x1egoogle/protobuf/duration.proto\"\xd1\x01\n" +
+	"1api/protoapi-spec/sea-date/v1/configuration.proto\x12\x0fsea.api.seadate\"\xd1\x01\n" +
 	"\rConfiguration\x12:\n" +
 	"\x05debug\x18\x14 \x01(\v2$.sea.api.seadate.Configuration.DebugR\x05debug\x1a\x83\x01\n" +
 	"\x05Debug\x12=\n" +
 	"\x04dump\x18\x01 \x01(\v2).sea.api.seadate.Configuration.Debug.DumpR\x04dump\x1a;\n" +
 	"\x04Dump\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x19\n" +
-	"\bdump_dir\x18\x02 \x01(\tR\adumpDirB3Z1github.com/kaydxh/sea/protoapi-spec/seadate/v1;v1b\x06proto3"
+	"\bdump_dir\x18\x02 \x01(\tR\adumpDirB8Z6github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1;v1b\x06proto3"
 
 var (
 	file_api_protoapi_spec_sea_date_v1_configuration_proto_rawDescOnce sync.Once

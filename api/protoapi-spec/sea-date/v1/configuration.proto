@@ -1,17 +1,20 @@
 syntax = "proto3";
 
 package sea.api.seadate;
-import "google/protobuf/duration.proto";
 
-option go_package = "github.com/kaydxh/sea/protoapi-spec/seadate/v1;v1";
+option go_package = "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1;v1";
 
-// config file yaml
+// 配置文件 yaml 映射
 message Configuration {
+  // 调试配置
   Debug debug = 20;
+
   message Debug {
     Dump dump = 1;
     message Dump {
+      // 是否启用 dump
       bool enabled = 1;
+      // dump 文件输出目录
       string dump_dir = 2;
     }
   }

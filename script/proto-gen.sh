@@ -7,23 +7,17 @@ set -o errexit
 set -o nounset
 # Fail on any error.
 set -o pipefail
-#set -o xtrace
 
 # example, generate golang proto files
 # bash go_proto_gen.sh -I . --proto_file_path pkg/webserver/webserver.proto --with-go
 
-# if script called by source, $0 is the name of father script, not the name of source run script
 SCRIPT_PATH=$(cd `dirname "${BASH_SOURCE[0]}"`;pwd)
-
-<<'COMMENT'
-SCRIPT=$(readlink -f "${BASH_SOURCE[0]}")
-SCRIPT_PATH=$(dirname "$SCRIPT")
-echo ${SCRIPT_PATH}
-COMMENT
 
 PROTOC_FILE_DIR=
 PROTO_HEADERS=
-# THIRD_PARTY_DIR=$(realpath "${2:-${SCRIPT_PATH}/../../third_party}")
+# 从 Go Module 缓存中获取 grpc-gateway v1 的路径，其 third_party/googleapis 包含 google/api/annotations.proto
+GRPC_GATEWAY_DIR=$(go list -m -f '{{.Dir}}' github.com/grpc-ecosystem/grpc-gateway 2>/dev/null || echo "")
+# 兼容本地 third_party 目录（当 go module 不可用时作为回退）
 THIRD_PARTY_DIR="${SCRIPT_PATH}/third_party"
 WITH_DOC=
 WITH_CPP=
@@ -47,6 +41,7 @@ function getopts() {
             ;;
        --third_party_path)
            THIRD_PARTY_DIR=$(realpath "$2")
+           GRPC_GATEWAY_DIR=""
             shift
             ;;
        --with-doc)
@@ -67,42 +62,30 @@ function getopts() {
  done
 
  PROTO_HEADERS="${protodirs[*]}"
- # echo "${protodirs[*]}"
 }
-
-<<'COMMENT'
-# This will place three binaries in your $GOBIN
-# Make sure that your $GOBIN is in your $PATH
-# install protoc-gen-doc on mac=> https:
-# github.com/pseudomuto/protoc-gen-doc/issues/20  (make build, cp bin/protoc-gen-doc ${GOBIN})
- go install \
-    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
-    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
-    google.golang.org/protobuf/cmd/protoc-gen-go \
-    google.golang.org/grpc/cmd/protoc-gen-go-grpc \
-    github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger 
-COMMENT
 
 echo `pwd`
 
 getopts $@
 
 echo "==> Checking tools..."
-#GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway protoc-gen-govalidators)
-GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-grpc-gateway)
-for tool in ${GEN_PROTO_TOOLS[@]}; do
+GEN_PROTO_TOOLS=(protoc protoc-gen-go protoc-gen-go-grpc protoc-gen-grpc-gateway)
+for tool in "${GEN_PROTO_TOOLS[@]}"; do
    q=$(command -v ${tool}) || die "didn't find ${tool}"
    echo 1>&2 "${tool}: ${q}"
 done
 
 
 echo "==> Generating proto..."
-#proto_headers="-I ${SCRIPT_PATH}/../../third_party"
-#proto_headers="-I .. -I ${THIRD_PARTY_DIR}"
-# "-I ." need behind PROTO_HEADERS, or remove it
 proto_headers="${PROTO_HEADERS} -I `pwd`"
-proto_headers="${proto_headers} -I ${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway"
+# 优先从 Go Module 缓存获取 google/api proto 依赖
+if [[ -n "${GRPC_GATEWAY_DIR}" ]]; then
+  proto_headers="${proto_headers} -I ${GRPC_GATEWAY_DIR}/third_party/googleapis"
+elif [[ -d "${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway" ]]; then
+  proto_headers="${proto_headers} -I ${THIRD_PARTY_DIR}/github.com/grpc-ecosystem/grpc-gateway"
+else
+  die "无法找到 google/api proto 依赖，请确保 go.mod 中包含 github.com/grpc-ecosystem/grpc-gateway 或通过 --third_party_path 指定"
+fi
 source_relative_option="paths=source_relative:."
 go_opt_option=""
 go_out_option=""
@@ -113,9 +96,9 @@ doc_out_option=""
 cpp_option=""
 cpp_out_option=""
 cpp_grpc_option=""
-grpc_gateway_option=""
 grpc_gateway_out_option="--grpc-gateway_out=logtostderr=true"
 grpc_gateway_delete_option="--grpc-gateway_opt=allow_delete_body=true"
+grpc_gateway_option=""
 
 for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -0); do
   echo "Generating ${proto}"
@@ -126,15 +109,20 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   grpc_api_yaml_option=""
   grpc_gateway_option=""
 
+  # 如果存在同名 yaml 配置文件，则使用 grpc_api_configuration 指定 HTTP 路由映射；
+  # 否则从 proto 文件中的 google.api.http option 读取路由定义。
   if [[ -f "${api_conf_yaml}" ]];then
     grpc_api_yaml_option="grpc_api_configuration=${api_conf_yaml},${source_relative_option}"
     grpc_gateway_option="${grpc_gateway_out_option},${grpc_api_yaml_option} ${grpc_gateway_delete_option}"
+  else
+    grpc_gateway_option="${grpc_gateway_out_option},${source_relative_option} ${grpc_gateway_delete_option}"
   fi
 
   if [[ "${WITH_DOC}" -eq 1 ]]; then
-    # output file name
     doc_option="--doc_opt=markdown,${proto_base_name}.md"
-    doc_out_option="--doc_out=${SCRIPT_PATH}/../doc"
+    doc_out_dir="${SCRIPT_PATH}/../docs"
+    mkdir -p "${doc_out_dir}"
+    doc_out_option="--doc_out=${doc_out_dir}"
   fi
 
   if [[ "${WITH_CPP}" -eq 1 ]]; then
@@ -144,12 +132,11 @@ for proto in $(find ${PROTOC_FILE_DIR} -type f -name '*.proto' -print0 | xargs -
   fi
 
   if [[ "${WITH_GO}" -eq 1 ]]; then
-    # go_tag_option="--go-tag_out=${source_relative_option}"
     go_out_option="--go_out=."
     go_opt_option="--go_opt=paths=source_relative"
     go_grpc_option="--go-grpc_out=${source_relative_option}"
   fi
 
+  echo "+ protoc ${proto_headers} ${go_out_option} ${go_tag_option} ${go_opt_option} ${go_grpc_option} ${grpc_gateway_option} ${cpp_out_option} ${cpp_option} ${doc_option} ${doc_out_option} ${cpp_grpc_option} ${proto}"
   protoc ${proto_headers} ${go_out_option} ${go_tag_option} ${go_opt_option} ${go_grpc_option} ${grpc_gateway_option} ${cpp_out_option} ${cpp_option} ${doc_option} ${doc_out_option} ${cpp_grpc_option} "${proto}"
-  #protoc -I . ${proto_headers} --go-tag_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. --grpc-gateway_out=logtostderr=true,grpc_api_configuration=${api_conf_yaml},paths=source_relative:. --grpc-gateway_opt=allow_delete_body=true ${f}
 done

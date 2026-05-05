@@ -21,34 +21,29 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Enum describing possible face fusion reasons.
-// Enum 描述了人脸融合业务出错的可能原因 -- 映射为具体业务错误码
-// 大驼峰式命名法
-// 一二级错误码之间用'_'隔开，服务会自动将之转换为'.'
 type SeaDateReasonEnum_SeaDateReason int32
 
 const (
-	// The canonical error codes for gRPC APIs.
-	// https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
-	SeaDateReasonEnum_OK                SeaDateReasonEnum_SeaDateReason = 0 // 无错误
-	SeaDateReasonEnum_CANCELLED         SeaDateReasonEnum_SeaDateReason = 1 // 请求被客户端取消
-	SeaDateReasonEnum_UNKNOWN           SeaDateReasonEnum_SeaDateReason = 2 // 出现未知的服务器错误。通常是服务器错误。
-	SeaDateReasonEnum_INVALID_ARGUMENT  SeaDateReasonEnum_SeaDateReason = 3 // 客户端指定了无效参数。如需了解详情，请查看错误消息和错误详细信息
-	SeaDateReasonEnum_DEADLINE_EXCEEDED SeaDateReasonEnum_SeaDateReason = 4 // 超出请求时限。仅当调用者设置的时限比方法的默认时限短（即请求的时限不足以让服务器处理请求）并且请求未在时限范围内完成时，才会发生这种情况
-	SeaDateReasonEnum_NOT_FOUND         SeaDateReasonEnum_SeaDateReason = 5 // 未找到指定的资源
-	SeaDateReasonEnum_ALREADY_EXISTS    SeaDateReasonEnum_SeaDateReason = 6 // 客户端尝试创建的资源已存在
-	SeaDateReasonEnum_PERMISSION_DENIED SeaDateReasonEnum_SeaDateReason = 7 // 客户端权限不足。这可能是因为 OAuth
-	// 令牌没有正确的范围、客户端没有权限或者 API 尚未启用
-	SeaDateReasonEnum_UNAUTHENTICATED     SeaDateReasonEnum_SeaDateReason = 16 // 由于 OAuth 令牌丢失、无效或过期，请求未通过身份验证
-	SeaDateReasonEnum_RESOURCE_EXHAUSTED  SeaDateReasonEnum_SeaDateReason = 8  // 资源配额不足或达到速率限制。如需了解详情，请查看错误消息和错误详细信息
-	SeaDateReasonEnum_FAILED_PRECONDITION SeaDateReasonEnum_SeaDateReason = 9  // 请求无法在当前系统状态下执行，例如删除非空目录
-	SeaDateReasonEnum_ABORTED             SeaDateReasonEnum_SeaDateReason = 10 // 并发冲突，例如读取/修改/写入冲突
-	SeaDateReasonEnum_OUT_OF_RANGE        SeaDateReasonEnum_SeaDateReason = 11 // 客户端指定了无效范围
-	SeaDateReasonEnum_UNIMPLEMENTED       SeaDateReasonEnum_SeaDateReason = 12 // API 方法未通过服务器实现
-	SeaDateReasonEnum_INTERNAL            SeaDateReasonEnum_SeaDateReason = 13 // 出现内部服务器错误。通常是服务器错误
-	SeaDateReasonEnum_UNAVAILABLE         SeaDateReasonEnum_SeaDateReason = 14 // 服务不可用。通常是服务器已关闭
-	SeaDateReasonEnum_DATA_LOSS           SeaDateReasonEnum_SeaDateReason = 15 // 出现不可恢复的数据丢失或数据损坏。客户端应该向用户报告错误
-	SeaDateReasonEnum_InvalidParameter    SeaDateReasonEnum_SeaDateReason = 1000
+	SeaDateReasonEnum_OK                  SeaDateReasonEnum_SeaDateReason = 0
+	SeaDateReasonEnum_CANCELLED           SeaDateReasonEnum_SeaDateReason = 1
+	SeaDateReasonEnum_UNKNOWN             SeaDateReasonEnum_SeaDateReason = 2
+	SeaDateReasonEnum_INVALID_ARGUMENT    SeaDateReasonEnum_SeaDateReason = 3
+	SeaDateReasonEnum_DEADLINE_EXCEEDED   SeaDateReasonEnum_SeaDateReason = 4
+	SeaDateReasonEnum_NOT_FOUND           SeaDateReasonEnum_SeaDateReason = 5
+	SeaDateReasonEnum_ALREADY_EXISTS      SeaDateReasonEnum_SeaDateReason = 6
+	SeaDateReasonEnum_PERMISSION_DENIED   SeaDateReasonEnum_SeaDateReason = 7
+	SeaDateReasonEnum_UNAUTHENTICATED     SeaDateReasonEnum_SeaDateReason = 16
+	SeaDateReasonEnum_RESOURCE_EXHAUSTED  SeaDateReasonEnum_SeaDateReason = 8
+	SeaDateReasonEnum_FAILED_PRECONDITION SeaDateReasonEnum_SeaDateReason = 9
+	SeaDateReasonEnum_ABORTED             SeaDateReasonEnum_SeaDateReason = 10
+	SeaDateReasonEnum_OUT_OF_RANGE        SeaDateReasonEnum_SeaDateReason = 11
+	SeaDateReasonEnum_UNIMPLEMENTED       SeaDateReasonEnum_SeaDateReason = 12
+	SeaDateReasonEnum_INTERNAL            SeaDateReasonEnum_SeaDateReason = 13
+	SeaDateReasonEnum_UNAVAILABLE         SeaDateReasonEnum_SeaDateReason = 14
+	SeaDateReasonEnum_DATA_LOSS           SeaDateReasonEnum_SeaDateReason = 15
+	// 业务错误码
+	SeaDateReasonEnum_InvalidParameter SeaDateReasonEnum_SeaDateReason = 1000
+	SeaDateReasonEnum_InternalError    SeaDateReasonEnum_SeaDateReason = 1001
 )
 
 // Enum value maps for SeaDateReasonEnum_SeaDateReason.
@@ -72,6 +67,7 @@ var (
 		14:   "UNAVAILABLE",
 		15:   "DATA_LOSS",
 		1000: "InvalidParameter",
+		1001: "InternalError",
 	}
 	SeaDateReasonEnum_SeaDateReason_value = map[string]int32{
 		"OK":                  0,
@@ -92,6 +88,7 @@ var (
 		"UNAVAILABLE":         14,
 		"DATA_LOSS":           15,
 		"InvalidParameter":    1000,
+		"InternalError":       1001,
 	}
 )
 
@@ -162,8 +159,8 @@ var File_api_protoapi_spec_sea_date_v1_error_proto protoreflect.FileDescriptor
 
 const file_api_protoapi_spec_sea_date_v1_error_proto_rawDesc = "" +
 	"\n" +
-	")api/protoapi-spec/sea-date/v1/error.proto\x12\x0fsea.api.seadate\"\xed\x02\n" +
-	"\x11SeaDateReasonEnum\"\xd7\x02\n" +
+	")api/protoapi-spec/sea-date/v1/error.proto\x12\x0fsea.api.seadate\"\x81\x03\n" +
+	"\x11SeaDateReasonEnum\"\xeb\x02\n" +
 	"\rSeaDateReason\x12\x06\n" +
 	"\x02OK\x10\x00\x12\r\n" +
 	"\tCANCELLED\x10\x01\x12\v\n" +
@@ -183,7 +180,8 @@ const file_api_protoapi_spec_sea_date_v1_error_proto_rawDesc = "" +
 	"\bINTERNAL\x10\r\x12\x0f\n" +
 	"\vUNAVAILABLE\x10\x0e\x12\r\n" +
 	"\tDATA_LOSS\x10\x0f\x12\x15\n" +
-	"\x10InvalidParameter\x10\xe8\aB7Z5github.com/kaydxh/sea/api/protoapi-spec/seadate/v1;v1b\x06proto3"
+	"\x10InvalidParameter\x10\xe8\a\x12\x12\n" +
+	"\rInternalError\x10\xe9\aB8Z6github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1;v1b\x06proto3"
 
 var (
 	file_api_protoapi_spec_sea_date_v1_error_proto_rawDescOnce sync.Once

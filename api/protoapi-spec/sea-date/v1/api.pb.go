@@ -7,10 +7,9 @@
 package v1
 
 import (
-	types "github.com/kaydxh/sea/api/protoapi-spec/types"
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/descriptorpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -23,12 +22,11 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// 获取当前时间请求
 type NowRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// proto name 默认为变量名，proto json默认为小驼峰模式, json默认为变量名
-	// [json_name = "RequestId"]将指定proto json的标签, 此时需要设置
-	// protojson编解码器选项UseProtoNames为false
-	RequestId     string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
+	// 请求ID
+	RequestId     string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -70,11 +68,15 @@ func (x *NowRequest) GetRequestId() string {
 	return ""
 }
 
+// 获取当前时间响应
 type NowResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
-	Date          string                 `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  // 当前时间
-	Error         *types.Error           `protobuf:"bytes,1000,opt,name=error,json=Error,proto3" json:"error,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 错误码（0 表示成功）
+	Code int32 `protobuf:"varint,1,opt,name=code,json=Code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,2,opt,name=message,json=Message,proto3" json:"message,omitempty"`
+	// 当前时间
+	Date          string `protobuf:"bytes,3,opt,name=date,json=Date,proto3" json:"date,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -109,9 +111,16 @@ func (*NowResponse) Descriptor() ([]byte, []int) {
 	return file_api_protoapi_spec_sea_date_v1_api_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *NowResponse) GetRequestId() string {
+func (x *NowResponse) GetCode() int32 {
 	if x != nil {
-		return x.RequestId
+		return x.Code
+	}
+	return 0
+}
+
+func (x *NowResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
 	}
 	return ""
 }
@@ -123,16 +132,11 @@ func (x *NowResponse) GetDate() string {
 	return ""
 }
 
-func (x *NowResponse) GetError() *types.Error {
-	if x != nil {
-		return x.Error
-	}
-	return nil
-}
-
+// 获取当前时间（模拟错误）请求
 type NowErrorRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId     string `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -174,11 +178,15 @@ func (x *NowErrorRequest) GetRequestId() string {
 	return ""
 }
 
+// 获取当前时间（模拟错误）响应
 type NowErrorResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=RequestId,proto3" json:"request_id,omitempty"` // 请求ID
-	Date          string                 `protobuf:"bytes,2,opt,name=date,json=Date,proto3" json:"date,omitempty"`                  // 当前时间
-	Error         *types.Error           `protobuf:"bytes,1000,opt,name=error,json=Error,proto3" json:"error,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 错误码（0 表示成功）
+	Code int32 `protobuf:"varint,1,opt,name=code,json=Code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,2,opt,name=message,json=Message,proto3" json:"message,omitempty"`
+	// 当前时间
+	Date          string `protobuf:"bytes,3,opt,name=date,json=Date,proto3" json:"date,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -213,9 +221,16 @@ func (*NowErrorResponse) Descriptor() ([]byte, []int) {
 	return file_api_protoapi_spec_sea_date_v1_api_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *NowErrorResponse) GetRequestId() string {
+func (x *NowErrorResponse) GetCode() int32 {
 	if x != nil {
-		return x.RequestId
+		return x.Code
+	}
+	return 0
+}
+
+func (x *NowErrorResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
 	}
 	return ""
 }
@@ -227,38 +242,29 @@ func (x *NowErrorResponse) GetDate() string {
 	return ""
 }
 
-func (x *NowErrorResponse) GetError() *types.Error {
-	if x != nil {
-		return x.Error
-	}
-	return nil
-}
-
 var File_api_protoapi_spec_sea_date_v1_api_proto protoreflect.FileDescriptor
 
 const file_api_protoapi_spec_sea_date_v1_api_proto_rawDesc = "" +
 	"\n" +
-	"'api/protoapi-spec/sea-date/v1/api.proto\x12\x0fsea.api.seadate\x1a google/protobuf/descriptor.proto\x1a#api/protoapi-spec/types/error.proto\"+\n" +
+	"'api/protoapi-spec/sea-date/v1/api.proto\x12\x0fsea.api.seadate\x1a\x1cgoogle/api/annotations.proto\"+\n" +
 	"\n" +
 	"NowRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\tRequestId\"m\n" +
-	"\vNowResponse\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x01 \x01(\tR\tRequestId\x12\x12\n" +
-	"\x04date\x18\x02 \x01(\tR\x04Date\x12+\n" +
-	"\x05error\x18\xe8\a \x01(\v2\x14.sea.api.types.ErrorR\x05Error\"0\n" +
+	"request_id\x18\x01 \x01(\tR\tRequestId\"O\n" +
+	"\vNowResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04Code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\aMessage\x12\x12\n" +
+	"\x04date\x18\x03 \x01(\tR\x04Date\"0\n" +
 	"\x0fNowErrorRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\tRequestId\"r\n" +
-	"\x10NowErrorResponse\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x01 \x01(\tR\tRequestId\x12\x12\n" +
-	"\x04date\x18\x02 \x01(\tR\x04Date\x12+\n" +
-	"\x05error\x18\xe8\a \x01(\v2\x14.sea.api.types.ErrorR\x05Error2\xa7\x01\n" +
-	"\x0eSeaDateService\x12B\n" +
-	"\x03Now\x12\x1b.sea.api.seadate.NowRequest\x1a\x1c.sea.api.seadate.NowResponse\"\x00\x12Q\n" +
-	"\bNowError\x12 .sea.api.seadate.NowErrorRequest\x1a!.sea.api.seadate.NowErrorResponse\"\x00B7Z5github.com/kaydxh/sea/api/protoapi-spec/seadate/v1;v1b\x06proto3"
+	"request_id\x18\x01 \x01(\tR\tRequestId\"T\n" +
+	"\x10NowErrorResponse\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04Code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\aMessage\x12\x12\n" +
+	"\x04date\x18\x03 \x01(\tR\x04Date2\xd3\x01\n" +
+	"\x0eSeaDateService\x12U\n" +
+	"\x03Now\x12\x1b.sea.api.seadate.NowRequest\x1a\x1c.sea.api.seadate.NowResponse\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/api/now\x12j\n" +
+	"\bNowError\x12 .sea.api.seadate.NowErrorRequest\x1a!.sea.api.seadate.NowErrorResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/api/now_errorB8Z6github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1;v1b\x06proto3"
 
 var (
 	file_api_protoapi_spec_sea_date_v1_api_proto_rawDescOnce sync.Once
@@ -278,20 +284,17 @@ var file_api_protoapi_spec_sea_date_v1_api_proto_goTypes = []any{
 	(*NowResponse)(nil),      // 1: sea.api.seadate.NowResponse
 	(*NowErrorRequest)(nil),  // 2: sea.api.seadate.NowErrorRequest
 	(*NowErrorResponse)(nil), // 3: sea.api.seadate.NowErrorResponse
-	(*types.Error)(nil),      // 4: sea.api.types.Error
 }
 var file_api_protoapi_spec_sea_date_v1_api_proto_depIdxs = []int32{
-	4, // 0: sea.api.seadate.NowResponse.error:type_name -> sea.api.types.Error
-	4, // 1: sea.api.seadate.NowErrorResponse.error:type_name -> sea.api.types.Error
-	0, // 2: sea.api.seadate.SeaDateService.Now:input_type -> sea.api.seadate.NowRequest
-	2, // 3: sea.api.seadate.SeaDateService.NowError:input_type -> sea.api.seadate.NowErrorRequest
-	1, // 4: sea.api.seadate.SeaDateService.Now:output_type -> sea.api.seadate.NowResponse
-	3, // 5: sea.api.seadate.SeaDateService.NowError:output_type -> sea.api.seadate.NowErrorResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: sea.api.seadate.SeaDateService.Now:input_type -> sea.api.seadate.NowRequest
+	2, // 1: sea.api.seadate.SeaDateService.NowError:input_type -> sea.api.seadate.NowErrorRequest
+	1, // 2: sea.api.seadate.SeaDateService.Now:output_type -> sea.api.seadate.NowResponse
+	3, // 3: sea.api.seadate.SeaDateService.NowError:output_type -> sea.api.seadate.NowErrorResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_api_protoapi_spec_sea_date_v1_api_proto_init() }
