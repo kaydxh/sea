@@ -1,73 +1,28 @@
-// Copyright 2020 The kaydxh Author. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
+// Package seadate SeaDate gRPC Controller 骨架。
+//
+//   - date.controller.go : 定义 Controller 结构体与构造函数（本文件）
+//   - now.go             : Now 方法
+//   - now_error.go       : NowError 方法
+//   - seadate.error.go   : domain/application error → (code, msg) 映射
+//   - date.router.go     : HTTP 路由、中间件注册
+//
+// 一个 RPC 方法一个文件，便于阅读与后续新增方法。
 package seadate
 
 import (
-	"context"
-
-	logs_ "github.com/kaydxh/golang/pkg/logs"
 	v1 "github.com/kaydxh/sea/api/protoapi-spec/sea-date/v1"
 	"github.com/kaydxh/sea/pkg/sea-date/application"
-	"github.com/kaydxh/sea/pkg/sea-date/domain/date"
 )
 
+// Controller SeaDate 控制器，实现 gRPC SeaDateService 接口。
 type Controller struct {
 	app application.Application
 
-	// Embed the unimplemented server
+	// 嵌入未实现的 gRPC server，保证前向兼容。
 	v1.UnimplementedSeaDateServiceServer
 }
 
-// 日期查询
-/*
-curl -X POST http://localhost:10001/Now \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{
-    "RequestId": "'"$(uuidgen)"'",
-    "Data": "MTEx"
-  }'
-*/
-func (c *Controller) Now(
-	ctx context.Context,
-	req *v1.NowRequest,
-) (resp *v1.NowResponse, err error) {
-	logger := logs_.GetLoggerOrFallback(ctx, req.GetRequestId())
-	dateReq := &date.NowRequest{
-		RequestId: req.GetRequestId(),
-	}
-	dateResp, err := c.app.Commands.SeaDateHandler.Now(ctx, dateReq)
-	if err != nil {
-		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [Now] command")
-		return nil, APIError(err)
-	}
-
-	resp = &v1.NowResponse{
-		Date: dateResp.Date,
-	}
-
-	return resp, nil
-}
-
-func (c *Controller) NowError(
-	ctx context.Context,
-	req *v1.NowErrorRequest,
-) (resp *v1.NowErrorResponse, err error) {
-	logger := logs_.GetLoggerOrFallback(ctx, req.GetRequestId())
-	dateReq := &date.NowErrorRequest{
-		RequestId: req.GetRequestId(),
-	}
-	dateResp, err := c.app.Commands.SeaDateHandler.NowError(ctx, dateReq)
-	if err != nil {
-		logger.WithError(err).WithField("cmd", "Sealet").Errorf("failed to run [NowError] command")
-		return nil, APIError(err)
-	}
-
-	resp = &v1.NowErrorResponse{
-		Date: dateResp.Date,
-	}
-
-	return resp, nil
+// NewController 创建 SeaDate Controller 实例。
+func NewController(app application.Application) *Controller {
+	return &Controller{app: app}
 }
