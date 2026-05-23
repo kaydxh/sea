@@ -1,6 +1,6 @@
 # example
 # make TARGET=sea-date
-# make new TARGET=date NEW_GIT_REPOSITORY_NAME="github.com/kaydxh/sea" 
+# make new TARGET=date NEW_GIT_REPOSITORY_NAME="github.com/kaydxh/sea"
 # set default target to sea-date
 TARGET=sea-date
 DEPS_NAME=deps.yaml
@@ -26,11 +26,17 @@ all:
 	@echo "building all ${TARGET}"
 	@bash script/build.sh -t "${TARGET}" -e "${BUILD_ENV_VAR}"
 
-.PHONY: generate 
+.PHONY: generate
 generate:
 	@echo "make generate"
-	@bash -c "curl -s -L -o ./script/proto-gen.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/go_proto_gen.sh"
-	#@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec --third_party_path ./third_party --with-go --with-doc
+	@# 优先使用本地 script/proto-gen.sh;离线环境或内网可跳过 curl 更新
+	@if [ "${OFFLINE:-0}" = "0" ]; then \
+		curl -s -L --connect-timeout 5 -o ./script/proto-gen.sh.new https://raw.githubusercontent.com/kaydxh/golang/main/script/go_proto_gen.sh \
+			&& mv ./script/proto-gen.sh.new ./script/proto-gen.sh \
+			|| echo "WARN: failed to refresh proto-gen.sh from upstream, using local version (set OFFLINE=1 to skip network refresh)"; \
+	else \
+		echo "OFFLINE=1, skip upstream refresh of proto-gen.sh"; \
+	fi
 	@bash  script/proto-gen.sh -I . --proto_file_path api/protoapi-spec  --with-go --with-doc
 
 .PHONY: deps
@@ -77,14 +83,23 @@ pkg-config: deps
 	@if [[ (( -d "${PROJECT_CMD_ROOT_DIR}"/third_path/yt-sdk-go/pkgconfig )) ]]; then cp -df "${PROJECT_CMD_ROOT_DIR}"/third_path/yt-sdk-go/pkgconfig/* "${PKG_CONFIG_PATH}/"; fi
 	@${BUILD_ENV_VAR} go mod tidy
 
-.PHONY: copyright 
+.PHONY: copyright
 copyright:
 	@echo "make copyright"
-	@bash -c "curl -s -L -o ./script/copyright.sh https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.sh"
-	@bash -c "curl -s -L -o ./script/copyright.txt https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.txt"
+	@# 脚本和许可证模板已本地化;仅在 OFFLINE != 1 时尝试上游刷新
+	@if [ "${OFFLINE:-0}" = "0" ]; then \
+		curl -s -L --connect-timeout 5 -o ./script/copyright.sh.new https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.sh \
+			&& mv ./script/copyright.sh.new ./script/copyright.sh \
+			|| echo "WARN: failed to refresh copyright.sh from upstream, using local version"; \
+		curl -s -L --connect-timeout 5 -o ./script/copyright.txt.new https://raw.githubusercontent.com/kaydxh/golang/main/script/copyright.txt \
+			&& mv ./script/copyright.txt.new ./script/copyright.txt \
+			|| echo "WARN: failed to refresh copyright.txt from upstream, using local version"; \
+	else \
+		echo "OFFLINE=1, skip upstream refresh of copyright.sh/copyright.txt"; \
+	fi
 	@bash script/copyright.sh
 
-.PHONY: new 
+.PHONY: new
 new:
 	@echo "make new project ${TARGET}"
 	@bash script/new-project.sh -t "${TARGET}"  -g "${NEW_GIT_REPOSITORY_NAME}"
@@ -92,7 +107,37 @@ new:
 .PHONY: delete
 delete:
 	@echo "make delete project ${TARGET}"
-	@bash script/delete-project.sh -t "${TARGET}" 
+	@bash script/delete-project.sh -t "${TARGET}"
+
+.PHONY: test
+test:
+	@echo "running tests (race detector + fresh run)..."
+	@go test ./... -v -race -count=1
+
+.PHONY: test-short
+test-short:
+	@echo "running tests (fast, no race)..."
+	@go test ./... -count=1
+
+.PHONY: vet
+vet:
+	@echo "running go vet..."
+	@go vet ./...
+
+.PHONY: lint
+lint:
+	@echo "running golangci-lint..."
+	@if command -v golangci-lint >/dev/null 2>&1; then \
+		golangci-lint run ./...; \
+	else \
+		echo "WARN: golangci-lint not installed"; \
+		echo "  install: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
+		exit 1; \
+	fi
+
+.PHONY: check
+check: vet lint test
+	@echo "all quality gates passed"
 
 .PHONY: clean
 clean:
